@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Bandara Ngurahrai bali to Mandala Monument.kml</name>
+	<StyleMap id="dir_startpoint">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#dir_startpoint1</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#dir_startpoint0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="dir_startpoint0">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00ef00</color>
+			<width>3</width>
+		</LineStyle>
+	</Style>
+	<Style id="dir_startpoint1">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00ef00</color>
+			<width>3</width>
+		</LineStyle>
+	</Style>
+	<Folder id="results">
+		<name>Bandara Ngurahrai bali to Mandala Monument</name>
+		<Style id="dir_step">
+			<IconStyle>
+				<Icon>
+					<href>http://maps.gstatic.com/mapfiles/kml/paddle/pause.png</href>
+				</Icon>
+			</IconStyle>
+			<BalloonStyle>
+				<text><![CDATA[<div>$[description]</div><div>$[geDirections]</div>]]></text>
+				<textColor>ff000000</textColor>
+				<displayMode>default</displayMode>
+			</BalloonStyle>
+		</Style>
+		<Placemark id="1.1">
+			<address>Ngurah Rai International Airport</address>
+			<styleUrl>#dir_startpoint</styleUrl>
+			<Point>
+				<coordinates>115.166787,-8.746717199999999,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="1.2">
+			<address>Mandala Monument</address>
+			<styleUrl>#dir_startpoint</styleUrl>
+			<Point>
+				<coordinates>115.2278792,-8.7963319,0</coordinates>
+			</Point>
+		</Placemark>
+		<Folder id="1.3">
+			<name>Jl. Nusa Dua – Bandara Ngurah Rai – Benoa Toll Road/Jl. Tol Bali Mandara/Mandara Toll Road</name>
+			<open>1</open>
+			<Style id="dir_route">
+				<LineStyle>
+					<color>7fa00000</color>
+					<colorMode>normal</colorMode>
+					<width>6</width>
+				</LineStyle>
+			</Style>
+			<Placemark id="1.3.2.2.2">
+				<name>Head northwest on Jl. Airport Ngurah Rai toward Jl. Kemayoran</name>
+				<description>Head northwest on Jl. Airport Ngurah Rai toward Jl. Kemayoran</description>
+				<LookAt>
+					<longitude>115.167594</longitude>
+					<latitude>-8.7433551</latitude>
+					<altitude>0</altitude>
+					<heading>-22.859823</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.643355100000001</north>
+						<south>-8.8433551</south>
+						<east>115.267594</east>
+						<west>115.067594</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.167594,-8.7433551,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.2.3">
+				<name>Make a U-turn at Jl. Kemayoran</name>
+				<description>Make a U-turn at Jl. Kemayoran</description>
+				<LookAt>
+					<longitude>115.1675368</longitude>
+					<latitude>-8.743221</latitude>
+					<altitude>0</altitude>
+					<heading>-22.85983</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.643221</north>
+						<south>-8.843221</south>
+						<east>115.2675368</east>
+						<west>115.0675368</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1675368,-8.743221,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.2.4">
+				<name>Continue straight</name>
+				<description>Continue straight</description>
+				<LookAt>
+					<longitude>115.1825528</longitude>
+					<latitude>-8.7445252</latitude>
+					<altitude>0</altitude>
+					<heading>58.703327</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6445252</north>
+						<south>-8.8445252</south>
+						<east>115.2825528</east>
+						<west>115.0825528</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1825528,-8.7445252,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.3.2">
+				<name>Turn left onto Jl. Nusa Dua – Bandara Ngurah Rai – Benoa Toll Road/Jl. Tol Bali Mandara (signs for Bali Mandara)</name>
+				<description>Turn left onto Jl. Nusa Dua – Bandara Ngurah Rai – Benoa Toll Road/Jl. Tol Bali Mandara (signs for Bali Mandara)</description>
+				<LookAt>
+					<longitude>115.1837649</longitude>
+					<latitude>-8.7448324</latitude>
+					<altitude>0</altitude>
+					<heading>144.39992</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6448324</north>
+						<south>-8.8448324</south>
+						<east>115.2837649</east>
+						<west>115.0837649</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1837649,-8.7448324,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.3.3">
+				<name>Take the exit on the right toward Nusa Dua Jimbaran</name>
+				<description>Take the exit on the right toward Nusa Dua Jimbaran</description>
+				<LookAt>
+					<longitude>115.1931647</longitude>
+					<latitude>-8.7445015</latitude>
+					<altitude>0</altitude>
+					<heading>97.39869</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.644501500000001</north>
+						<south>-8.8445015</south>
+						<east>115.2931647</east>
+						<west>115.0931647</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1931647,-8.7445015,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.3.4">
+				<name>Merge onto Jl. Nusa Dua – Bandara Ngurah Rai – Benoa Toll Road/Jl. Tol Bali Mandara/Mandara Toll Road</name>
+				<description>Merge onto Jl. Nusa Dua – Bandara Ngurah Rai – Benoa Toll Road/Jl. Tol Bali Mandara/Mandara Toll Road</description>
+				<LookAt>
+					<longitude>115.195964</longitude>
+					<latitude>-8.7459732</latitude>
+					<altitude>0</altitude>
+					<heading>-151.44493</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6459732</north>
+						<south>-8.8459732</south>
+						<east>115.295964</east>
+						<west>115.095964</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.195964,-8.7459732,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.4.2">
+				<name>Turn left onto Jl. Bypass Ngurah Rai</name>
+				<description>Turn left onto Jl. Bypass Ngurah Rai</description>
+				<LookAt>
+					<longitude>115.2123992</longitude>
+					<latitude>-8.7899373</latitude>
+					<altitude>0</altitude>
+					<heading>-165.04965</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6899373</north>
+						<south>-8.8899373</south>
+						<east>115.3123992</east>
+						<west>115.1123992</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2123992,-8.7899373,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.4.3">
+				<name>Continue onto Jl. Nusa Dua</name>
+				<description>Continue onto Jl. Nusa Dua</description>
+				<LookAt>
+					<longitude>115.2230263</longitude>
+					<latitude>-8.7983767</latitude>
+					<altitude>0</altitude>
+					<heading>102.24423</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.698376700000001</north>
+						<south>-8.8983767</south>
+						<east>115.3230263</east>
+						<west>115.1230263</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2230263,-8.7983767,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.4.4">
+				<name>At Raja Bali Nusa Dua, Jl. Nusa Dua turns left and becomes Jl. ITDC Nusa Dua</name>
+				<description>At Raja Bali Nusa Dua, Jl. Nusa Dua turns left and becomes Jl. ITDC Nusa Dua</description>
+				<LookAt>
+					<longitude>115.2250018</longitude>
+					<latitude>-8.797927999999999</latitude>
+					<altitude>0</altitude>
+					<heading>60.132717</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.697927999999999</north>
+						<south>-8.897927999999999</south>
+						<east>115.3250018</east>
+						<west>115.1250018</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2250018,-8.797927999999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.4.5">
+				<name>Jl. ITDC Nusa Dua turns slightly left and becomes Jl. Nusa Dua</name>
+				<description>Jl. ITDC Nusa Dua turns slightly left and becomes Jl. Nusa Dua</description>
+				<LookAt>
+					<longitude>115.2260708</longitude>
+					<latitude>-8.797338</latitude>
+					<altitude>0</altitude>
+					<heading>95.83853000000001</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.697338</north>
+						<south>-8.897338</south>
+						<east>115.3260708</east>
+						<west>115.1260708</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2260708,-8.797338,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.4.6">
+				<name>Enter the roundabout</name>
+				<description>Enter the roundabout</description>
+				<LookAt>
+					<longitude>115.2274998</longitude>
+					<latitude>-8.7963855</latitude>
+					<altitude>0</altitude>
+					<heading>40.227314</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6963855</north>
+						<south>-8.896385499999999</south>
+						<east>115.3274998</east>
+						<west>115.1274998</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2274998,-8.7963855,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2">
+				<name>Route</name>
+				<styleUrl>#dir_startpoint</styleUrl>
+				<LineString>
+					<coordinates>
+						115.167594,-8.7433551,0 115.167594,-8.7433551,0 115.1675825,-8.7433361,0 115.1675368,-8.743221,0 115.1676558,-8.7432132,0 115.1677683,-8.7433897,0 115.167827,-8.743444200000001,0 115.167881,-8.743482200000001,0 115.1679502,-8.743510499999999,0 115.1679628,-8.7435118,0 115.1684244,-8.7435478,0 115.1686921,-8.743588900000001,0 115.1689251,-8.743631300000001,0 115.1690866,-8.7436718,0 115.1692722,-8.7437328,0 115.1695766,-8.7438477,0 115.1696848,-8.743875299999999,0 115.1698536,-8.7438854,0 115.1700622,-8.743887900000001,0 115.1701515,-8.743887300000001,0 115.1707166,-8.7438711,0 115.1709699,-8.743862399999999,0 115.1712761,-8.7438521,0 115.171487,-8.7438483,0 115.1716482,-8.743842799999999,0 115.1719883,-8.7438368,0 115.1725672,-8.7438301,0 115.1726717,-8.7438267,0 115.173995,-8.743779200000001,0 115.174602,-8.7437717,0 115.1752395,-8.743814800000001,0 115.1756396,-8.743837900000001,0 115.1762166,-8.743863599999999,0 115.1763033,-8.743870100000001,0 115.1763656,-8.7438799,0 115.1764173,-8.7438936,0 115.1764462,-8.7439038,0 115.1764746,-8.743915599999999,0 115.1765113,-8.743936700000001,0 115.1767961,-8.7441181,0 115.1771872,-8.7443942,0 115.1774149,-8.74456,0 115.1775119,-8.7446093,0 115.1775558,-8.744623799999999,0 115.177605,-8.7446324,0 115.1777773,-8.7446316,0 115.1778172,-8.7446325,0 115.1781877,-8.744623799999999,0 115.1783105,-8.744624,0 115.17848,-8.744622400000001,0 115.1787928,-8.7446254,0 115.1789724,-8.744619999999999,0 115.1791151,-8.744623499999999,0 115.1792706,-8.7446336,0 115.1799958,-8.7446343,0 115.1801433,-8.7446412,0 115.1801498,-8.744641700000001,0 115.1804333,-8.744684899999999,0 115.1807011,-8.744765900000001,0 115.1815035,-8.744983899999999,0 115.1815648,-8.744998199999999,0 115.1816308,-8.7450093,0 115.1817022,-8.745017300000001,0 115.1817652,-8.745024300000001,0 115.1818435,-8.745027,0 115.1819315,-8.7450276,0 115.1819859,-8.7450267,0 115.1820346,-8.745009,0 115.1820616,-8.744994800000001,0 115.182086,-8.7449809,0 115.1821119,-8.744961999999999,0 115.1821341,-8.744944800000001,0 115.1821684,-8.7449186,0 115.1821758,-8.7448912,0 115.1821853,-8.744866699999999,0 115.1821958,-8.7448464,0 115.1822418,-8.744772299999999,0 115.1822923,-8.7447146,0 115.1823435,-8.744660400000001,0 115.182413,-8.744606599999999,0 115.1824732,-8.744562500000001,0 115.1825528,-8.7445252,0 115.1826074,-8.7445074,0 115.1826269,-8.744501100000001,0 115.1828763,-8.744465399999999,0 115.1829547,-8.744456100000001,0 115.1830393,-8.7444576,0 115.1831112,-8.744462,0 115.1831992,-8.7444746,0 115.1832628,-8.7444895,0 115.183273,-8.7444907,0 115.1833538,-8.744506299999999,0 115.183431,-8.744531500000001,0 115.1834383,-8.7445348,0 115.1835047,-8.744565,0 115.1835454,-8.7445915,0 115.1835845,-8.744620100000001,0 115.1836218,-8.744651599999999,0 115.1836574,-8.744684599999999,0 115.1836902,-8.7447202,0 115.1837205,-8.744757399999999,0 115.1837329,-8.744774,0 115.1837456,-8.744794600000001,0 115.1837649,-8.7448324,0 115.1839145,-8.744814,0 115.184075,-8.744805100000001,0 115.1846262,-8.744787199999999,0 115.1848407,-8.7447891,0 115.1850621,-8.744798400000001,0 115.1855362,-8.7448289,0 115.1857551,-8.744844499999999,0 115.1859228,-8.7448538,0 115.1860627,-8.744861,0 115.1862456,-8.744855100000001,0 115.1864042,-8.744835399999999,0 115.1865701,-8.744807099999999,0 115.1867045,-8.744775600000001,0 115.1868668,-8.744728500000001,0 115.1871699,-8.7446327,0 115.1874761,-8.744528499999999,0 115.1878562,-8.744376900000001,0 115.1879265,-8.7443539,0 115.1880386,-8.7443133,0 115.1881644,-8.744279300000001,0 115.1883232,-8.744245299999999,0 115.1885729,-8.7441963,0 115.1886646,-8.7441826,0 115.1888805,-8.744149500000001,0 115.1888887,-8.744147699999999,0 115.1889895,-8.7441326,0 115.1892208,-8.7441216,0 115.189521,-8.7440918,0 115.1896894,-8.744078399999999,0 115.1899507,-8.744068199999999,0 115.1902134,-8.7440683,0 115.1905772,-8.7440838,0 115.1910454,-8.744127199999999,0 115.1913552,-8.744176899999999,0 115.191498,-8.744202700000001,0 115.1922035,-8.744348,0 115.1927237,-8.7444449,0 115.1931647,-8.7445015,0 115.1932687,-8.7445144,0 115.1936701,-8.7445576,0 115.1941614,-8.7446088,0 115.1944335,-8.744634599999999,0 115.1949312,-8.7446816,0 115.1950434,-8.7446904,0 115.1951747,-8.744699199999999,0 115.1953035,-8.744708599999999,0 115.1953761,-8.744713300000001,0 115.1958051,-8.744746599999999,0 115.1960762,-8.7447632,0 115.1963447,-8.7447806,0 115.1965925,-8.744776399999999,0 115.196847,-8.7447658,0 115.1969985,-8.744734100000001,0 115.1970956,-8.744709800000001,0 115.1972414,-8.744635799999999,0 115.1973288,-8.744566300000001,0 115.1973827,-8.7445035,0 115.1974679,-8.7443556,0 115.1975032,-8.7442622,0 115.1975183,-8.7441256,0 115.1975054,-8.743993700000001,0 115.197467,-8.7438839,0 115.1974062,-8.743781500000001,0 115.1973525,-8.7437038,0 115.1972653,-8.743625400000001,0 115.1971696,-8.7435726,0 115.1970746,-8.7435356,0 115.1969394,-8.743506500000001,0 115.1968471,-8.743509100000001,0 115.1967882,-8.7435144,0 115.196707,-8.7435303,0 115.196653,-8.743548799999999,0 115.1965602,-8.743599100000001,0 115.1964458,-8.7436714,0 115.1963821,-8.743751400000001,0 115.1963238,-8.743834,0 115.1962768,-8.7439234,0 115.196272,-8.743938999999999,0 115.1962282,-8.7441373,0 115.1962051,-8.744269299999999,0 115.1961961,-8.744342,0 115.1961528,-8.744896300000001,0 115.1960879,-8.745411199999999,0 115.1960507,-8.7458112,0 115.1960414,-8.7458586,0 115.19603,-8.7458876,0 115.1959987,-8.745932699999999,0 115.195964,-8.7459732,0 115.1958503,-8.747457900000001,0 115.1957898,-8.7481823,0 115.1957388,-8.748844200000001,0 115.195555,-8.751010600000001,0 115.1955454,-8.751174799999999,0 115.1955372,-8.7512685,0 115.1955279,-8.751401400000001,0 115.1954074,-8.752822200000001,0 115.1953379,-8.753627099999999,0 115.1952524,-8.7546663,0 115.1951964,-8.7553649,0 115.1951623,-8.7557166,0 115.1951415,-8.755974699999999,0 115.1950955,-8.7564881,0 115.1950597,-8.7571078,0 115.1950595,-8.7571098,0 115.1950582,-8.757156500000001,0 115.1950388,-8.7580057,0 115.1950614,-8.758751699999999,0 115.1950837,-8.759259200000001,0 115.1951166,-8.759649,0 115.1951655,-8.7600777,0 115.1952198,-8.760514799999999,0 115.1953004,-8.7610166,0 115.1954198,-8.761635399999999,0 115.1955547,-8.7622137,0 115.1956458,-8.762569600000001,0 115.1957598,-8.762969200000001,0 115.1959586,-8.763624800000001,0 115.196167,-8.7642153,0 115.1963477,-8.7646807,0 115.196488,-8.765042100000001,0 115.1967028,-8.765519100000001,0 115.1967666,-8.7656578,0 115.1969079,-8.7659512,0 115.1970461,-8.766219899999999,0 115.1971858,-8.7664867,0 115.197297,-8.7666822,0 115.1973638,-8.7668058,0 115.1975961,-8.7672072,0 115.1977552,-8.767458899999999,0 115.1981888,-8.7681109,0 115.1983931,-8.768399,0 115.1986082,-8.7686914,0 115.198823,-8.7689711,0 115.199017,-8.7692134,0 115.1991006,-8.769318999999999,0 115.1993064,-8.769563700000001,0 115.19952,-8.7698094,0 115.1996152,-8.769921399999999,0 115.1999027,-8.7702309,0 115.2002038,-8.770549300000001,0 115.200414,-8.770762,0 115.2007854,-8.771117200000001,0 115.2010631,-8.771367700000001,0 115.2015743,-8.7718253,0 115.2017087,-8.771940000000001,0 115.2019539,-8.772155100000001,0 115.202147,-8.7723256,0 115.2025185,-8.772652900000001,0 115.2027156,-8.7728307,0 115.2035374,-8.773544100000001,0 115.2049534,-8.774801699999999,0 115.2056818,-8.7754388,0 115.2064412,-8.776110900000001,0 115.2066172,-8.776263200000001,0 115.20711,-8.7766941,0 115.2073515,-8.776907899999999,0 115.2080811,-8.7775491,0 115.2082969,-8.777741300000001,0 115.2089546,-8.7783189,0 115.2092775,-8.778601999999999,0 115.209664,-8.7789435,0 115.2100181,-8.7792569,0 115.2103017,-8.779514000000001,0 115.2106207,-8.7798382,0 115.2107607,-8.779987200000001,0 115.2108693,-8.7801112,0 115.2111048,-8.7803892,0 115.2112844,-8.780619099999999,0 115.211554,-8.7809971,0 115.2117894,-8.781356199999999,0 115.2120041,-8.781739099999999,0 115.2121671,-8.7820549,0 115.2123288,-8.782397700000001,0 115.2123904,-8.782538300000001,0 115.2125481,-8.782937,0 115.2126905,-8.7833448,0 115.2127862,-8.7836964,0 115.2128461,-8.7839306,0 115.2128843,-8.7840975,0 115.212931,-8.7843017,0 115.2129781,-8.7845741,0 115.2129932,-8.784659,0 115.2130397,-8.7850187,0 115.2130562,-8.7851654,0 115.2130726,-8.7853484,0 115.2130777,-8.785402100000001,0 115.2130966,-8.785741399999999,0 115.2131,-8.7862376,0 115.2130873,-8.786572400000001,0 115.2130775,-8.786884000000001,0 115.2130336,-8.787277899999999,0 115.2129938,-8.7875558,0 115.2129526,-8.787800600000001,0 115.2128875,-8.788118000000001,0 115.2126073,-8.7891542,0 115.2125613,-8.7893363,0 115.2124336,-8.7898101,0 115.2123992,-8.7899373,0 115.2124348,-8.790022799999999,0 115.2124587,-8.7900849,0 115.2125075,-8.7902039,0 115.2125471,-8.790277700000001,0 115.2125899,-8.790376,0 115.2125961,-8.790395,0 115.2126728,-8.790456799999999,0 115.2127194,-8.7905047,0 115.213104,-8.7908539,0 115.2132694,-8.7910255,0 115.2133402,-8.791097199999999,0 115.2135818,-8.7913458,0 115.213801,-8.791585700000001,0 115.2138305,-8.7916183,0 115.21396,-8.791742599999999,0 115.2140554,-8.7918374,0 115.2140831,-8.791867099999999,0 115.2141323,-8.791918300000001,0 115.2142613,-8.7920526,0 115.2143433,-8.7921379,0 115.2149755,-8.792747500000001,0 115.2150137,-8.7927844,0 115.2151974,-8.7929689,0 115.2153594,-8.7931183,0 115.2153905,-8.793147299999999,0 115.2156206,-8.7933539,0 115.2156733,-8.793400500000001,0 115.2158978,-8.793648900000001,0 115.2159138,-8.7936648,0 115.2165422,-8.7943409,0 115.2169025,-8.7946936,0 115.2173273,-8.795109999999999,0 115.2175256,-8.7952733,0 115.2179045,-8.795518599999999,0 115.2181476,-8.795677,0 115.2184781,-8.7958924,0 115.2186213,-8.795984000000001,0 115.2187789,-8.796084799999999,0 115.2190791,-8.796276900000001,0 115.2195947,-8.796605,0 115.2202107,-8.797000799999999,0 115.220424,-8.797125400000001,0 115.2206516,-8.797245999999999,0 115.2209913,-8.7974283,0 115.2212998,-8.7975843,0 115.2213286,-8.797598900000001,0 115.2217413,-8.797807499999999,0 115.2221506,-8.7980217,0 115.2222997,-8.798095399999999,0 115.2224851,-8.798185800000001,0 115.2226985,-8.7982853,0 115.2227927,-8.798323999999999,0 115.2229394,-8.798362300000001,0 115.2230263,-8.7983767,0 115.2231308,-8.7983955,0 115.2233663,-8.798432,0 115.2235285,-8.7984431,0 115.2237409,-8.7984429,0 115.2239359,-8.798442700000001,0 115.2241998,-8.7983464,0 115.2244248,-8.7982444,0 115.2246699,-8.798117100000001,0 115.2249109,-8.7979793,0 115.2250018,-8.797928000000001,0 115.2251345,-8.797641799999999,0 115.2251921,-8.7975092,0 115.2252228,-8.797480500000001,0 115.2252558,-8.7974566,0 115.2253573,-8.7974028,0 115.2256128,-8.797287499999999,0 115.2256516,-8.797283200000001,0 115.225691,-8.797287600000001,0 115.2258795,-8.797318199999999,0 115.2259695,-8.797331399999999,0 115.2260708,-8.797338,0 115.2260759,-8.7973357,0 115.2267056,-8.796970999999999,0 115.2270993,-8.7967605,0 115.2271779,-8.7966812,0 115.227239,-8.7966423,0 115.2273091,-8.7965924,0 115.2273623,-8.7965441,0 115.2274289,-8.7964731,0 115.2274998,-8.7963855,0 115.2274994,-8.7963763,0 115.2274991,-8.796367099999999,0 115.2274991,-8.796358100000001,0 115.2274993,-8.7963489,0 115.2274997,-8.796339700000001,0 115.2275004,-8.796330599999999,0 115.2275012,-8.796321499999999,0 115.2275009,-8.7963121,0 115.2275158,-8.796253200000001,0 115.227538,-8.796196999999999,0 115.2275695,-8.7961449,0 115.2276087,-8.796098499999999,0 115.2276551,-8.796059,0 115.227691,-8.7960367,0 115.2277065,-8.7960253,0 115.2277624,-8.7959991,0 115.2278407,-8.795977499999999,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+		</Folder>
+	</Folder>
+</Document>
+</kml>

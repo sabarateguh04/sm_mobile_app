@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Mandala Monument to GWK.kml</name>
+	<Style id="dir_startpoint">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00ff00</color>
+			<width>3.2</width>
+		</LineStyle>
+	</Style>
+	<Style id="dir_startpoint0">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00f0f5</color>
+			<width>3.2</width>
+		</LineStyle>
+	</Style>
+	<StyleMap id="dir_startpoint1">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#dir_startpoint2</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#dir_startpoint</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="dir_startpoint2">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00ff00</color>
+			<width>3.2</width>
+		</LineStyle>
+	</Style>
+	<Style id="dir_startpoint3">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00f0f5</color>
+			<width>3.2</width>
+		</LineStyle>
+	</Style>
+	<StyleMap id="dir_startpoint4">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#dir_startpoint5</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#dir_startpoint7</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="dir_startpoint5">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00ff00</color>
+			<width>3.2</width>
+		</LineStyle>
+	</Style>
+	<StyleMap id="dir_startpoint6">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#dir_startpoint3</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#dir_startpoint0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="dir_startpoint7">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff00ff00</color>
+			<width>3.2</width>
+		</LineStyle>
+	</Style>
+	<StyleMap id="dir_startpoint8">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#dir_startpoint10</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#dir_startpoint9</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="dir_startpoint9">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0096ff</color>
+			<width>3.2</width>
+		</LineStyle>
+	</Style>
+	<Style id="dir_startpoint10">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.gstatic.com/mapfiles/kml/paddle/go.png</href>
+			</Icon>
+		</IconStyle>
+		<LineStyle>
+			<color>ff0096ff</color>
+			<width>3.2</width>
+		</LineStyle>
+	</Style>
+	<Folder id="results">
+		<name>Mandala Monument to GWK</name>
+		<visibility>0</visibility>
+		<Style id="dir_step">
+			<IconStyle>
+				<Icon>
+					<href>http://maps.gstatic.com/mapfiles/kml/paddle/pause.png</href>
+				</Icon>
+			</IconStyle>
+			<BalloonStyle>
+				<text><![CDATA[<div>$[description]</div><div>$[geDirections]</div>]]></text>
+				<textColor>ff000000</textColor>
+				<displayMode>default</displayMode>
+			</BalloonStyle>
+		</Style>
+		<Placemark id="1.1">
+			<visibility>0</visibility>
+			<address>Mandala Monument</address>
+			<styleUrl>#dir_startpoint1</styleUrl>
+			<Point>
+				<coordinates>115.2278792,-8.7963319,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark id="1.2">
+			<visibility>0</visibility>
+			<address>Garuda Wisnu Kencana Cultural Park</address>
+			<styleUrl>#dir_startpoint1</styleUrl>
+			<Point>
+				<coordinates>115.1675986,-8.8104228,0</coordinates>
+			</Point>
+		</Placemark>
+		<Folder id="1.3">
+			<name>Jl. Bypass Ngurah Rai and Jl. Raya Kampus Unud</name>
+			<visibility>0</visibility>
+			<Style id="dir_route">
+				<LineStyle>
+					<color>7fa00000</color>
+					<colorMode>normal</colorMode>
+					<width>6</width>
+				</LineStyle>
+			</Style>
+			<Placemark id="1.3.2.2.2">
+				<name>Head east toward Jl. Kw. Nusa Dua Resort</name>
+				<visibility>0</visibility>
+				<description>Head east toward Jl. Kw. Nusa Dua Resort</description>
+				<LookAt>
+					<longitude>115.2278407</longitude>
+					<latitude>-8.795977499999999</latitude>
+					<altitude>0</altitude>
+					<heading>100.096886</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6959775</north>
+						<south>-8.895977499999999</south>
+						<east>115.3278407</east>
+						<west>115.1278407</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2278407,-8.795977499999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.2.3">
+				<name>Exit the roundabout onto Jl. Nusa Dua</name>
+				<visibility>0</visibility>
+				<description>Exit the roundabout onto Jl. Nusa Dua</description>
+				<LookAt>
+					<longitude>115.2277314</longitude>
+					<latitude>-8.796700099999999</latitude>
+					<altitude>0</altitude>
+					<heading>-83.865585</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.696700099999999</north>
+						<south>-8.896700099999999</south>
+						<east>115.3277314</east>
+						<west>115.1277314</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2277314,-8.796700099999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.2.4">
+				<name>Continue onto Jl. Bypass Ngurah Rai</name>
+				<visibility>0</visibility>
+				<description>Continue onto Jl. Bypass Ngurah Rai</description>
+				<LookAt>
+					<longitude>115.2229497</longitude>
+					<latitude>-8.798480999999999</latitude>
+					<altitude>0</altitude>
+					<heading>-81.70649</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.698480999999999</north>
+						<south>-8.898480999999999</south>
+						<east>115.3229497</east>
+						<west>115.1229497</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2229497,-8.798480999999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.2.5">
+				<name>Turn left onto Jl. Raya Kampus Unud (signs for Kampus unud/GWK Uluwatu)</name>
+				<visibility>0</visibility>
+				<description>Turn left onto Jl. Raya Kampus Unud (signs for Kampus unud/GWK Uluwatu)</description>
+				<LookAt>
+					<longitude>115.1790301</longitude>
+					<latitude>-8.7816928</latitude>
+					<altitude>0</altitude>
+					<heading>-64.65510999999999</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6816928</north>
+						<south>-8.8816928</south>
+						<east>115.2790301</east>
+						<west>115.0790301</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1790301,-8.7816928,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.2.6">
+				<name>Slight left to stay on Jl. Raya Kampus Unud</name>
+				<visibility>0</visibility>
+				<description>Slight left to stay on Jl. Raya Kampus Unud</description>
+				<LookAt>
+					<longitude>115.1714471</longitude>
+					<latitude>-8.7973839</latitude>
+					<altitude>0</altitude>
+					<heading>-69.07332599999999</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6973839</north>
+						<south>-8.897383899999999</south>
+						<east>115.2714471</east>
+						<west>115.0714471</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1714471,-8.7973839,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.2.7">
+				<name>Turn right to stay on Jl. Raya Kampus Unud</name>
+				<visibility>0</visibility>
+				<description>Turn right to stay on Jl. Raya Kampus Unud</description>
+				<LookAt>
+					<longitude>115.1709121</longitude>
+					<latitude>-8.799910299999999</latitude>
+					<altitude>0</altitude>
+					<heading>-174.47739</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.699910299999999</north>
+						<south>-8.899910299999998</south>
+						<east>115.2709121</east>
+						<west>115.0709121</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1709121,-8.799910299999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.2.8">
+				<name>Turn left onto Jl. Raya Uluwatu</name>
+				<visibility>0</visibility>
+				<description>Turn left onto Jl. Raya Uluwatu</description>
+				<LookAt>
+					<longitude>115.1608264</longitude>
+					<latitude>-8.798049799999999</latitude>
+					<altitude>0</altitude>
+					<heading>-73.80244399999999</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6980498</north>
+						<south>-8.898049799999999</south>
+						<east>115.2608264</east>
+						<west>115.0608264</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1608264,-8.798049799999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.3.2">
+				<name>Turn left onto Jl. Kw. Garuda Wisnu Kencana</name>
+				<visibility>0</visibility>
+				<description>Turn left onto Jl. Kw. Garuda Wisnu Kencana</description>
+				<LookAt>
+					<longitude>115.159001</longitude>
+					<latitude>-8.805968499999999</latitude>
+					<altitude>0</altitude>
+					<heading>-163.96704</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.705968499999999</north>
+						<south>-8.905968499999998</south>
+						<east>115.259001</east>
+						<west>115.059001</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.159001,-8.805968499999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2.3.3">
+				<name>At the roundabout, take the 2nd exit and stay on Jl. Kw. Garuda Wisnu Kencana</name>
+				<visibility>0</visibility>
+				<description>At the roundabout, take the 2nd exit and stay on Jl. Kw. Garuda Wisnu Kencana</description>
+				<LookAt>
+					<longitude>115.1606849</longitude>
+					<latitude>-8.807028599999999</latitude>
+					<altitude>0</altitude>
+					<heading>82.51279</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.707028599999999</north>
+						<south>-8.907028599999999</south>
+						<east>115.2606849</east>
+						<west>115.0606849</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1606849,-8.807028599999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.3.2">
+				<name>Route</name>
+				<visibility>0</visibility>
+				<styleUrl>#dir_startpoint4</styleUrl>
+				<LineString>
+					<coordinates>
+						115.2278407,-8.795977499999999,0 115.2278407,-8.795977499999999,0 115.2278977,-8.7959763,0 115.2279557,-8.7959868,0 115.2280092,-8.796003900000001,0 115.2280614,-8.7960327,0 115.2281064,-8.7960669,0 115.2281454,-8.796110000000001,0 115.2281774,-8.796158500000001,0 115.2281904,-8.796188900000001,0 115.228201,-8.7962126,0 115.2282158,-8.7962703,0 115.2282223,-8.7963304,0 115.2282185,-8.796390499999999,0 115.2282052,-8.796449600000001,0 115.2281823,-8.7965056,0 115.2281607,-8.7965594,0 115.2281444,-8.7965921,0 115.2280582,-8.7966658,0 115.2280551,-8.796667599999999,0 115.228016,-8.796689600000001,0 115.2279706,-8.7967066,0 115.2279236,-8.796718,0 115.2278747,-8.7967225,0 115.2278264,-8.796721,0 115.2277783,-8.796712599999999,0 115.2277314,-8.796700100000001,0 115.2277255,-8.7966967,0 115.227719,-8.7966949,0 115.2277125,-8.7966929,0 115.227707,-8.7966906,0 115.2277009,-8.796688100000001,0 115.2276948,-8.796685399999999,0 115.2276888,-8.7966826,0 115.2276826,-8.796679900000001,0 115.2275448,-8.7966522,0 115.2274504,-8.796652699999999,0 115.2273585,-8.796664099999999,0 115.2272916,-8.796685099999999,0 115.2272178,-8.7967174,0 115.2270993,-8.7967605,0 115.2267056,-8.796970999999999,0 115.2260759,-8.7973357,0 115.2260708,-8.797338,0 115.2256376,-8.797571599999999,0 115.2252324,-8.797804299999999,0 115.2250018,-8.797928000000001,0 115.2249109,-8.7979793,0 115.2246699,-8.798117100000001,0 115.2244248,-8.7982444,0 115.2241998,-8.7983464,0 115.2239359,-8.798442700000001,0 115.2238368,-8.798478899999999,0 115.2237496,-8.7984998,0 115.2235499,-8.7985218,0 115.2233571,-8.7985212,0 115.2233074,-8.798522699999999,0 115.2231236,-8.798506400000001,0 115.2229497,-8.798481000000001,0 115.2228428,-8.798455199999999,0 115.222721,-8.798413800000001,0 115.2224675,-8.7982885,0 115.222262,-8.7981801,0 115.2220942,-8.798098400000001,0 115.2217111,-8.7978848,0 115.2212864,-8.797675999999999,0 115.2212395,-8.797653,0 115.2209469,-8.797509099999999,0 115.2206013,-8.7973207,0 115.2201574,-8.797071799999999,0 115.2201203,-8.797047900000001,0 115.219537,-8.7966731,0 115.2190487,-8.7963442,0 115.2187427,-8.796153800000001,0 115.2184554,-8.7959674,0 115.2182652,-8.795842199999999,0 115.2178697,-8.795589100000001,0 115.217492,-8.795333100000001,0 115.2172979,-8.7951733,0 115.2168622,-8.794764499999999,0 115.2166408,-8.7945362,0 115.2165162,-8.7944073,0 115.2163344,-8.7942266,0 115.2155982,-8.793505700000001,0 115.2154399,-8.793339899999999,0 115.2153035,-8.7931971,0 115.2152724,-8.7931645,0 115.2152072,-8.793101999999999,0 115.2144754,-8.7924001,0 115.2141775,-8.792101600000001,0 115.2139688,-8.7918924,0 115.2138839,-8.7918018,0 115.2137687,-8.791682700000001,0 115.2137386,-8.7916507,0 115.2135145,-8.791413,0 115.2132706,-8.791168300000001,0 115.2131979,-8.791096100000001,0 115.2128003,-8.790702100000001,0 115.2126982,-8.7906078,0 115.2126446,-8.7905528,0 115.212535,-8.7904608,0 115.2124384,-8.790384100000001,0 115.2122986,-8.790289700000001,0 115.2122132,-8.790244,0 115.2119516,-8.7901211,0 115.2116391,-8.7899662,0 115.2114428,-8.789880200000001,0 115.2112554,-8.789788400000001,0 115.210326,-8.789332999999999,0 115.2103013,-8.7893206,0 115.2101146,-8.789227,0 115.209709,-8.7890052,0 115.2094282,-8.788828799999999,0 115.2091136,-8.7886068,0 115.2087174,-8.7883171,0 115.2085883,-8.7882295,0 115.208465,-8.788155100000001,0 115.208085,-8.787963700000001,0 115.2077468,-8.787827500000001,0 115.2076043,-8.787779799999999,0 115.2071218,-8.7876279,0 115.2070065,-8.7875985,0 115.206859,-8.7875593,0 115.2065325,-8.7874526,0 115.206252,-8.787335799999999,0 115.2058469,-8.787196,0 115.2054988,-8.7870487,0 115.2052679,-8.786951,0 115.2051341,-8.786886000000001,0 115.2048091,-8.786732900000001,0 115.2047064,-8.786691100000001,0 115.2041529,-8.786487899999999,0 115.2035734,-8.786228599999999,0 115.2032442,-8.7860928,0 115.2031515,-8.7860596,0 115.202651,-8.785876699999999,0 115.2023928,-8.785798,0 115.2023137,-8.7857734,0 115.2021932,-8.785745,0 115.2020282,-8.7856974,0 115.2018234,-8.785640300000001,0 115.2017662,-8.7856284,0 115.2013892,-8.785574,0 115.2010923,-8.7855408,0 115.2005052,-8.7854761,0 115.2003939,-8.7854619,0 115.2003696,-8.785458200000001,0 115.199401,-8.7853338,0 115.1985604,-8.7852096,0 115.1982775,-8.7851555,0 115.1982218,-8.785146599999999,0 115.197924,-8.785103700000001,0 115.1978837,-8.7850997,0 115.1978604,-8.7850976,0 115.1976667,-8.785080300000001,0 115.1973484,-8.7850342,0 115.1972275,-8.7850149,0 115.1970392,-8.784993500000001,0 115.1967139,-8.7849652,0 115.1965347,-8.7849564,0 115.1963294,-8.7849494,0 115.1960277,-8.784955699999999,0 115.1958081,-8.784965700000001,0 115.1952815,-8.784990199999999,0 115.1951872,-8.7849939,0 115.1948749,-8.785019200000001,0 115.194542,-8.7850486,0 115.1942749,-8.7850678,0 115.1941147,-8.7850731,0 115.1939403,-8.785068799999999,0 115.1937913,-8.7850617,0 115.1936086,-8.785046700000001,0 115.1934438,-8.7850298,0 115.1933078,-8.785007999999999,0 115.1928631,-8.7848788,0 115.1925007,-8.784789200000001,0 115.1921576,-8.7847001,0 115.1919601,-8.7846531,0 115.191757,-8.784598900000001,0 115.1914741,-8.7845327,0 115.1914016,-8.784509699999999,0 115.1908243,-8.784373499999999,0 115.1906502,-8.784333699999999,0 115.1900863,-8.784159300000001,0 115.1900125,-8.784141399999999,0 115.1899375,-8.784125,0 115.1899326,-8.784124,0 115.1898307,-8.7841004,0 115.1894253,-8.784008999999999,0 115.1893321,-8.783984999999999,0 115.1892,-8.7839581,0 115.1888976,-8.783946,0 115.188577,-8.783975099999999,0 115.1882686,-8.7839934,0 115.1879186,-8.7840142,0 115.1877785,-8.784027500000001,0 115.1876912,-8.784037100000001,0 115.1874934,-8.7840191,0 115.1873621,-8.7840001,0 115.1872711,-8.7839843,0 115.1871467,-8.7839568,0 115.1869584,-8.783911700000001,0 115.1865396,-8.7837418,0 115.1860312,-8.7835018,0 115.1858506,-8.783412200000001,0 115.185681,-8.783333000000001,0 115.1855507,-8.783276900000001,0 115.1853576,-8.783213,0 115.1852249,-8.7831771,0 115.1850657,-8.7831492,0 115.1848611,-8.7831248,0 115.1838507,-8.783045100000001,0 115.1830642,-8.783003799999999,0 115.1827288,-8.7829981,0 115.1825397,-8.7829815,0 115.1823002,-8.782957,0 115.1821613,-8.7829313,0 115.182023,-8.7828997,0 115.1818635,-8.782849799999999,0 115.1817493,-8.782807099999999,0 115.1813349,-8.782642299999999,0 115.1811593,-8.782571000000001,0 115.1807006,-8.7823829,0 115.1800932,-8.7821438,0 115.1799841,-8.7821026,0 115.1796784,-8.7819792,0 115.1794329,-8.7818781,0 115.1792194,-8.7817814,0 115.1791561,-8.7817518,0 115.1790301,-8.7816928,0 115.1788439,-8.7819191,0 115.1788351,-8.7820096,0 115.1788253,-8.7821435,0 115.178817,-8.7822561,0 115.1787584,-8.7827845,0 115.1787204,-8.7829906,0 115.1786708,-8.783285299999999,0 115.178628,-8.783507,0 115.1785406,-8.7839703,0 115.1784594,-8.7843315,0 115.178452,-8.7844979,0 115.1784516,-8.7845143,0 115.1784525,-8.7845374,0 115.1784547,-8.784569599999999,0 115.1784593,-8.7846034,0 115.1784755,-8.7846694,0 115.1784917,-8.784744099999999,0 115.1785245,-8.784936,0 115.1785445,-8.7850687,0 115.1785527,-8.7851298,0 115.1785547,-8.7851795,0 115.178558,-8.7852259,0 115.178559,-8.785265000000001,0 115.1785521,-8.7853072,0 115.1785287,-8.785398799999999,0 115.1784064,-8.785719,0 115.1783605,-8.7858102,0 115.1783439,-8.7858518,0 115.1782053,-8.7861441,0 115.1781262,-8.7863059,0 115.1780016,-8.7865439,0 115.1779603,-8.786622899999999,0 115.1779112,-8.786714099999999,0 115.1778641,-8.786819899999999,0 115.1777908,-8.7869668,0 115.1775633,-8.787385199999999,0 115.1774903,-8.7874991,0 115.1774567,-8.7875649,0 115.1774239,-8.787647700000001,0 115.1774035,-8.7877069,0 115.1773665,-8.7878334,0 115.1773355,-8.787960699999999,0 115.1773169,-8.7880786,0 115.1772398,-8.7885385,0 115.1772265,-8.7886632,0 115.1772032,-8.789070600000001,0 115.1771845,-8.789126700000001,0 115.1771727,-8.7891519,0 115.1771548,-8.7891868,0 115.1771365,-8.7892156,0 115.177118,-8.789237999999999,0 115.1770935,-8.7892701,0 115.1771042,-8.7893449,0 115.1771491,-8.7895538,0 115.1772202,-8.789804999999999,0 115.1773045,-8.7900519,0 115.1773728,-8.790269500000001,0 115.177431,-8.790471699999999,0 115.1774635,-8.790614700000001,0 115.177484,-8.7907338,0 115.1774963,-8.7908054,0 115.1775126,-8.7909086,0 115.1775166,-8.790985299999999,0 115.1775138,-8.791172400000001,0 115.1774998,-8.791324899999999,0 115.1774958,-8.7914127,0 115.1774728,-8.7917053,0 115.1774518,-8.791859799999999,0 115.1773876,-8.7920535,0 115.1773585,-8.7921207,0 115.1773169,-8.7921923,0 115.1773154,-8.7921949,0 115.177278,-8.792256699999999,0 115.1771861,-8.792365800000001,0 115.1771249,-8.792446200000001,0 115.1770683,-8.7925193,0 115.1770276,-8.792589,0 115.177004,-8.792631999999999,0 115.1769829,-8.792686099999999,0 115.1769613,-8.7927599,0 115.176928,-8.7928698,0 115.176853,-8.793101399999999,0 115.1768176,-8.7931854,0 115.1767946,-8.7932427,0 115.1767628,-8.793328600000001,0 115.1766912,-8.793491299999999,0 115.1766349,-8.7936139,0 115.1765574,-8.7937367,0 115.1764739,-8.7938963,0 115.1763406,-8.794103,0 115.1761511,-8.794456800000001,0 115.1760564,-8.794633599999999,0 115.1759591,-8.7948153,0 115.1758606,-8.7950093,0 115.1758057,-8.795128800000001,0 115.1756778,-8.7954972,0 115.1756573,-8.7955512,0 115.1755489,-8.7958292,0 115.1755363,-8.795859,0 115.1754486,-8.7960864,0 115.175442,-8.7961087,0 115.1753542,-8.7963643,0 115.1753117,-8.7965272,0 115.1752628,-8.7967125,0 115.1752615,-8.796717299999999,0 115.1752168,-8.796886499999999,0 115.1752149,-8.796893900000001,0 115.1751765,-8.7970393,0 115.1751207,-8.7972372,0 115.1750778,-8.7972901,0 115.175027,-8.7973379,0 115.1748907,-8.7974139,0 115.1748133,-8.7974519,0 115.1745975,-8.7975428,0 115.1745588,-8.797553600000001,0 115.1745231,-8.7975598,0 115.1744752,-8.797567900000001,0 115.1744268,-8.797569599999999,0 115.1743073,-8.7975666,0 115.1741204,-8.7975464,0 115.1739824,-8.797533400000001,0 115.1737653,-8.7975096,0 115.1737468,-8.797507299999999,0 115.1736434,-8.7974949,0 115.1735031,-8.797469100000001,0 115.1734733,-8.7974643,0 115.1732824,-8.7974262,0 115.1730763,-8.7974028,0 115.1730335,-8.7974034,0 115.1729892,-8.7974102,0 115.1729401,-8.7974216,0 115.1728876,-8.7974443,0 115.1728494,-8.7974725,0 115.1727302,-8.797599099999999,0 115.1725921,-8.797742899999999,0 115.1725675,-8.797760800000001,0 115.1725429,-8.7977753,0 115.1725134,-8.797787,0 115.172493,-8.7977931,0 115.1724598,-8.7977948,0 115.1724151,-8.797791699999999,0 115.1723622,-8.797783900000001,0 115.1722119,-8.797700499999999,0 115.1721696,-8.797675099999999,0 115.1718958,-8.797556999999999,0 115.1716561,-8.797463799999999,0 115.1715236,-8.797410599999999,0 115.1714471,-8.7973839,0 115.1713401,-8.797386599999999,0 115.1712752,-8.797388,0 115.1712293,-8.797395399999999,0 115.1711814,-8.797416699999999,0 115.1711441,-8.79745,0 115.1711147,-8.797485399999999,0 115.1710708,-8.797540100000001,0 115.1710553,-8.7976417,0 115.1710123,-8.798233700000001,0 115.1710097,-8.798299099999999,0 115.1709826,-8.798894000000001,0 115.1709734,-8.799114899999999,0 115.170971,-8.799145599999999,0 115.1709574,-8.7992992,0 115.1709492,-8.7995409,0 115.1709127,-8.7998957,0 115.1709121,-8.799910300000001,0 115.1708456,-8.799981900000001,0 115.1708166,-8.800007600000001,0 115.1707764,-8.800036,0 115.1707215,-8.8000677,0 115.1706584,-8.800095600000001,0 115.170579,-8.800129800000001,0 115.1704637,-8.800114600000001,0 115.1702957,-8.8000948,0 115.1698203,-8.8000279,0 115.1697147,-8.800012300000001,0 115.1696509,-8.8000051,0 115.1693124,-8.799972500000001,0 115.1691987,-8.7999648,0 115.1686952,-8.799905799999999,0 115.1684395,-8.799883899999999,0 115.1683864,-8.799879600000001,0 115.1682246,-8.799866,0 115.167642,-8.7998297,0 115.1675549,-8.799829300000001,0 115.1671536,-8.799821700000001,0 115.1668473,-8.7998045,0 115.1667376,-8.7997885,0 115.1664908,-8.799759099999999,0 115.1664237,-8.799749200000001,0 115.1662126,-8.7997178,0 115.1660563,-8.799690200000001,0 115.1658783,-8.7996544,0 115.1655865,-8.799565899999999,0 115.1653288,-8.7995027,0 115.1651517,-8.799459300000001,0 115.1648072,-8.799319300000001,0 115.1646731,-8.799285899999999,0 115.1643531,-8.799191199999999,0 115.1642175,-8.799144200000001,0 115.1635741,-8.7989014,0 115.1634064,-8.798845999999999,0 115.1626249,-8.798590799999999,0 115.162494,-8.798542299999999,0 115.1624373,-8.7985244,0 115.1623406,-8.798494,0 115.1613539,-8.7981991,0 115.1612608,-8.7981745,0 115.1608264,-8.798049799999999,0 115.1608134,-8.7981654,0 115.1608044,-8.7982847,0 115.160785,-8.798485599999999,0 115.1607604,-8.79874,0 115.1607458,-8.7988807,0 115.1607211,-8.7990125,0 115.1607169,-8.799042500000001,0 115.1606873,-8.799287,0 115.1606631,-8.7994866,0 115.1606295,-8.7998859,0 115.160606,-8.8001652,0 115.1605662,-8.800533,0 115.1605309,-8.800716400000001,0 115.160496,-8.8008407,0 115.1604282,-8.801104799999999,0 115.1603723,-8.801302700000001,0 115.1601615,-8.802080800000001,0 115.1601458,-8.802137,0 115.160049,-8.802473900000001,0 115.1599842,-8.8026877,0 115.1598603,-8.8030671,0 115.1598109,-8.803241,0 115.1595343,-8.8040957,0 115.1595157,-8.804159800000001,0 115.1593818,-8.804733199999999,0 115.159374,-8.8047565,0 115.1592209,-8.8052776,0 115.159165,-8.8054614,0 115.1591354,-8.8055761,0 115.1590664,-8.805743,0 115.1590244,-8.8058891,0 115.159001,-8.805968500000001,0 115.1593138,-8.8062206,0 115.1595332,-8.806396400000001,0 115.1596252,-8.806468300000001,0 115.1599659,-8.8067492,0 115.1602007,-8.806921900000001,0 115.1603003,-8.8069782,0 115.1603836,-8.8070194,0 115.1604731,-8.807050500000001,0 115.1605686,-8.8070545,0 115.1606849,-8.807028600000001,0 115.1607034,-8.8069907,0 115.1607316,-8.8069589,0 115.1607695,-8.806926199999999,0 115.160817,-8.8068945,0 115.1608867,-8.8068697,0 115.1609385,-8.8068597,0 115.1609632,-8.8068554,0 115.1611027,-8.806676299999999,0 115.1612377,-8.8065471,0 115.1613358,-8.806488999999999,0 115.1613499,-8.8064839,0 115.1614393,-8.806451300000001,0 115.1615017,-8.806440200000001,0 115.1615246,-8.8064357,0 115.1615539,-8.806429899999999,0 115.1616934,-8.806388699999999,0 115.1617888,-8.806374699999999,0 115.1618668,-8.8063669,0 115.1619891,-8.806392900000001,0 115.1621167,-8.806402,0 115.1621843,-8.8064094,0 115.162238,-8.8064182,0 115.1622785,-8.8064287,0 115.1623301,-8.806444900000001,0 115.1623887,-8.806467,0 115.1625182,-8.8064848,0 115.1625222,-8.806486400000001,0 115.1625822,-8.8065102,0 115.1630056,-8.806776599999999,0 115.1630886,-8.8068264,0 115.1630985,-8.8068309,0 115.1632692,-8.806872500000001,0 115.1642184,-8.806929999999999,0 115.1643398,-8.806937,0 115.164412,-8.806950000000001,0 115.1644655,-8.8069714,0 115.1645023,-8.806994599999999,0 115.1645421,-8.8070325,0 115.1646059,-8.8071065,0 115.1646593,-8.807195200000001,0 115.1647016,-8.807285800000001,0 115.1647128,-8.8073525,0 115.1647144,-8.807424899999999,0 115.1647337,-8.8074843,0 115.1647407,-8.8075163,0 115.1647391,-8.8075522,0 115.1646835,-8.807884700000001,0 115.164651,-8.8082356,0 115.1646457,-8.808324000000001,0 115.1646554,-8.808408399999999,0 115.1646665,-8.8084448,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+		</Folder>
+		<Folder id="1.4">
+			<name>Jl. Bypass Ngurah Rai</name>
+			<visibility>0</visibility>
+			<Style id="dir_route">
+				<LineStyle>
+					<color>7fa00000</color>
+					<colorMode>normal</colorMode>
+					<width>6</width>
+				</LineStyle>
+			</Style>
+			<Placemark id="1.4.2.2.2">
+				<name>Head east toward Jl. Kw. Nusa Dua Resort</name>
+				<visibility>0</visibility>
+				<description>Head east toward Jl. Kw. Nusa Dua Resort</description>
+				<LookAt>
+					<longitude>115.2278407</longitude>
+					<latitude>-8.795977499999999</latitude>
+					<altitude>0</altitude>
+					<heading>100.096886</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6959775</north>
+						<south>-8.895977499999999</south>
+						<east>115.3278407</east>
+						<west>115.1278407</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2278407,-8.795977499999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.4.2.2.3">
+				<name>Exit the roundabout onto Jl. Nusa Dua</name>
+				<visibility>0</visibility>
+				<description>Exit the roundabout onto Jl. Nusa Dua</description>
+				<LookAt>
+					<longitude>115.2277314</longitude>
+					<latitude>-8.796700099999999</latitude>
+					<altitude>0</altitude>
+					<heading>-83.865585</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.696700099999999</north>
+						<south>-8.896700099999999</south>
+						<east>115.3277314</east>
+						<west>115.1277314</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2277314,-8.796700099999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.4.2.2.4">
+				<name>Continue onto Jl. Bypass Ngurah Rai</name>
+				<visibility>0</visibility>
+				<description>Continue onto Jl. Bypass Ngurah Rai</description>
+				<LookAt>
+					<longitude>115.2229497</longitude>
+					<latitude>-8.798480999999999</latitude>
+					<altitude>0</altitude>
+					<heading>-81.70649</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.698480999999999</north>
+						<south>-8.898480999999999</south>
+						<east>115.3229497</east>
+						<west>115.1229497</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2229497,-8.798480999999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.4.2.2.5">
+				<name>Slight left onto Jl. Uluwatu II (signs for Jimbaran/Uluwatu)</name>
+				<visibility>0</visibility>
+				<description>Slight left onto Jl. Uluwatu II (signs for Jimbaran/Uluwatu)</description>
+				<LookAt>
+					<longitude>115.1790301</longitude>
+					<latitude>-8.7816928</latitude>
+					<altitude>0</altitude>
+					<heading>-64.65510999999999</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6816928</north>
+						<south>-8.8816928</south>
+						<east>115.2790301</east>
+						<west>115.0790301</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1790301,-8.7816928,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.4.2.2.6">
+				<name>Turn left toward Jl. Raya Uluwatu</name>
+				<visibility>0</visibility>
+				<description>Turn left toward Jl. Raya Uluwatu</description>
+				<LookAt>
+					<longitude>115.1664547</longitude>
+					<latitude>-8.7856007</latitude>
+					<altitude>0</altitude>
+					<heading>-83.15733</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6856007</north>
+						<south>-8.885600699999999</south>
+						<east>115.2664547</east>
+						<west>115.0664547</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1664547,-8.7856007,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.4.2.2.7">
+				<name>Turn left onto Jl. Raya Uluwatu</name>
+				<visibility>0</visibility>
+				<description>Turn left onto Jl. Raya Uluwatu</description>
+				<LookAt>
+					<longitude>115.1663222</longitude>
+					<latitude>-8.7858439</latitude>
+					<altitude>0</altitude>
+					<heading>-153.86331</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6858439</north>
+						<south>-8.885843899999999</south>
+						<east>115.2663222</east>
+						<west>115.0663222</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1663222,-8.7858439,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.4.2.3.2">
+				<name>Turn left onto Jl. Kw. Garuda Wisnu Kencana</name>
+				<visibility>0</visibility>
+				<description>Turn left onto Jl. Kw. Garuda Wisnu Kencana</description>
+				<LookAt>
+					<longitude>115.159001</longitude>
+					<latitude>-8.805968499999999</latitude>
+					<altitude>0</altitude>
+					<heading>-163.96704</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.705968499999999</north>
+						<south>-8.905968499999998</south>
+						<east>115.259001</east>
+						<west>115.059001</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.159001,-8.805968499999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.4.2.3.3">
+				<name>At the roundabout, take the 2nd exit and stay on Jl. Kw. Garuda Wisnu Kencana</name>
+				<visibility>0</visibility>
+				<description>At the roundabout, take the 2nd exit and stay on Jl. Kw. Garuda Wisnu Kencana</description>
+				<LookAt>
+					<longitude>115.1606849</longitude>
+					<latitude>-8.807028599999999</latitude>
+					<altitude>0</altitude>
+					<heading>82.51279</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.707028599999999</north>
+						<south>-8.907028599999999</south>
+						<east>115.2606849</east>
+						<west>115.0606849</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1606849,-8.807028599999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.4.2">
+				<name>Route</name>
+				<visibility>0</visibility>
+				<styleUrl>#dir_startpoint6</styleUrl>
+				<LineString>
+					<coordinates>
+						115.2278407,-8.795977499999999,0 115.2278407,-8.795977499999999,0 115.2278977,-8.7959763,0 115.2279557,-8.7959868,0 115.2280092,-8.796003900000001,0 115.2280614,-8.7960327,0 115.2281064,-8.7960669,0 115.2281454,-8.796110000000001,0 115.2281774,-8.796158500000001,0 115.2281904,-8.796188900000001,0 115.228201,-8.7962126,0 115.2282158,-8.7962703,0 115.2282223,-8.7963304,0 115.2282185,-8.796390499999999,0 115.2282052,-8.796449600000001,0 115.2281823,-8.7965056,0 115.2281607,-8.7965594,0 115.2281444,-8.7965921,0 115.2280582,-8.7966658,0 115.2280551,-8.796667599999999,0 115.228016,-8.796689600000001,0 115.2279706,-8.7967066,0 115.2279236,-8.796718,0 115.2278747,-8.7967225,0 115.2278264,-8.796721,0 115.2277783,-8.796712599999999,0 115.2277314,-8.796700100000001,0 115.2277255,-8.7966967,0 115.227719,-8.7966949,0 115.2277125,-8.7966929,0 115.227707,-8.7966906,0 115.2277009,-8.796688100000001,0 115.2276948,-8.796685399999999,0 115.2276888,-8.7966826,0 115.2276826,-8.796679900000001,0 115.2275448,-8.7966522,0 115.2274504,-8.796652699999999,0 115.2273585,-8.796664099999999,0 115.2272916,-8.796685099999999,0 115.2272178,-8.7967174,0 115.2270993,-8.7967605,0 115.2267056,-8.796970999999999,0 115.2260759,-8.7973357,0 115.2260708,-8.797338,0 115.2256376,-8.797571599999999,0 115.2252324,-8.797804299999999,0 115.2250018,-8.797928000000001,0 115.2249109,-8.7979793,0 115.2246699,-8.798117100000001,0 115.2244248,-8.7982444,0 115.2241998,-8.7983464,0 115.2239359,-8.798442700000001,0 115.2238368,-8.798478899999999,0 115.2237496,-8.7984998,0 115.2235499,-8.7985218,0 115.2233571,-8.7985212,0 115.2233074,-8.798522699999999,0 115.2231236,-8.798506400000001,0 115.2229497,-8.798481000000001,0 115.2228428,-8.798455199999999,0 115.222721,-8.798413800000001,0 115.2224675,-8.7982885,0 115.222262,-8.7981801,0 115.2220942,-8.798098400000001,0 115.2217111,-8.7978848,0 115.2212864,-8.797675999999999,0 115.2212395,-8.797653,0 115.2209469,-8.797509099999999,0 115.2206013,-8.7973207,0 115.2201574,-8.797071799999999,0 115.2201203,-8.797047900000001,0 115.219537,-8.7966731,0 115.2190487,-8.7963442,0 115.2187427,-8.796153800000001,0 115.2184554,-8.7959674,0 115.2182652,-8.795842199999999,0 115.2178697,-8.795589100000001,0 115.217492,-8.795333100000001,0 115.2172979,-8.7951733,0 115.2168622,-8.794764499999999,0 115.2166408,-8.7945362,0 115.2165162,-8.7944073,0 115.2163344,-8.7942266,0 115.2155982,-8.793505700000001,0 115.2154399,-8.793339899999999,0 115.2153035,-8.7931971,0 115.2152724,-8.7931645,0 115.2152072,-8.793101999999999,0 115.2144754,-8.7924001,0 115.2141775,-8.792101600000001,0 115.2139688,-8.7918924,0 115.2138839,-8.7918018,0 115.2137687,-8.791682700000001,0 115.2137386,-8.7916507,0 115.2135145,-8.791413,0 115.2132706,-8.791168300000001,0 115.2131979,-8.791096100000001,0 115.2128003,-8.790702100000001,0 115.2126982,-8.7906078,0 115.2126446,-8.7905528,0 115.212535,-8.7904608,0 115.2124384,-8.790384100000001,0 115.2122986,-8.790289700000001,0 115.2122132,-8.790244,0 115.2119516,-8.7901211,0 115.2116391,-8.7899662,0 115.2114428,-8.789880200000001,0 115.2112554,-8.789788400000001,0 115.210326,-8.789332999999999,0 115.2103013,-8.7893206,0 115.2101146,-8.789227,0 115.209709,-8.7890052,0 115.2094282,-8.788828799999999,0 115.2091136,-8.7886068,0 115.2087174,-8.7883171,0 115.2085883,-8.7882295,0 115.208465,-8.788155100000001,0 115.208085,-8.787963700000001,0 115.2077468,-8.787827500000001,0 115.2076043,-8.787779799999999,0 115.2071218,-8.7876279,0 115.2070065,-8.7875985,0 115.206859,-8.7875593,0 115.2065325,-8.7874526,0 115.206252,-8.787335799999999,0 115.2058469,-8.787196,0 115.2054988,-8.7870487,0 115.2052679,-8.786951,0 115.2051341,-8.786886000000001,0 115.2048091,-8.786732900000001,0 115.2047064,-8.786691100000001,0 115.2041529,-8.786487899999999,0 115.2035734,-8.786228599999999,0 115.2032442,-8.7860928,0 115.2031515,-8.7860596,0 115.202651,-8.785876699999999,0 115.2023928,-8.785798,0 115.2023137,-8.7857734,0 115.2021932,-8.785745,0 115.2020282,-8.7856974,0 115.2018234,-8.785640300000001,0 115.2017662,-8.7856284,0 115.2013892,-8.785574,0 115.2010923,-8.7855408,0 115.2005052,-8.7854761,0 115.2003939,-8.7854619,0 115.2003696,-8.785458200000001,0 115.199401,-8.7853338,0 115.1985604,-8.7852096,0 115.1982775,-8.7851555,0 115.1982218,-8.785146599999999,0 115.197924,-8.785103700000001,0 115.1978837,-8.7850997,0 115.1978604,-8.7850976,0 115.1976667,-8.785080300000001,0 115.1973484,-8.7850342,0 115.1972275,-8.7850149,0 115.1970392,-8.784993500000001,0 115.1967139,-8.7849652,0 115.1965347,-8.7849564,0 115.1963294,-8.7849494,0 115.1960277,-8.784955699999999,0 115.1958081,-8.784965700000001,0 115.1952815,-8.784990199999999,0 115.1951872,-8.7849939,0 115.1948749,-8.785019200000001,0 115.194542,-8.7850486,0 115.1942749,-8.7850678,0 115.1941147,-8.7850731,0 115.1939403,-8.785068799999999,0 115.1937913,-8.7850617,0 115.1936086,-8.785046700000001,0 115.1934438,-8.7850298,0 115.1933078,-8.785007999999999,0 115.1928631,-8.7848788,0 115.1925007,-8.784789200000001,0 115.1921576,-8.7847001,0 115.1919601,-8.7846531,0 115.191757,-8.784598900000001,0 115.1914741,-8.7845327,0 115.1914016,-8.784509699999999,0 115.1908243,-8.784373499999999,0 115.1906502,-8.784333699999999,0 115.1900863,-8.784159300000001,0 115.1900125,-8.784141399999999,0 115.1899375,-8.784125,0 115.1899326,-8.784124,0 115.1898307,-8.7841004,0 115.1894253,-8.784008999999999,0 115.1893321,-8.783984999999999,0 115.1892,-8.7839581,0 115.1888976,-8.783946,0 115.188577,-8.783975099999999,0 115.1882686,-8.7839934,0 115.1879186,-8.7840142,0 115.1877785,-8.784027500000001,0 115.1876912,-8.784037100000001,0 115.1874934,-8.7840191,0 115.1873621,-8.7840001,0 115.1872711,-8.7839843,0 115.1871467,-8.7839568,0 115.1869584,-8.783911700000001,0 115.1865396,-8.7837418,0 115.1860312,-8.7835018,0 115.1858506,-8.783412200000001,0 115.185681,-8.783333000000001,0 115.1855507,-8.783276900000001,0 115.1853576,-8.783213,0 115.1852249,-8.7831771,0 115.1850657,-8.7831492,0 115.1848611,-8.7831248,0 115.1838507,-8.783045100000001,0 115.1830642,-8.783003799999999,0 115.1827288,-8.7829981,0 115.1825397,-8.7829815,0 115.1823002,-8.782957,0 115.1821613,-8.7829313,0 115.182023,-8.7828997,0 115.1818635,-8.782849799999999,0 115.1817493,-8.782807099999999,0 115.1813349,-8.782642299999999,0 115.1811593,-8.782571000000001,0 115.1807006,-8.7823829,0 115.1800932,-8.7821438,0 115.1799841,-8.7821026,0 115.1796784,-8.7819792,0 115.1794329,-8.7818781,0 115.1792194,-8.7817814,0 115.1791561,-8.7817518,0 115.1790301,-8.7816928,0 115.1788527,-8.781597100000001,0 115.178735,-8.7815251,0 115.178282,-8.7814148,0 115.1781328,-8.7813552,0 115.1779231,-8.7812971,0 115.1777383,-8.781283200000001,0 115.1776692,-8.781278500000001,0 115.1776172,-8.7812755,0 115.1773499,-8.7812597,0 115.1772271,-8.7812521,0 115.1770336,-8.781254499999999,0 115.1769588,-8.781254199999999,0 115.1768611,-8.7812538,0 115.1766781,-8.7812526,0 115.1766407,-8.781252500000001,0 115.1764954,-8.781254000000001,0 115.1762303,-8.7812568,0 115.1761858,-8.781259199999999,0 115.1761699,-8.781260100000001,0 115.1760175,-8.7812787,0 115.1759665,-8.7812923,0 115.1756464,-8.781422600000001,0 115.1754967,-8.781494800000001,0 115.1752947,-8.7815976,0 115.1751958,-8.7816501,0 115.1751206,-8.781688600000001,0 115.1748815,-8.7817995,0 115.1747734,-8.7818416,0 115.1746956,-8.781878799999999,0 115.1744862,-8.781981,0 115.1743047,-8.782091700000001,0 115.1739792,-8.7823305,0 115.1739228,-8.7823783,0 115.1738018,-8.782481300000001,0 115.173597,-8.7826413,0 115.1734784,-8.7827421,0 115.1734274,-8.7827828,0 115.173188,-8.7829976,0 115.1731726,-8.783010000000001,0 115.1730495,-8.783109700000001,0 115.172894,-8.783244099999999,0 115.1727105,-8.783379699999999,0 115.1726563,-8.783413299999999,0 115.1725296,-8.783485199999999,0 115.1721567,-8.783640699999999,0 115.1720742,-8.783671099999999,0 115.1720001,-8.783702099999999,0 115.171831,-8.783776100000001,0 115.1717504,-8.7838061,0 115.1717054,-8.783832200000001,0 115.1716143,-8.783883100000001,0 115.1715405,-8.783927500000001,0 115.1714869,-8.783970500000001,0 115.171454,-8.7839966,0 115.1713851,-8.784067200000001,0 115.1713094,-8.7841627,0 115.1712611,-8.784236,0 115.1711897,-8.784364099999999,0 115.1711368,-8.7844531,0 115.1709771,-8.784774499999999,0 115.1709693,-8.784788600000001,0 115.1708853,-8.7849533,0 115.170757,-8.785204800000001,0 115.1706884,-8.78533,0 115.1706173,-8.7854466,0 115.1705754,-8.785531000000001,0 115.1705598,-8.785558999999999,0 115.1704382,-8.785766199999999,0 115.1703152,-8.785951300000001,0 115.1702471,-8.7860423,0 115.1701947,-8.786099699999999,0 115.1701,-8.7862036,0 115.1700722,-8.7862312,0 115.1700488,-8.7862583,0 115.1700189,-8.7862847,0 115.16999,-8.7863074,0 115.1699663,-8.786324,0 115.1699328,-8.7863404,0 115.1699006,-8.7863524,0 115.1698379,-8.7863737,0 115.1696117,-8.786404299999999,0 115.1695263,-8.786410099999999,0 115.1694584,-8.786420100000001,0 115.1693375,-8.7864322,0 115.1692628,-8.7864302,0 115.169219,-8.786430599999999,0 115.1691474,-8.7864272,0 115.16907,-8.786414799999999,0 115.1689976,-8.7863983,0 115.1689285,-8.786376300000001,0 115.1688798,-8.7863579,0 115.1686664,-8.786278299999999,0 115.1685585,-8.786236499999999,0 115.1683232,-8.7861519,0 115.1680836,-8.786073999999999,0 115.1679483,-8.7860288,0 115.1678967,-8.786011200000001,0 115.1677555,-8.785967100000001,0 115.1676848,-8.785941599999999,0 115.167676,-8.785938399999999,0 115.1673741,-8.7858395,0 115.1673154,-8.785823600000001,0 115.1671213,-8.785768900000001,0 115.1670206,-8.7857406,0 115.166954,-8.7857184,0 115.1665897,-8.7856085,0 115.1664547,-8.7856007,0 115.166408,-8.7856746,0 115.1663875,-8.785707800000001,0 115.1663724,-8.785721300000001,0 115.1663612,-8.785733199999999,0 115.1663547,-8.785743500000001,0 115.1663409,-8.7857591,0 115.1663271,-8.785782299999999,0 115.1663222,-8.7858439,0 115.1663598,-8.78595,0 115.1664153,-8.7860297,0 115.1664801,-8.7861411,0 115.1665163,-8.7862229,0 115.1665244,-8.7862481,0 115.1665305,-8.786281000000001,0 115.1665303,-8.786310500000001,0 115.1665286,-8.786330899999999,0 115.1665237,-8.7863481,0 115.1665166,-8.786372999999999,0 115.1665064,-8.7863908,0 115.1664874,-8.786414000000001,0 115.1664714,-8.7864281,0 115.1664606,-8.7864366,0 115.1664469,-8.786445499999999,0 115.1664289,-8.786453699999999,0 115.1664126,-8.786459300000001,0 115.1663973,-8.786463599999999,0 115.1663661,-8.786470400000001,0 115.1663563,-8.7864722,0 115.1663359,-8.786475899999999,0 115.1662967,-8.786478900000001,0 115.166255,-8.7864792,0 115.1662,-8.786476499999999,0 115.1659897,-8.7864459,0 115.1658741,-8.786417800000001,0 115.1658486,-8.7864121,0 115.1654835,-8.7863305,0 115.1654686,-8.7863279,0 115.1654499,-8.7863247,0 115.1654181,-8.7863247,0 115.1653658,-8.7863299,0 115.1653216,-8.7863416,0 115.1652903,-8.7863515,0 115.1652869,-8.786352600000001,0 115.1652557,-8.786373599999999,0 115.165231,-8.7864021,0 115.1652139,-8.7864311,0 115.1651879,-8.786493999999999,0 115.1652198,-8.7866482,0 115.1652408,-8.7867674,0 115.1652684,-8.786860600000001,0 115.1653365,-8.787051099999999,0 115.1653456,-8.787106899999999,0 115.1653455,-8.7871381,0 115.1653447,-8.787171499999999,0 115.1653414,-8.7872006,0 115.1653315,-8.787240199999999,0 115.1653203,-8.7872811,0 115.1653053,-8.787317399999999,0 115.1652656,-8.787410899999999,0 115.1652001,-8.787539600000001,0 115.16502,-8.787831000000001,0 115.1649438,-8.7879366,0 115.1648218,-8.7881246,0 115.1646658,-8.788380200000001,0 115.1645438,-8.788596399999999,0 115.164458,-8.7887518,0 115.1644064,-8.788857,0 115.164352,-8.7889769,0 115.164289,-8.789134199999999,0 115.1642006,-8.789361299999999,0 115.1641623,-8.7894773,0 115.164133,-8.789586,0 115.164112,-8.789698,0 115.1641028,-8.789745,0 115.1640653,-8.7899352,0 115.1639943,-8.790304300000001,0 115.1639638,-8.7904769,0 115.1638935,-8.7908408,0 115.1638625,-8.7910009,0 115.1638613,-8.791006899999999,0 115.1637877,-8.791366699999999,0 115.1637696,-8.791469599999999,0 115.1637421,-8.791589699999999,0 115.1636952,-8.791915299999999,0 115.1636927,-8.791927299999999,0 115.1636759,-8.791971800000001,0 115.1636373,-8.7921215,0 115.1635538,-8.792401099999999,0 115.1634041,-8.7927593,0 115.1633583,-8.792859099999999,0 115.1632831,-8.7930229,0 115.1632096,-8.7931892,0 115.1631787,-8.793268899999999,0 115.1631772,-8.793272,0 115.1631396,-8.7933713,0 115.1630388,-8.793644,0 115.1630137,-8.7937072,0 115.1628835,-8.7940337,0 115.1628745,-8.794054300000001,0 115.1627579,-8.794309699999999,0 115.16267,-8.794555799999999,0 115.162624,-8.7946714,0 115.1625748,-8.794787899999999,0 115.1624974,-8.794972599999999,0 115.162388,-8.7952358,0 115.162367,-8.7952779,0 115.1622095,-8.7956073,0 115.1621635,-8.7956878,0 115.1620645,-8.795867100000001,0 115.1620087,-8.7959608,0 115.1617135,-8.7964205,0 115.1615829,-8.7966256,0 115.1614127,-8.7968893,0 115.161345,-8.797006100000001,0 115.1611361,-8.797366500000001,0 115.1610942,-8.797443400000001,0 115.1610434,-8.7974619,0 115.1609877,-8.7975528,0 115.1609429,-8.7976258,0 115.1608977,-8.797705300000001,0 115.1608786,-8.797753800000001,0 115.1608606,-8.797807799999999,0 115.1608495,-8.797860999999999,0 115.1608264,-8.798049799999999,0 115.1608134,-8.7981654,0 115.1608044,-8.7982847,0 115.160785,-8.798485599999999,0 115.1607604,-8.79874,0 115.1607458,-8.7988807,0 115.1607211,-8.7990125,0 115.1607169,-8.799042500000001,0 115.1606873,-8.799287,0 115.1606631,-8.7994866,0 115.1606295,-8.7998859,0 115.160606,-8.8001652,0 115.1605662,-8.800533,0 115.1605309,-8.800716400000001,0 115.160496,-8.8008407,0 115.1604282,-8.801104799999999,0 115.1603723,-8.801302700000001,0 115.1601615,-8.802080800000001,0 115.1601458,-8.802137,0 115.160049,-8.802473900000001,0 115.1599842,-8.8026877,0 115.1598603,-8.8030671,0 115.1598109,-8.803241,0 115.1595343,-8.8040957,0 115.1595157,-8.804159800000001,0 115.1593818,-8.804733199999999,0 115.159374,-8.8047565,0 115.1592209,-8.8052776,0 115.159165,-8.8054614,0 115.1591354,-8.8055761,0 115.1590664,-8.805743,0 115.1590244,-8.8058891,0 115.159001,-8.805968500000001,0 115.1593138,-8.8062206,0 115.1595332,-8.806396400000001,0 115.1596252,-8.806468300000001,0 115.1599659,-8.8067492,0 115.1602007,-8.806921900000001,0 115.1603003,-8.8069782,0 115.1603836,-8.8070194,0 115.1604731,-8.807050500000001,0 115.1605686,-8.8070545,0 115.1606849,-8.807028600000001,0 115.1607034,-8.8069907,0 115.1607316,-8.8069589,0 115.1607695,-8.806926199999999,0 115.160817,-8.8068945,0 115.1608867,-8.8068697,0 115.1609385,-8.8068597,0 115.1609632,-8.8068554,0 115.1611027,-8.806676299999999,0 115.1612377,-8.8065471,0 115.1613358,-8.806488999999999,0 115.1613499,-8.8064839,0 115.1614393,-8.806451300000001,0 115.1615017,-8.806440200000001,0 115.1615246,-8.8064357,0 115.1615539,-8.806429899999999,0 115.1616934,-8.806388699999999,0 115.1617888,-8.806374699999999,0 115.1618668,-8.8063669,0 115.1619891,-8.806392900000001,0 115.1621167,-8.806402,0 115.1621843,-8.8064094,0 115.162238,-8.8064182,0 115.1622785,-8.8064287,0 115.1623301,-8.806444900000001,0 115.1623887,-8.806467,0 115.1625182,-8.8064848,0 115.1625222,-8.806486400000001,0 115.1625822,-8.8065102,0 115.1630056,-8.806776599999999,0 115.1630886,-8.8068264,0 115.1630985,-8.8068309,0 115.1632692,-8.806872500000001,0 115.1642184,-8.806929999999999,0 115.1643398,-8.806937,0 115.164412,-8.806950000000001,0 115.1644655,-8.8069714,0 115.1645023,-8.806994599999999,0 115.1645421,-8.8070325,0 115.1646059,-8.8071065,0 115.1646593,-8.807195200000001,0 115.1647016,-8.807285800000001,0 115.1647128,-8.8073525,0 115.1647144,-8.807424899999999,0 115.1647337,-8.8074843,0 115.1647407,-8.8075163,0 115.1647391,-8.8075522,0 115.1646835,-8.807884700000001,0 115.164651,-8.8082356,0 115.1646457,-8.808324000000001,0 115.1646554,-8.808408399999999,0 115.1646665,-8.8084448,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+		</Folder>
+		<Folder id="1.5">
+			<name>Jl. Dharmawangsa</name>
+			<visibility>0</visibility>
+			<Style id="dir_route">
+				<LineStyle>
+					<color>7fa00000</color>
+					<colorMode>normal</colorMode>
+					<width>6</width>
+				</LineStyle>
+			</Style>
+			<Placemark id="1.5.2.2.2">
+				<name>Head east toward Jl. Kw. Nusa Dua Resort</name>
+				<visibility>0</visibility>
+				<description>Head east toward Jl. Kw. Nusa Dua Resort</description>
+				<LookAt>
+					<longitude>115.2278407</longitude>
+					<latitude>-8.795977499999999</latitude>
+					<altitude>0</altitude>
+					<heading>100.096886</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.6959775</north>
+						<south>-8.895977499999999</south>
+						<east>115.3278407</east>
+						<west>115.1278407</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2278407,-8.795977499999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2.2.3">
+				<name>Exit the roundabout onto Jl. Nusa Dua</name>
+				<visibility>0</visibility>
+				<description>Exit the roundabout onto Jl. Nusa Dua</description>
+				<LookAt>
+					<longitude>115.2277314</longitude>
+					<latitude>-8.796700099999999</latitude>
+					<altitude>0</altitude>
+					<heading>-83.865585</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.696700099999999</north>
+						<south>-8.896700099999999</south>
+						<east>115.3277314</east>
+						<west>115.1277314</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2277314,-8.796700099999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2.2.4">
+				<name>Turn left onto Jl. Gopala</name>
+				<visibility>0</visibility>
+				<description>Turn left onto Jl. Gopala</description>
+				<LookAt>
+					<longitude>115.2229497</longitude>
+					<latitude>-8.798480999999999</latitude>
+					<altitude>0</altitude>
+					<heading>-81.70649</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.698480999999999</north>
+						<south>-8.898480999999999</south>
+						<east>115.3229497</east>
+						<west>115.1229497</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2229497,-8.798480999999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2.2.5">
+				<name>Turn right after Toko Fajar Jaya (on the right)</name>
+				<visibility>0</visibility>
+				<description>Turn right after Toko Fajar Jaya (on the right)</description>
+				<LookAt>
+					<longitude>115.2225825</longitude>
+					<latitude>-8.7992112</latitude>
+					<altitude>0</altitude>
+					<heading>-153.57458</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.699211200000001</north>
+						<south>-8.8992112</south>
+						<east>115.3225825</east>
+						<west>115.1225825</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2225825,-8.7992112,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2.2.6">
+				<name>Continue onto Jl. Dharmawangsa</name>
+				<visibility>0</visibility>
+				<description>Continue onto Jl. Dharmawangsa</description>
+				<LookAt>
+					<longitude>115.2103387</longitude>
+					<latitude>-8.802608099999999</latitude>
+					<altitude>0</altitude>
+					<heading>-109.295525</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.702608099999999</north>
+						<south>-8.902608099999998</south>
+						<east>115.3103387</east>
+						<west>115.1103387</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.2103387,-8.802608099999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2.2.7">
+				<name>Continue onto Jl. Nusa Dua</name>
+				<visibility>0</visibility>
+				<description>Continue onto Jl. Nusa Dua</description>
+				<LookAt>
+					<longitude>115.1678351</longitude>
+					<latitude>-8.8275044</latitude>
+					<altitude>0</altitude>
+					<heading>-139.72784</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.727504400000001</north>
+						<south>-8.9275044</south>
+						<east>115.2678351</east>
+						<west>115.0678351</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1678351,-8.8275044,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2.2.8">
+				<name>Turn right onto Jl. Bali Cliff</name>
+				<visibility>0</visibility>
+				<description>Turn right onto Jl. Bali Cliff</description>
+				<LookAt>
+					<longitude>115.16588</longitude>
+					<latitude>-8.8269786</latitude>
+					<altitude>0</altitude>
+					<heading>-69.67563</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.726978600000001</north>
+						<south>-8.9269786</south>
+						<east>115.26588</east>
+						<west>115.06588</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.16588,-8.8269786,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2.2.9">
+				<name>Turn right onto Jl. Raya Uluwatu</name>
+				<visibility>0</visibility>
+				<description>Turn right onto Jl. Raya Uluwatu</description>
+				<LookAt>
+					<longitude>115.1560191</longitude>
+					<latitude>-8.8157003</latitude>
+					<altitude>0</altitude>
+					<heading>-51.133675</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.7157003</north>
+						<south>-8.915700299999999</south>
+						<east>115.2560191</east>
+						<west>115.0560191</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1560191,-8.8157003,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2.3.2">
+				<name>Turn right onto Jl. Kw. Garuda Wisnu Kencana</name>
+				<visibility>0</visibility>
+				<description>Turn right onto Jl. Kw. Garuda Wisnu Kencana</description>
+				<LookAt>
+					<longitude>115.1589606</longitude>
+					<latitude>-8.8061042</latitude>
+					<altitude>0</altitude>
+					<heading>17.331415</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.7061042</north>
+						<south>-8.9061042</south>
+						<east>115.2589606</east>
+						<west>115.0589606</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1589606,-8.8061042,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2.3.3">
+				<name>At the roundabout, take the 2nd exit and stay on Jl. Kw. Garuda Wisnu Kencana</name>
+				<visibility>0</visibility>
+				<description>At the roundabout, take the 2nd exit and stay on Jl. Kw. Garuda Wisnu Kencana</description>
+				<LookAt>
+					<longitude>115.1606849</longitude>
+					<latitude>-8.807028599999999</latitude>
+					<altitude>0</altitude>
+					<heading>82.51279</heading>
+					<tilt>45</tilt>
+					<range>360</range>
+				</LookAt>
+				<styleUrl>#dir_startpoint1</styleUrl>
+				<Region>
+					<LatLonAltBox>
+						<north>-8.707028599999999</north>
+						<south>-8.907028599999999</south>
+						<east>115.2606849</east>
+						<west>115.0606849</west>
+						<minAltitude>0</minAltitude>
+						<maxAltitude>0</maxAltitude>
+						<altitudeMode>absolute</altitudeMode>
+					</LatLonAltBox>
+					<Lod>
+						<minLodPixels>512</minLodPixels>
+						<maxLodPixels>-1</maxLodPixels>
+						<minFadeExtent>0</minFadeExtent>
+						<maxFadeExtent>0</maxFadeExtent>
+					</Lod>
+				</Region>
+				<Point>
+					<coordinates>115.1606849,-8.807028599999999,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="1.5.2">
+				<name>Route</name>
+				<visibility>0</visibility>
+				<styleUrl>#dir_startpoint8</styleUrl>
+				<LineString>
+					<coordinates>
+						115.2278407,-8.795977499999999,0 115.2278407,-8.795977499999999,0 115.2278977,-8.7959763,0 115.2279557,-8.7959868,0 115.2280092,-8.796003900000001,0 115.2280614,-8.7960327,0 115.2281064,-8.7960669,0 115.2281454,-8.796110000000001,0 115.2281774,-8.796158500000001,0 115.2281904,-8.796188900000001,0 115.228201,-8.7962126,0 115.2282158,-8.7962703,0 115.2282223,-8.7963304,0 115.2282185,-8.796390499999999,0 115.2282052,-8.796449600000001,0 115.2281823,-8.7965056,0 115.2281607,-8.7965594,0 115.2281444,-8.7965921,0 115.2280582,-8.7966658,0 115.2280551,-8.796667599999999,0 115.228016,-8.796689600000001,0 115.2279706,-8.7967066,0 115.2279236,-8.796718,0 115.2278747,-8.7967225,0 115.2278264,-8.796721,0 115.2277783,-8.796712599999999,0 115.2277314,-8.796700100000001,0 115.2277255,-8.7966967,0 115.227719,-8.7966949,0 115.2277125,-8.7966929,0 115.227707,-8.7966906,0 115.2277009,-8.796688100000001,0 115.2276948,-8.796685399999999,0 115.2276888,-8.7966826,0 115.2276826,-8.796679900000001,0 115.2275448,-8.7966522,0 115.2274504,-8.796652699999999,0 115.2273585,-8.796664099999999,0 115.2272916,-8.796685099999999,0 115.2272178,-8.7967174,0 115.2270993,-8.7967605,0 115.2267056,-8.796970999999999,0 115.2260759,-8.7973357,0 115.2260708,-8.797338,0 115.2256376,-8.797571599999999,0 115.2252324,-8.797804299999999,0 115.2250018,-8.797928000000001,0 115.2249109,-8.7979793,0 115.2246699,-8.798117100000001,0 115.2244248,-8.7982444,0 115.2241998,-8.7983464,0 115.2239359,-8.798442700000001,0 115.2238368,-8.798478899999999,0 115.2237496,-8.7984998,0 115.2235499,-8.7985218,0 115.2233571,-8.7985212,0 115.2233074,-8.798522699999999,0 115.2231236,-8.798506400000001,0 115.2229497,-8.798481000000001,0 115.2225825,-8.7992112,0 115.2224545,-8.7992218,0 115.2223922,-8.7992206,0 115.2219518,-8.7991899,0 115.2215588,-8.7991492,0 115.221083,-8.7990856,0 115.2210334,-8.7990783,0 115.2210149,-8.799075999999999,0 115.220746,-8.7990508,0 115.2205758,-8.799034799999999,0 115.2203728,-8.799025800000001,0 115.2203244,-8.7990257,0 115.2201968,-8.7990338,0 115.2200833,-8.799048900000001,0 115.2200411,-8.799059099999999,0 115.2198246,-8.799103300000001,0 115.2197112,-8.799122799999999,0 115.2195653,-8.7991507,0 115.2194955,-8.7991659,0 115.2194782,-8.7991741,0 115.2193917,-8.799221299999999,0 115.2192858,-8.799286,0 115.2191895,-8.799321600000001,0 115.2190773,-8.799369199999999,0 115.2190418,-8.7993843,0 115.2189049,-8.7994503,0 115.218745,-8.7995433,0 115.2186644,-8.799584899999999,0 115.2185484,-8.799647,0 115.218535,-8.7996528,0 115.2183781,-8.7997254,0 115.2181338,-8.7998125,0 115.2181004,-8.799826899999999,0 115.217729,-8.7999584,0 115.2177135,-8.799963999999999,0 115.2175495,-8.800023100000001,0 115.2173502,-8.8000863,0 115.2171788,-8.800140499999999,0 115.2171706,-8.8001428,0 115.2168661,-8.8002289,0 115.2168065,-8.8002386,0 115.2164501,-8.8002951,0 115.216279,-8.800321,0 115.2160815,-8.8003441,0 115.215535,-8.8004079,0 115.215487,-8.800413000000001,0 115.2149818,-8.800465000000001,0 115.2148017,-8.8004921,0 115.2147356,-8.800504099999999,0 115.2146344,-8.8005297,0 115.21463,-8.800530800000001,0 115.2144945,-8.8005829,0 115.2143874,-8.8006311,0 115.2143662,-8.800640599999999,0 115.2142722,-8.800689500000001,0 115.2140298,-8.800823599999999,0 115.2139307,-8.8008852,0 115.2138497,-8.800935000000001,0 115.2136514,-8.801130000000001,0 115.2133979,-8.8012838,0 115.2133914,-8.801288400000001,0 115.2133677,-8.8013057,0 115.2127454,-8.801657799999999,0 115.2126451,-8.8017121,0 115.2124506,-8.801813900000001,0 115.2123417,-8.801864800000001,0 115.2121709,-8.801948599999999,0 115.2119911,-8.8020339,0 115.2118007,-8.80212,0 115.2114257,-8.802250900000001,0 115.2113688,-8.8022711,0 115.2112238,-8.8022876,0 115.2111664,-8.8023101,0 115.2106549,-8.802498699999999,0 115.2103387,-8.8026081,0 115.2100675,-8.8027009,0 115.2099267,-8.8027464,0 115.2099098,-8.802751300000001,0 115.2097265,-8.802804699999999,0 115.2094976,-8.8028707,0 115.2092656,-8.8029385,0 115.208864,-8.8030451,0 115.208631,-8.803111100000001,0 115.2082553,-8.803236099999999,0 115.2082226,-8.8032509,0 115.2080572,-8.803325900000001,0 115.2079966,-8.803353400000001,0 115.2079259,-8.803389599999999,0 115.2078947,-8.803406799999999,0 115.2076272,-8.803561,0 115.2075637,-8.803587500000001,0 115.2072381,-8.8037695,0 115.2068807,-8.8039577,0 115.2064974,-8.804151299999999,0 115.2064849,-8.8041597,0 115.2063377,-8.804252399999999,0 115.206106,-8.804368200000001,0 115.2057175,-8.804556,0 115.2055054,-8.804666900000001,0 115.2052394,-8.804805999999999,0 115.2051653,-8.8048526,0 115.2049376,-8.804957699999999,0 115.2048002,-8.805021099999999,0 115.2047729,-8.8050342,0 115.2044456,-8.8051917,0 115.2041319,-8.805350000000001,0 115.2038834,-8.8054755,0 115.2038796,-8.805477399999999,0 115.2036114,-8.805609199999999,0 115.2035342,-8.8056459,0 115.2028816,-8.805964599999999,0 115.2027501,-8.8060296,0 115.2024133,-8.8062086,0 115.2023477,-8.806234999999999,0 115.2021696,-8.806312399999999,0 115.2019087,-8.8064608,0 115.2015209,-8.8066741,0 115.2013196,-8.8067771,0 115.2011179,-8.8068802,0 115.2010466,-8.8069167,0 115.20092,-8.806976499999999,0 115.2003237,-8.8072675,0 115.2000616,-8.807399200000001,0 115.1994997,-8.8077136,0 115.1994354,-8.8077451,0 115.1993914,-8.807762800000001,0 115.1993724,-8.807769800000001,0 115.1993487,-8.8077761,0 115.1992651,-8.8077857,0 115.1987292,-8.8077168,0 115.1984602,-8.8076943,0 115.1984365,-8.8076913,0 115.1980913,-8.807653,0 115.1979119,-8.8076227,0 115.1977825,-8.8076013,0 115.1977536,-8.807599400000001,0 115.1977257,-8.8075978,0 115.1977033,-8.8075967,0 115.197693,-8.8075972,0 115.1976809,-8.807598,0 115.1976478,-8.807601500000001,0 115.1975734,-8.8076127,0 115.1974905,-8.807641200000001,0 115.1974253,-8.8076661,0 115.1973691,-8.8076887,0 115.1973097,-8.807713400000001,0 115.1972299,-8.8077551,0 115.1970591,-8.807845800000001,0 115.196779,-8.808028200000001,0 115.1966545,-8.8081145,0 115.1961101,-8.808453399999999,0 115.1956269,-8.808733200000001,0 115.1954516,-8.808816999999999,0 115.1952928,-8.8088976,0 115.1949267,-8.8090811,0 115.1947833,-8.8091522,0 115.1945862,-8.809245499999999,0 115.1942727,-8.8093722,0 115.1940814,-8.8094652,0 115.1940288,-8.809496599999999,0 115.1939775,-8.8095324,0 115.1939316,-8.809570900000001,0 115.1938899,-8.809608600000001,0 115.1938555,-8.809644199999999,0 115.1938225,-8.8096821,0 115.193798,-8.809715000000001,0 115.1937267,-8.809802899999999,0 115.1937026,-8.809839500000001,0 115.1936704,-8.809888300000001,0 115.1935717,-8.8100653,0 115.1935201,-8.810214500000001,0 115.1934613,-8.8103847,0 115.1934102,-8.8105324,0 115.193403,-8.8105551,0 115.1932389,-8.811069699999999,0 115.1932343,-8.811083999999999,0 115.1931897,-8.8112429,0 115.1930953,-8.811579500000001,0 115.193058,-8.811766199999999,0 115.1929286,-8.812413299999999,0 115.1928927,-8.812568000000001,0 115.1928858,-8.8125935,0 115.1928628,-8.8126874,0 115.1928407,-8.8127719,0 115.1928164,-8.812848499999999,0 115.1927464,-8.813071900000001,0 115.1926405,-8.8133579,0 115.1925222,-8.813678400000001,0 115.1924011,-8.814016499999999,0 115.1923451,-8.8141908,0 115.1922737,-8.8144083,0 115.1921498,-8.8147392,0 115.1921014,-8.8148541,0 115.1920835,-8.8148961,0 115.1920432,-8.8149739,0 115.1920004,-8.815048000000001,0 115.1919521,-8.8151133,0 115.1919002,-8.815177200000001,0 115.1917903,-8.8152986,0 115.1916071,-8.8154939,0 115.1915007,-8.815594300000001,0 115.191326,-8.8157789,0 115.1911685,-8.815976900000001,0 115.19105,-8.8161501,0 115.1909468,-8.816330300000001,0 115.1908419,-8.816523500000001,0 115.1907021,-8.8168118,0 115.1906217,-8.8169776,0 115.1904847,-8.817291000000001,0 115.1904194,-8.817478400000001,0 115.1903308,-8.817732400000001,0 115.1902347,-8.818013799999999,0 115.1901742,-8.818176599999999,0 115.1901261,-8.818301999999999,0 115.1901218,-8.8183151,0 115.1900121,-8.8186407,0 115.1899585,-8.8188531,0 115.1899251,-8.8190136,0 115.1897642,-8.819256299999999,0 115.189763,-8.8192577,0 115.1896306,-8.8194424,0 115.1895728,-8.819519700000001,0 115.1895674,-8.8195269,0 115.1894958,-8.819617600000001,0 115.1894343,-8.8196858,0 115.1892524,-8.819887400000001,0 115.1891423,-8.8200062,0 115.1889958,-8.8201827,0 115.1889383,-8.8202427,0 115.1886172,-8.8206791,0 115.1885467,-8.8207749,0 115.1883649,-8.8210029,0 115.1882139,-8.8212037,0 115.1878994,-8.821625299999999,0 115.1877983,-8.8217345,0 115.1877028,-8.8218438,0 115.1876341,-8.8219101,0 115.1875967,-8.821942699999999,0 115.1875078,-8.8220423,0 115.1873114,-8.822168700000001,0 115.1871493,-8.822275100000001,0 115.1869334,-8.8224552,0 115.1867581,-8.8225914,0 115.1866283,-8.8227294,0 115.1859412,-8.823363799999999,0 115.1856833,-8.8236021,0 115.185221,-8.8240073,0 115.1849594,-8.824236600000001,0 115.1847378,-8.824431300000001,0 115.1844644,-8.8246688,0 115.1843935,-8.8247304,0 115.184118,-8.824965499999999,0 115.1839193,-8.825135,0 115.1838593,-8.8251811,0 115.1837369,-8.8252858,0 115.1832955,-8.8256633,0 115.1829912,-8.825954100000001,0 115.182939,-8.825996200000001,0 115.1825029,-8.8264285,0 115.1824615,-8.8264599,0 115.18243,-8.8264932,0 115.1822628,-8.826637699999999,0 115.1818649,-8.826982900000001,0 115.181561,-8.827249500000001,0 115.181484,-8.8273156,0 115.1811765,-8.8276059,0 115.1809638,-8.827809200000001,0 115.1809226,-8.827849000000001,0 115.1808443,-8.827898899999999,0 115.1807858,-8.8279289,0 115.180702,-8.827991000000001,0 115.1806141,-8.8280402,0 115.1805497,-8.828071599999999,0 115.1804838,-8.8280946,0 115.1804187,-8.828121700000001,0 115.1800832,-8.828216599999999,0 115.179714,-8.8283016,0 115.1796312,-8.828320700000001,0 115.1794406,-8.828364499999999,0 115.179328,-8.828387599999999,0 115.1789589,-8.8284296,0 115.1788985,-8.8284377,0 115.1787765,-8.8284615,0 115.1786253,-8.828489299999999,0 115.1785101,-8.828521800000001,0 115.178187,-8.8286069,0 115.1779936,-8.8286616,0 115.1779019,-8.8286874,0 115.1777417,-8.828720199999999,0 115.1776998,-8.8287239,0 115.1776849,-8.828723699999999,0 115.1773213,-8.828742,0 115.1773153,-8.8287423,0 115.1770229,-8.828742699999999,0 115.1767855,-8.8287437,0 115.1763652,-8.828757400000001,0 115.1763591,-8.8287584,0 115.1763289,-8.8287598,0 115.175851,-8.8287681,0 115.1755534,-8.828777799999999,0 115.1753915,-8.828791300000001,0 115.1753491,-8.8287937,0 115.1752307,-8.828814299999999,0 115.1751276,-8.8288472,0 115.1749328,-8.828951999999999,0 115.1747341,-8.8290764,0 115.1747314,-8.8290781,0 115.1746717,-8.8291155,0 115.1743613,-8.829328800000001,0 115.1743179,-8.829356900000001,0 115.174222,-8.8294219,0 115.1741613,-8.8294534,0 115.1741261,-8.829467299999999,0 115.1740932,-8.8294713,0 115.1740245,-8.829462599999999,0 115.173894,-8.829431599999999,0 115.173721,-8.8293797,0 115.1735647,-8.8293204,0 115.1735277,-8.8293064,0 115.1732943,-8.829173300000001,0 115.1731735,-8.829109300000001,0 115.1728767,-8.828926900000001,0 115.1727905,-8.8288688,0 115.1725299,-8.828693100000001,0 115.1724895,-8.828666399999999,0 115.1724251,-8.8286227,0 115.1721929,-8.8284483,0 115.1721362,-8.828386099999999,0 115.1720485,-8.8282895,0 115.1719776,-8.8282188,0 115.1719027,-8.828134500000001,0 115.1718904,-8.828120200000001,0 115.1717649,-8.8279728,0 115.1716982,-8.827900700000001,0 115.1716504,-8.827852699999999,0 115.1716494,-8.8278517,0 115.1715726,-8.8277745,0 115.1715203,-8.827727100000001,0 115.1715194,-8.8277263,0 115.1714936,-8.8277029,0 115.1714026,-8.827628900000001,0 115.1712924,-8.8275535,0 115.1712279,-8.8275124,0 115.1711422,-8.827457600000001,0 115.171075,-8.827415200000001,0 115.1708635,-8.8272815,0 115.1705388,-8.8271014,0 115.1702842,-8.8269725,0 115.1701743,-8.8269115,0 115.169828,-8.826740900000001,0 115.1695568,-8.8266293,0 115.1692692,-8.8265175,0 115.169253,-8.826512299999999,0 115.1691276,-8.826458300000001,0 115.1690842,-8.8264437,0 115.1690556,-8.826438899999999,0 115.1690469,-8.8264377,0 115.1690248,-8.8264358,0 115.168991,-8.826438599999999,0 115.1689509,-8.826446199999999,0 115.1689142,-8.8264598,0 115.1688718,-8.826480399999999,0 115.168821,-8.826514899999999,0 115.1686672,-8.826648799999999,0 115.168597,-8.8267136,0 115.1684825,-8.8268193,0 115.1684643,-8.826836699999999,0 115.1681393,-8.8271482,0 115.1680792,-8.8272187,0 115.167841,-8.8274984,0 115.1678351,-8.8275044,0 115.1677704,-8.827541800000001,0 115.167725,-8.827555500000001,0 115.167694,-8.827559600000001,0 115.1676759,-8.827560999999999,0 115.1676347,-8.827559000000001,0 115.1675671,-8.8275425,0 115.1674825,-8.827514000000001,0 115.1672679,-8.8274182,0 115.167056,-8.827333100000001,0 115.1670483,-8.8273309,0 115.1670037,-8.8273134,0 115.166932,-8.827287200000001,0 115.166712,-8.827222300000001,0 115.1665108,-8.8271686,0 115.166297,-8.8271186,0 115.1661454,-8.8270727,0 115.1660265,-8.827033,0 115.16588,-8.8269786,0 115.1658957,-8.826840000000001,0 115.1659245,-8.8266779,0 115.1659482,-8.8263275,0 115.1659578,-8.8260253,0 115.1659517,-8.8259489,0 115.1659411,-8.8259116,0 115.1658507,-8.825719899999999,0 115.1657423,-8.8255252,0 115.1657046,-8.8254693,0 115.1655532,-8.8252449,0 115.165404,-8.825070500000001,0 115.1653307,-8.824971700000001,0 115.1652756,-8.8249309,0 115.1651873,-8.824881299999999,0 115.164931,-8.8246348,0 115.164737,-8.8244822,0 115.1646939,-8.8244489,0 115.164308,-8.824154500000001,0 115.1641389,-8.8240243,0 115.1639449,-8.823880300000001,0 115.1638241,-8.823718,0 115.1637157,-8.823596999999999,0 115.1636563,-8.8235244,0 115.1635289,-8.8233728,0 115.1635057,-8.8233455,0 115.1631735,-8.822939399999999,0 115.1631068,-8.822857900000001,0 115.1629636,-8.822664899999999,0 115.162799,-8.8225018,0 115.162771,-8.822466,0 115.1627136,-8.822379700000001,0 115.1625701,-8.8221995,0 115.1623552,-8.8218712,0 115.1623303,-8.8218216,0 115.162244,-8.821680199999999,0 115.1620846,-8.8214717,0 115.16195,-8.8212674,0 115.1617185,-8.820980799999999,0 115.1616568,-8.8209065,0 115.1613467,-8.8204639,0 115.161274,-8.8203561,0 115.1611573,-8.820191599999999,0 115.1609297,-8.8198673,0 115.1608321,-8.8196963,0 115.1607629,-8.8196067,0 115.1606833,-8.8195329,0 115.1606416,-8.819498400000001,0 115.1605752,-8.8194465,0 115.1604984,-8.8193888,0 115.1604677,-8.8193676,0 115.1599891,-8.819058500000001,0 115.1598774,-8.818981300000001,0 115.1596035,-8.818785699999999,0 115.1594674,-8.8186897,0 115.1593991,-8.8186415,0 115.1591843,-8.818497000000001,0 115.1589095,-8.818312600000001,0 115.1588632,-8.8182805,0 115.1588107,-8.818245599999999,0 115.1587505,-8.8182039,0 115.158664,-8.818141499999999,0 115.1582219,-8.8177786,0 115.15798,-8.8175829,0 115.1579026,-8.8175086,0 115.1576549,-8.8173187,0 115.1575333,-8.8172254,0 115.157428,-8.8171534,0 115.1574113,-8.8171415,0 115.1573325,-8.817086400000001,0 115.1572876,-8.8170535,0 115.1572273,-8.817004000000001,0 115.157115,-8.816910699999999,0 115.1569735,-8.8167872,0 115.1569566,-8.816772800000001,0 115.1568193,-8.816644800000001,0 115.1567689,-8.8166118,0 115.156693,-8.8165581,0 115.1566087,-8.8164923,0 115.1565819,-8.816470000000001,0 115.1563713,-8.816127,0 115.1562695,-8.815962799999999,0 115.156169,-8.8158248,0 115.1561394,-8.8157868,0 115.1561105,-8.8157552,0 115.1560816,-8.815730800000001,0 115.1560191,-8.8157003,0 115.1562328,-8.815408,0 115.1563363,-8.815280700000001,0 115.1565457,-8.815023,0 115.1566845,-8.8148652,0 115.1567493,-8.814765100000001,0 115.1567842,-8.8146804,0 115.1568216,-8.814581799999999,0 115.1568634,-8.814440299999999,0 115.1568835,-8.8143663,0 115.1569308,-8.8141926,0 115.156936,-8.814173500000001,0 115.1570047,-8.8139225,0 115.1571109,-8.813472300000001,0 115.1571608,-8.813303400000001,0 115.1572227,-8.812997599999999,0 115.1572564,-8.8129028,0 115.1573177,-8.8127189,0 115.1573886,-8.8124769,0 115.1574169,-8.8123565,0 115.1574629,-8.812191500000001,0 115.1574821,-8.812116700000001,0 115.1574966,-8.8120166,0 115.1575122,-8.811501399999999,0 115.1575184,-8.8113007,0 115.1575185,-8.8112452,0 115.1575335,-8.810904600000001,0 115.1576048,-8.810364699999999,0 115.1576117,-8.810340500000001,0 115.157636,-8.8102137,0 115.1576501,-8.810164800000001,0 115.1576625,-8.8100799,0 115.1577378,-8.809769899999999,0 115.1578011,-8.809568199999999,0 115.1579304,-8.809181499999999,0 115.1579735,-8.809081300000001,0 115.1581096,-8.808747200000001,0 115.1581656,-8.808582299999999,0 115.1582253,-8.8084062,0 115.1582591,-8.8082695,0 115.1583458,-8.807959200000001,0 115.1583875,-8.807820599999999,0 115.1584058,-8.807773299999999,0 115.1584501,-8.807653800000001,0 115.1585589,-8.8073105,0 115.1585746,-8.8072611,0 115.1586148,-8.807139400000001,0 115.1586172,-8.8071322,0 115.1588141,-8.806497200000001,0 115.158876,-8.806372100000001,0 115.1589606,-8.8061042,0 115.15898,-8.806041,0 115.159001,-8.805968500000001,0 115.1593138,-8.8062206,0 115.1595332,-8.806396400000001,0 115.1596252,-8.806468300000001,0 115.1599659,-8.8067492,0 115.1602007,-8.806921900000001,0 115.1603003,-8.8069782,0 115.1603836,-8.8070194,0 115.1604731,-8.807050500000001,0 115.1605686,-8.8070545,0 115.1606849,-8.807028600000001,0 115.1607034,-8.8069907,0 115.1607316,-8.8069589,0 115.1607695,-8.806926199999999,0 115.160817,-8.8068945,0 115.1608867,-8.8068697,0 115.1609385,-8.8068597,0 115.1609632,-8.8068554,0 115.1611027,-8.806676299999999,0 115.1612377,-8.8065471,0 115.1613358,-8.806488999999999,0 115.1613499,-8.8064839,0 115.1614393,-8.806451300000001,0 115.1615017,-8.806440200000001,0 115.1615246,-8.8064357,0 115.1615539,-8.806429899999999,0 115.1616934,-8.806388699999999,0 115.1617888,-8.806374699999999,0 115.1618668,-8.8063669,0 115.1619891,-8.806392900000001,0 115.1621167,-8.806402,0 115.1621843,-8.8064094,0 115.162238,-8.8064182,0 115.1622785,-8.8064287,0 115.1623301,-8.806444900000001,0 115.1623887,-8.806467,0 115.1625182,-8.8064848,0 115.1625222,-8.806486400000001,0 115.1625822,-8.8065102,0 115.1630056,-8.806776599999999,0 115.1630886,-8.8068264,0 115.1630985,-8.8068309,0 115.1632692,-8.806872500000001,0 115.1642184,-8.806929999999999,0 115.1643398,-8.806937,0 115.164412,-8.806950000000001,0 115.1644655,-8.8069714,0 115.1645023,-8.806994599999999,0 115.1645421,-8.8070325,0 115.1646059,-8.8071065,0 115.1646593,-8.807195200000001,0 115.1647016,-8.807285800000001,0 115.1647128,-8.8073525,0 115.1647144,-8.807424899999999,0 115.1647337,-8.8074843,0 115.1647407,-8.8075163,0 115.1647391,-8.8075522,0 115.1646835,-8.807884700000001,0 115.164651,-8.8082356,0 115.1646457,-8.808324000000001,0 115.1646554,-8.808408399999999,0 115.1646665,-8.8084448,0 
+					</coordinates>
+				</LineString>
+			</Placemark>
+		</Folder>
+	</Folder>
+</Document>
+</kml>

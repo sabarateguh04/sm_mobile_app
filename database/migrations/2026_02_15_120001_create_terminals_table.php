@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('terminals', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->string('alamat')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+            $table->string('wilayah')->nullable();
+            $table->string('daerah')->nullable();
+            $table->text('keterangan')->nullable();
+            $table->timestamps();
+            $table->index(['wilayah', 'daerah']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('terminals');
+    }
+};

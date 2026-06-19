@@ -1,0 +1,120 @@
+
+<style>
+*{box-sizing:border-box}
+.wrap{padding:1rem 0;overflow-x:auto}
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem}
+.fbtn{font-size:12px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.fbtn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+table{border-collapse:collapse;min-width:700px;width:100%}
+th{font-size:11px;font-weight:500;color:var(--color-text-secondary);padding:6px 8px;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap;text-align:center}
+th.fitur{text-align:left;min-width:160px;position:sticky;left:0;background:var(--color-background-primary);z-index:2}
+td{padding:6px 8px;border-bottom:0.5px solid var(--color-border-tertiary);text-align:center;font-size:12px}
+td.fitur{text-align:left;font-size:12px;color:var(--color-text-primary);position:sticky;left:0;background:var(--color-background-primary);z-index:1}
+td.cat{font-size:11px;color:var(--color-text-tertiary);font-weight:500;padding-top:10px;text-transform:uppercase;letter-spacing:.04em;border-bottom:none}
+tr.hidden{display:none}
+.dot{display:inline-block;width:20px;height:20px;border-radius:4px;font-size:12px;line-height:20px}
+.dot-full{background:var(--color-background-success);color:var(--color-text-success)}
+.dot-view{background:var(--color-background-info);color:var(--color-text-info)}
+.dot-none{color:var(--color-text-tertiary)}
+.role-hdr{font-size:10px;writing-mode:vertical-rl;transform:rotate(180deg);height:80px;display:flex;align-items:center;justify-content:center;padding:4px 0}
+.legend{display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--color-text-secondary);flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:6px}
+.highlight td{background:var(--color-background-secondary)}
+</style>
+<div class="wrap">
+<h2 class="sr-only">Matriks akses fitur per role di sistem Smart Back Office</h2>
+<div class="filter-bar" id="filters">
+  <span style="font-size:12px;color:var(--color-text-tertiary);padding:4px 0;align-self:center">Filter kategori:</span>
+  <button class="fbtn active" onclick="filterCat('all',this)">Semua</button>
+  <button class="fbtn" onclick="filterCat('lalin',this)">Lalu Lintas</button>
+  <button class="fbtn" onclick="filterCat('posyan',this)">Posyan</button>
+  <button class="fbtn" onclick="filterCat('terminal',this)">Terminal</button>
+  <button class="fbtn" onclick="filterCat('wisata',this)">Wisata</button>
+  <button class="fbtn" onclick="filterCat('it',this)">IT</button>
+  <button class="fbtn" onclick="filterCat('master',this)">Master Data</button>
+</div>
+<table id="matrix">
+<thead>
+<tr>
+  <th class="fitur">Fitur / Modul</th>
+  <th><div class="role-hdr">SA</div></th>
+  <th><div class="role-hdr">Adminbo</div></th>
+  <th><div class="role-hdr">Admin</div></th>
+  <th><div class="role-hdr">Backoffice</div></th>
+  <th><div class="role-hdr">Posyan</div></th>
+  <th><div class="role-hdr">Wasdalwil</div></th>
+  <th><div class="role-hdr">Wasdalda</div></th>
+  <th><div class="role-hdr">Wasdalnas</div></th>
+  <th><div class="role-hdr">Wasdalopsda</div></th>
+  <th><div class="role-hdr">Wasdalopsnas</div></th>
+  <th><div class="role-hdr">Wasdaltik</div></th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+<div class="legend">
+  <div class="leg-item"><span class="dot dot-full">+</span> CRUD penuh</div>
+  <div class="leg-item"><span class="dot dot-view">v</span> View / monitor</div>
+  <div class="leg-item"><span class="dot dot-none">-</span> Tidak ada akses</div>
+</div>
+</div>
+<script>
+const F='full',V='view',N='none';
+const rows=[
+  {cat:'lalin',label:'Kemacetan (trafficstuck)',data:[F,F,F,F,F,V,V,V,N,N,N]},
+  {cat:'lalin',label:'Arus lalu lintas kota',data:[F,F,F,F,F,V,N,N,N,N,N]},
+  {cat:'lalin',label:'Arus mudik/balik',data:[F,N,F,N,F,V,V,V,N,V,N]},
+  {cat:'lalin',label:'Kontijensi & kejadian',data:[F,N,F,F,F,V,V,V,V,V,N]},
+  {cat:'lalin',label:'Kegiatan rutin (turjagwali)',data:[F,N,F,F,N,V,V,V,N,N,N]},
+  {cat:'lalin',label:'Gangguan jalan',data:[F,N,F,F,F,V,V,N,N,N,N]},
+  {cat:'posyan',label:'Profil pos pelayanan',data:[F,N,F,N,F,V,N,V,V,V,N]},
+  {cat:'posyan',label:'Personil posyan',data:[F,N,F,N,F,V,N,V,N,V,N]},
+  {cat:'posyan',label:'Apel posyan',data:[F,N,F,N,F,V,N,V,N,V,N]},
+  {cat:'posyan',label:'Pengunjung posyan',data:[F,N,F,N,F,V,N,V,N,V,N]},
+  {cat:'posyan',label:'Survei posyan',data:[F,N,F,N,F,V,N,V,N,V,N]},
+  {cat:'posyan',label:'Wanjol',data:[F,N,F,N,F,V,N,V,N,V,N]},
+  {cat:'terminal',label:'Profil terminal',data:[F,N,F,F,F,V,N,V,N,N,N]},
+  {cat:'terminal',label:'Data penumpang harian',data:[F,N,F,F,F,V,N,V,N,N,N]},
+  {cat:'wisata',label:'Objek wisata',data:[F,N,F,F,F,V,V,V,N,N,N]},
+  {cat:'wisata',label:'Kunjungan wisata harian',data:[F,N,F,F,F,V,N,V,N,N,N]},
+  {cat:'wisata',label:'Tempat ibadah',data:[F,N,F,F,F,V,N,N,N,N,N]},
+  {cat:'it',label:'CCTV',data:[F,N,F,F,N,N,N,N,N,N,V]},
+  {cat:'it',label:'Perangkat IT',data:[F,N,F,F,N,N,N,N,N,N,V]},
+  {cat:'it',label:'IT Support / tiket',data:[F,N,F,F,N,N,N,V,N,N,V]},
+  {cat:'master',label:'Kelola user (USM)',data:[F,F,F,N,N,V,V,V,N,N,N]},
+  {cat:'master',label:'Daerah & wilayah',data:[F,F,F,N,N,N,N,N,N,N,N]},
+  {cat:'master',label:'Organisasi & suborg',data:[F,F,F,N,N,N,N,N,N,N,N]},
+  {cat:'master',label:'Role & permissions',data:[F,N,N,N,N,N,N,N,N,N,N]},
+  {cat:'master',label:'Master referensi (faktor dll)',data:[F,N,F,N,N,N,N,N,N,N,N]},
+];
+const catLabel={lalin:'Lalu Lintas',posyan:'Pos Pelayanan',terminal:'Terminal & Penumpang',wisata:'Wisata & Ibadah',it:'Infrastruktur IT',master:'Master Data'};
+let currentCat='all';
+function renderDot(v){
+  if(v===F) return '<span class="dot dot-full" title="CRUD penuh">+</span>';
+  if(v===V) return '<span class="dot dot-view" title="View saja">v</span>';
+  return '<span class="dot dot-none">-</span>';
+}
+function render(){
+  const tb=document.getElementById('tbody');
+  let html='',lastCat='';
+  rows.forEach((r,i)=>{
+    const show=(currentCat==='all'||r.cat===currentCat);
+    if(show && r.cat!==lastCat){
+      html+=`<tr class="cat-sep${!show?' hidden':''}"><td class="cat fitur" colspan="12">${catLabel[r.cat]}</td></tr>`;
+      lastCat=r.cat;
+    }
+    html+=`<tr class="${!show?'hidden':''}" onmouseenter="this.classList.add('highlight')" onmouseleave="this.classList.remove('highlight')">`;
+    html+=`<td class="fitur">${r.label}</td>`;
+    r.data.forEach(d=>{html+=`<td>${renderDot(d)}</td>`;});
+    html+='</tr>';
+  });
+  tb.innerHTML=html;
+}
+function filterCat(cat,btn){
+  currentCat=cat;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+render();
+</script>

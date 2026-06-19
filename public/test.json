@@ -1,0 +1,2881 @@
+{
+    "polda": [
+        {
+            "polda": "POLDA ACEH",
+            "lat": 5.5302205,
+            "lng": 95.2978755
+        },
+        {
+            "polda": "POLDA SUMATERA UTARA",
+            "lat": 3.530854,
+            "lng": 98.73761879999999
+        },
+        {
+            "polda": "POLDA RIAU",
+            "lat": 0.5106790999999999,
+            "lng": 101.4577596
+        },
+        {
+            "polda": "POLDA KEPULAUAN RIAU",
+            "lat": 1.1620995,
+            "lng": 104.1203231
+        },
+        {
+            "polda": "POLDA SUMATERA BARAT",
+            "lat": -0.9361268,
+            "lng": 100.3604202
+        },
+        {
+            "polda": "POLDA JAMBI",
+            "lat": -1.6110982,
+            "lng": 103.6236772
+        },
+        {
+            "polda": "POLDA SUMATERA SELATAN",
+            "lat": -2.9610096,
+            "lng": 104.73991
+        },
+        {
+            "polda": "POLDA BENGKULU",
+            "lat": -3.824923899999999,
+            "lng": 102.3011987
+        },
+        {
+            "polda": "POLDA LAMPUNG",
+            "lat": -5.4448606,
+            "lng": 105.2622629
+        },
+        {
+            "polda": "POLDA BANTEN",
+            "lat": -6.1492846,
+            "lng": 106.1918089
+        },
+        {
+            "polda": "POLDA METRO JAYA",
+            "lat": -6.222807599999999,
+            "lng": 106.8124146
+        },
+        {
+            "polda": "POLDA JAWA BARAT",
+            "lat": -6.9372693,
+            "lng": 107.7039953
+        },
+        {
+            "polda": "POLDA JAWA TENGAH",
+            "lat": -6.996563999999999,
+            "lng": 110.4184989
+        },
+        {
+            "polda": "POLDA JAWA TIMUR",
+            "lat": -7.322306199999999,
+            "lng": 112.7301933
+        },
+        {
+            "polda": "POLDA KALIMANTAN BARAT",
+            "lat": -0.0685866,
+            "lng": 109.3615124
+        },
+        {
+            "polda": "POLDA KALIMANTAN SELATAN",
+            "lat": -3.3127818,
+            "lng": 114.5899365
+        },
+        {
+            "polda": "POLDA KALIMANTAN TENGAH",
+            "lat": -2.2456374,
+            "lng": 113.8751377
+        },
+        {
+            "polda": "POLDA KALIMANTAN TIMUR",
+            "lat": -1.2298342,
+            "lng": 116.8859919
+        },
+        {
+            "polda": "POLDA SULAWESI SELATAN",
+            "lat": -5.0954478,
+            "lng": 119.5134495
+        },
+        {
+            "polda": "POLDA SULAWESI TENGAH",
+            "lat": -0.8562289,
+            "lng": 119.892342
+        },
+        {
+            "polda": "POLDA SULAWESI TENGGARA",
+            "lat": -4.024327899999999,
+            "lng": 122.5370779
+        },
+        {
+            "polda": "POLDA SULAWESI UTARA",
+            "lat": 1.4643569,
+            "lng": 124.8329734
+        },
+        {
+            "polda": "POLDA GORONTALO",
+            "lat": 0.5979534,
+            "lng": 123.0314576
+        },
+        {
+            "polda": "POLDA MALUKU",
+            "lat": -3.6976773,
+            "lng": 128.1864451
+        },
+        {
+            "polda": "POLDA MALUKU UTARA",
+            "lat": 0.787486,
+            "lng": 127.3801507
+        },
+        {
+            "polda": "POLDA PAPUA",
+            "lat": -2.5367789,
+            "lng": 140.706528
+        },
+        {
+            "polda": "POLDA SULAWESI BARAT",
+            "lat": -2.6802985,
+            "lng": 118.9184985
+        },
+        {
+            "polda": "POLDA KALIMANTAN UTARA",
+            "lat": 2.7861406,
+            "lng": 117.4464353
+        },
+        {
+            "polda": "POLDA PAPUA BARAT",
+            "lat": -0.9498943,
+            "lng": 134.0009549
+        },
+        {
+            "polda": "POLDA DI YOGYAKARTA",
+            "lat": -7.7579515,
+            "lng": 110.4005096
+        },
+        {
+            "polda": "POLDA NUSA TENGGARA BARAT",
+            "lat": -8.5781318,
+            "lng": 116.086459
+        },
+        {
+            "polda": "POLDA NUSA TENGGARA TIMUR",
+            "lat": -10.1774094,
+            "lng": 123.5968358
+        },
+        {
+            "polda": "POLDA KEPULAUAN BANGKA BELITUNG",
+            "lat": -2.1540638,
+            "lng": 106.1620587
+        },
+        {
+            "polda": "POLDA BALI",
+            "lat": -8.6482099,
+            "lng": 115.2253427
+        }
+    ],
+    "polres": [
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LHOKSEUMAWE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BIREUEN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SABANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA BANDA ACEH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES GAYO LUES",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH TENGGARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH JAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SIMEULUE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BENER MERIAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH TAMIANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LANGSA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES NAGAN RAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PIDIE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH SINGKIL",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH BARAT DAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PIDIE JAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ACEH BESAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUBULUSSALAM",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": 3.601781173451587,
+            "lng": 98.68131175645203
+        },
+        {
+            "polres": "POLRESTABES MEDAN",
+            "lat": 3.442216616972698,
+            "lng": 98.7499998841065
+        },
+        {
+            "polres": "POLRES TEBING TINGGI",
+            "lat": 3.325558182815092,
+            "lng": 99.16181062734458
+        },
+        {
+            "polres": "POLRES MANDAILING NATAL",
+            "lat": 0.9019490942227918,
+            "lng": 99.54546732364683
+        },
+        {
+            "polres": "POLRES DAIRI",
+            "lat": 2.747355294330636,
+            "lng": 99.54546732364683
+        },
+        {
+            "polres": "POLRES TAPANULI SELATAN",
+            "lat": 1.3838428149180224,
+            "lng": 99.27577975683772
+        },
+        {
+            "polres": "POLRES SERDANG BEDAGAI",
+            "lat": 3.510982209567257,
+            "lng": 99.10674803898763
+        },
+        {
+            "polres": "POLRES PEMATANG SIANTAR",
+            "lat": 2.954941932183724,
+            "lng": 99.06083040830144
+        },
+        {
+            "polres": "POLRES LABUHAN BATU",
+            "lat": 2.1041935299325822,
+            "lng": 99.82499347946596
+        },
+        {
+            "polres": "POLRES TOBA SAMOSIR",
+            "lat": 2.4430164389275437,
+            "lng": 99.16273845714393
+        },
+        {
+            "polres": "POLRES BATU BARA",
+            "lat": 3.170029607322788,
+            "lng": 99.41801607946586
+        },
+        {
+            "polres": "POLRES TANAH KARO",
+            "lat": 3.104162054016306,
+            "lng": 98.49355713713726
+        },
+        {
+            "polres": "POLRES PELABUHAN BELAWAN",
+            "lat": 3.7778965011425156,
+            "lng": 98.70310775248092
+        },
+        {
+            "polres": "POLRES NIAS",
+            "lat": 1.2831528431948334,
+            "lng": 97.62422920830305
+        },
+        {
+            "polres": "POLRESTA DELI SERDANG",
+            "lat": 3.5597124738657415,
+            "lng": 98.86030659643859
+        },
+        {
+            "polres": "POLRES TAPANULI TENGAH",
+            "lat": 1.7097953869986717,
+            "lng": 98.84953239480934
+        },
+        {
+            "polres": "POLRES SIBOLGA",
+            "lat": 1.8533082921049036,
+            "lng": 98.64971196146412
+        },
+        {
+            "polres": "POLRES PADANG SIDEMPUAN",
+            "lat": 1.5450389640306055,
+            "lng": 99.17772005106676
+        },
+        {
+            "polres": "POLRES LANGKAT",
+            "lat": 3.739371804168853,
+            "lng": 98.4417620524808
+        },
+        {
+            "polres": "POLRES BINJAI",
+            "lat": 3.600168442003918,
+            "lng": 98.48466776597353
+        },
+        {
+            "polres": "POLRES TANJUNG BALAI",
+            "lat": 2.9637737143134375,
+            "lng": 99.80695182364438
+        },
+        {
+            "polres": "POLRES SAMOSIR",
+            "lat": 2.6073319037564535,
+            "lng": 98.69678535248002
+        },
+        {
+            "polres": "POLRES NIAS SELATAN",
+            "lat": 0.5689890523480243,
+            "lng": 97.81849703714067
+        },
+        {
+            "polres": "POLRES HUMBANG HASUNDUTAN",
+            "lat": 2.2647652022841798,
+            "lng": 98.84359519665874
+        },
+        {
+            "polres": "POLRES TAPANULI UTARA",
+            "lat": 2.022685041005131,
+            "lng": 98.96186628131598
+        },
+        {
+            "polres": "POLRES ASAHAN",
+            "lat": 2.9689708558078953,
+            "lng": 99.61524589295863
+        },
+        {
+            "polres": "POLRES SIMALUNGUN",
+            "lat": 2.958359445961151,
+            "lng": 98.86141848131575
+        },
+        {
+            "polres": "POLRES PAK PAK BARAT",
+            "lat": 2.542170517842367,
+            "lng": 98.3253950101514
+        },
+        {
+            "polres": "POLRES PADANG LAWAS",
+            "lat": 1.0532317664430577,
+            "lng": 99.79748386597494
+        },
+        {
+            "polres": "POLRES NIAS SELATAN",
+            "lat": 0.5689890523480243,
+            "lng": 97.81849703714067
+        },
+        {
+            "polres": "POLRESTA PEKANBARU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES DUMAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BENGKALIS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SIAK",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KAMPAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ROKAN HULU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES INDRAGIRI HILIR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KUANTAN SINGINGI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ROKAN HILIR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES INDRAGIRI HULU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PELALAWAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN MERANTI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA BARELANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TANJUNG PINANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES NATUNA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KARIMUN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LINGGA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN ANAMBAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BINTAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BUKITTINGGI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA PADANG PARIAMAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SOLOK SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PESISIR SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PASAMAN BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES AGAM",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PADANG PANJANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LIMA PULUH KOTA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TANAH DATAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SAWAH LUNTO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PASAMAN TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES DAMASRAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SOLOK KOTA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PD.PARIAMAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PARIAMAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SIJUNJUNG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PAYAKUMBUH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN MENTAWAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SAWAH LUNTO SIJUNJUNG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SOLOK",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PASAMAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PADANG PARIAMAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA PADANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LIMA PULUH KOTO \/ KOTA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BATANG HARI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA JAMBI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MUARO JAMBI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TANJUNG JABUNG BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KERINCI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SAROLANGUN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TEBO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MERANGIN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TANJUNG JABUNG TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BUNGO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUNGAIPENUH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MUARA ENIM",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTABES PALEMBANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PAGAR ALAM",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES OGAN ILIR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES EMPAT LAWANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES OKU SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MUSI BANYUASIN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PRABUMULIH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LAHAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES OKU TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MUSI RAWAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANYUASIN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES OGAN KOMERING ULU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LUBUK LINGGAU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES OGAN KOMERING ULU TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES OGAN KOMERING ULU SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES OGAN KOMERING ILIR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PENUKAL ABAB LEMATANG ILIR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MUSI RAWAS UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MUSI RAWAS UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BENGKULU UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA BENGKULU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES REJANG LEBONG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BENGKULU SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LEBONG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SELUMA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MUKO MUKO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KAUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BENGKULU TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPAHIANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA BANDAR LAMPUNG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES METRO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LAMPUNG UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES WAY KANAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LAMPUNG TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TANGGAMUS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LAMPUNG BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LAMPUNG TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TULANG BAWANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LAMPUNG SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MESUJI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PRINGSEWU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TULANG BAWANG BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PESISIR BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PESAWARAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PANGKAL PINANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANGKA BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANGKA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BELITUNG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANGKA SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BELITUNG TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANGKA TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PANDEGLANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LEBAK",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA SERANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES CILEGON",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA TANGERANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SERANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA TANGERANG SELATAN",
+            "lat": -7.81424512015983,
+            "lng": 112.012168445646
+        },
+        {
+            "polres": "POLRES KEPULAUAN SERIBU",
+            "lat": -5.730831932940544,
+            "lng": 106.59452943967544
+        },
+        {
+            "polres": "POLRES METRO JAKARTA PUSAT",
+            "lat": -6.16044022485039,
+            "lng": 106.850316639008
+        },
+        {
+            "polres": "POLRES METRO JAKARTA UTARA",
+            "lat": -6.25310890543786,
+            "lng": 106.798533067845
+        },
+        {
+            "polres": "POLRES METRO JAKARTA SELATAN",
+            "lat": -6.11633244969772,
+            "lng": 106.893961727368
+        },
+        {
+            "polres": "POLRES METRO JAKARTA BARAT",
+            "lat": -6.19472840848075,
+            "lng": 106.797892623665
+        },
+        {
+            "polres": "POLRES METRO JAKARTA TIMUR",
+            "lat": -6.21411592431942,
+            "lng": 106.862997112025
+        },
+        {
+            "polres": "POLRES METRO TANGERANG",
+            "lat": -6.167995663379061,
+            "lng": 106.64686192852979
+        },
+        {
+            "polres": "POLRES METRO BEKASI",
+            "lat": -6.24380093088849,
+            "lng": 106.999555396681
+        },
+        {
+            "polres": "POLRES METRO BEKASI KOTA",
+            "lat": -6.24380093088849,
+            "lng": 106.999555396681
+        },
+        {
+            "polres": "POLRES METROPOLITAN DEPOK",
+            "lat": -6.394426476027008,
+            "lng": 106.658469912062
+        },
+        {
+            "polres": "POLRES BANDARA SOEKARNO HATTA",
+            "lat": -6.12448562905284,
+            "lng": 106.82450000076726
+        },
+        {
+            "polres": "POLRES PELABUHAN TANJUNG PRIOK",
+            "lat": -6.11232611545411,
+            "lng": 106.87517931846368
+        },
+        {
+            "polres": "POLRES KARAWANG",
+            "lat": -6.52465303037944,
+            "lng": 107.44840898134
+        },
+        {
+            "polres": "POLRESTA BANDUNG",
+            "lat": -7.0372026346874,
+            "lng": 107.539496467853
+        },
+        {
+            "polres": "POLRESTA BOGOR KOTA",
+            "lat": -6.557046755792128,
+            "lng": 106.81504141552901
+        },
+        {
+            "polres": "POLRES BOGOR",
+            "lat": -6.47269358788071,
+            "lng": 106.823757414045
+        },
+        {
+            "polres": "POLRES SUKABUMI KOTA",
+            "lat": -6.92070917386645,
+            "lng": 106.926674183196
+        },
+        {
+            "polres": "POLRES SUKABUMI",
+            "lat": -6.98406431510072,
+            "lng": 106.557534325525
+        },
+        {
+            "polres": "POLRES CIANJUR",
+            "lat": -6.83628678629661,
+            "lng": 107.122320196687
+        },
+        {
+            "polres": "POLRES PURWAKARTA",
+            "lat": -6.52465303037944,
+            "lng": 107.44840898134
+        },
+        {
+            "polres": "POLRES SUBANG",
+            "lat": -6.55753163289058,
+            "lng": 107.763766110176
+        },
+        {
+            "polres": "POLRES CIREBON",
+            "lat": -6.70319675608922,
+            "lng": 108.563491148059
+        },
+        {
+            "polres": "POLRESTA CIREBON",
+            "lat": -6.75365780116663,
+            "lng": 108.473994497783
+        },
+        {
+            "polres": "POLRES INDRAMAYU",
+            "lat": -6.34491323800276,
+            "lng": 108.334255769698
+        },
+        {
+            "polres": "POLRES MAJALENGKA",
+            "lat": -6.83508483310279,
+            "lng": 108.248491496687
+        },
+        {
+            "polres": "POLRES KUNINGAN",
+            "lat": -6.9714887581639,
+            "lng": 108.519940781345
+        },
+        {
+            "polres": "POLRES CIMAHI",
+            "lat": -7.32279510287338,
+            "lng": 108.325903496693
+        },
+        {
+            "polres": "POLRES SUMEDANG",
+            "lat": -6.83705243922347,
+            "lng": 107.917509583195
+        },
+        {
+            "polres": "POLRES TASIKMALAYA",
+            "lat": -7.36184810142749,
+            "lng": 108.10339991668
+        },
+        {
+            "polres": "POLRES TASIKMALAYA KOTA",
+            "lat": -7.306504010018,
+            "lng": 108.196330009691
+        },
+        {
+            "polres": "POLRES CIAMIS",
+            "lat": -7.32279510287338,
+            "lng": 108.325903496693
+        },
+        {
+            "polres": "POLRES BANJAR",
+            "lat": -7.36005429046887,
+            "lng": 108.560325445758
+        },
+        {
+            "polres": "POLRESTABES BANDUNG",
+            "lat": -6.91376372292672,
+            "lng": 107.610693023672
+        },
+        {
+            "polres": "POLRES GARUT",
+            "lat": -7.21223144769715,
+            "lng": 107.919309352511
+        },
+        {
+            "polres": "POLRES PANGANDARAN",
+            "lat": -7.682778693706657,
+            "lng": 108.64964547128403
+        },
+        {
+            "polres": "POLRES BANDUNG BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": -6.994183662566941,
+            "lng": 110.41807670010856
+        },
+        {
+            "polres": "POLRES DEMAK",
+            "lat": -6.90860361701822,
+            "lng": 110.619016655058
+        },
+        {
+            "polres": "POLRESTA BANYUMAS",
+            "lat": -7.40368573126178,
+            "lng": 109.231808840874
+        },
+        {
+            "polres": "POLRES BANJARNEGARA",
+            "lat": -7.39647630568299,
+            "lng": 109.700201739021
+        },
+        {
+            "polres": "POLRES PEMALANG",
+            "lat": -6.89290200513098,
+            "lng": 109.405923696688
+        },
+        {
+            "polres": "POLRES BREBES",
+            "lat": -6.87461255427743,
+            "lng": 109.05122405436
+        },
+        {
+            "polres": "POLRES KUDUS",
+            "lat": -6.80272108234914,
+            "lng": 110.928349881343
+        },
+        {
+            "polres": "POLRES REMBANG",
+            "lat": -6.73383581496627,
+            "lng": 111.354983150654
+        },
+        {
+            "polres": "POLRES BLORA",
+            "lat": -6.97169815432213,
+            "lng": 111.458583540869
+        },
+        {
+            "polres": "POLRESTA SURAKARTA",
+            "lat": -7.56453022074476,
+            "lng": 110.805365112039
+        },
+        {
+            "polres": "POLRES SUKOHARJO",
+            "lat": -7.67509773825944,
+            "lng": 110.836328029237
+        },
+        {
+            "polres": "POLRES BOYOLALI",
+            "lat": -7.53731479965128,
+            "lng": 110.624317866007
+        },
+        {
+            "polres": "POLRES WONOGIRI",
+            "lat": -7.83083814746951,
+            "lng": 110.916000825534
+        },
+        {
+            "polres": "POLRES SALATIGA",
+            "lat": -7.3288526063404,
+            "lng": 110.499922039021
+        },
+        {
+            "polres": "POLRES KARANGANYAR",
+            "lat": -7.5958058700891,
+            "lng": 110.94626371204
+        },
+        {
+            "polres": "POLRES PURBALINGGA",
+            "lat": -7.39898912568228,
+            "lng": 109.349780571562
+        },
+        {
+            "polres": "POLRES CILACAP",
+            "lat": -7.69278424577512,
+            "lng": 109.025539025533
+        },
+        {
+            "polres": "POLRES PEKALONGAN",
+            "lat": -7.02653981425801,
+            "lng": 109.593101357649
+        },
+        {
+            "polres": "POLRES PEKALONGAN KOTA",
+            "lat": -6.88113776088227,
+            "lng": 109.671979056212
+        },
+        {
+            "polres": "POLRES BATANG",
+            "lat": -6.91781763915885,
+            "lng": 109.729902841272
+        },
+        {
+            "polres": "POLRES TEGAL",
+            "lat": -6.98083008119187,
+            "lng": 109.131690830596
+        },
+        {
+            "polres": "POLRES TEGAL KOTA",
+            "lat": -6.85550156101373,
+            "lng": 109.137691208328
+        },
+        {
+            "polres": "POLRES KLATEN",
+            "lat": -7.70343051580541,
+            "lng": 110.614424972992
+        },
+        {
+            "polres": "POLRES MAGELANG",
+            "lat": -7.57911549841024,
+            "lng": 110.218435125769
+        },
+        {
+            "polres": "POLRES MAGELANG KOTA",
+            "lat": -7.46883667553511,
+            "lng": 110.218435125627
+        },
+        {
+            "polres": "POLRES TEMANGGUNG",
+            "lat": -7.33603079246736,
+            "lng": 110.204894154365
+        },
+        {
+            "polres": "POLRES WONOSOBO",
+            "lat": -7.36731154919304,
+            "lng": 109.899449139021
+        },
+        {
+            "polres": "POLRES SEMARANG",
+            "lat": -7.11661334804174,
+            "lng": 110.413122210182
+        },
+        {
+            "polres": "POLRES KENDAL",
+            "lat": -6.92502878258339,
+            "lng": 110.207263819968
+        },
+        {
+            "polres": "POLRES PATI",
+            "lat": -6.7406930750478,
+            "lng": 111.033161296686
+        },
+        {
+            "polres": "POLRES JEPARA",
+            "lat": -6.59669506577925,
+            "lng": 110.666089898537
+        },
+        {
+            "polres": "POLRES GROBOGAN",
+            "lat": -7.09481582138464,
+            "lng": 110.909231112034
+        },
+        {
+            "polres": "POLRESTABES SEMARANG",
+            "lat": -6.98533075168544,
+            "lng": 110.404470141673
+        },
+        {
+            "polres": "POLRES KEBUMEN",
+            "lat": -7.67657780424495,
+            "lng": 109.670139625533
+        },
+        {
+            "polres": "POLRES BATANG",
+            "lat": -6.918050177201463,
+            "lng": 109.7298823218663
+        },
+        {
+            "polres": "POLRES PURWOREJO",
+            "lat": -7.72630518585171,
+            "lng": 109.970778125533
+        },
+        {
+            "polres": "POLRES SRAGEN",
+            "lat": -7.43092381029806,
+            "lng": 111.02593736971
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": -7.787936414491329,
+            "lng": 110.35964694979967
+        },
+        {
+            "polres": "POLRES BANTUL",
+            "lat": -7.88984753067955,
+            "lng": 110.326939312043
+        },
+        {
+            "polres": "POLRES GUNUNG KIDUL",
+            "lat": -7.96991946260325,
+            "lng": 110.605806483208
+        },
+        {
+            "polres": "POLRES KULON PROGO",
+            "lat": -7.85696150752481,
+            "lng": 110.177036689539
+        },
+        {
+            "polres": "POLRES SLEMAN",
+            "lat": -7.69640892551453,
+            "lng": 110.347090212041
+        },
+        {
+            "polres": "POLRESTA YOGYAKARTA",
+            "lat": -7.79912507711239,
+            "lng": 110.362658240878
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": -7.322805316125763,
+            "lng": 112.72904947059327
+        },
+        {
+            "polres": "POLRES GRESIK",
+            "lat": -7.15901,
+            "lng": 112.623633
+        },
+        {
+            "polres": "POLRES MALANG",
+            "lat": -7.96692,
+            "lng": 112.634341
+        },
+        {
+            "polres": "POLRES PROBOLINGGO KOTA",
+            "lat": -7.744702,
+            "lng": 113.213687
+        },
+        {
+            "polres": "POLRES PASURUAN",
+            "lat": -7.6450148240786,
+            "lng": 112.900405840487
+        },
+        {
+            "polres": "POLRES LUMAJANG",
+            "lat": -8.13350829224812,
+            "lng": 113.22408319485
+        },
+        {
+            "polres": "POLRES JEMBER",
+            "lat": -8.17275785630777,
+            "lng": 113.701011096702
+        },
+        {
+            "polres": "POLRES TULUNG AGUNG",
+            "lat": -8.06514721275103,
+            "lng": 111.906596125113
+        },
+        {
+            "polres": "POLRES MADIUN",
+            "lat": -7.61939448060651,
+            "lng": 111.522221267437
+        },
+        {
+            "polres": "POLRES JOMBANG",
+            "lat": -7.54737990509493,
+            "lng": 112.236797609765
+        },
+        {
+            "polres": "POLRES BANGKALAN",
+            "lat": -7.04925997888597,
+            "lng": 112.734753969283
+        },
+        {
+            "polres": "POLRES SAMPANG",
+            "lat": -7.18725335888297,
+            "lng": 113.238853540449
+        },
+        {
+            "polres": "POLRES SUMENEP",
+            "lat": -7.01689848304133,
+            "lng": 113.871905213462
+        },
+        {
+            "polres": "POLRES BANJAR\/MARTAPURA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PELABUHAN TANJUNG PERAK",
+            "lat": -7.101690318336356,
+            "lng": 113.17346740081634
+        },
+        {
+            "polres": "POLRES PONOROGO",
+            "lat": -7.86588288082677,
+            "lng": 111.466937309768
+        },
+        {
+            "polres": "POLRESTA MALANG KOTA",
+            "lat": -7.971744,
+            "lng": 112.630918
+        },
+        {
+            "polres": "POLRES BONDOWOSO",
+            "lat": -7.91557559513783,
+            "lng": 113.828733171567
+        },
+        {
+            "polres": "POLRES SITUBONDO",
+            "lat": -7.70860282501137,
+            "lng": 113.998068239025
+        },
+        {
+            "polres": "POLRESTA BANYUWANGI",
+            "lat": -8.23156608086602,
+            "lng": 114.349477653876
+        },
+        {
+            "polres": "POLRES KEDIRI",
+            "lat": -7.7664674860222,
+            "lng": 112.191919467862
+        },
+        {
+            "polres": "POLRES BLITAR",
+            "lat": -8.08605742029068,
+            "lng": 112.271874414386
+        },
+        {
+            "polres": "POLRES BLITAR KOTA",
+            "lat": -8.09670672211207,
+            "lng": 112.171913352098
+        },
+        {
+            "polres": "POLRES NGANJUK",
+            "lat": -7.59046122844199,
+            "lng": 111.890143753945
+        },
+        {
+            "polres": "POLRES TRENGGALEK",
+            "lat": -8.06099266922482,
+            "lng": 111.710977038605
+        },
+        {
+            "polres": "POLRES NGAWI",
+            "lat": -7.38112140486298,
+            "lng": 111.446999708001
+        },
+        {
+            "polres": "POLRES MAGETAN",
+            "lat": -7.63968538808519,
+            "lng": 111.356305723258
+        },
+        {
+            "polres": "POLRES PACITAN",
+            "lat": -8.19501397001406,
+            "lng": 111.101097467442
+        },
+        {
+            "polres": "POLRES BOJONEGORO",
+            "lat": -7.15322695231161,
+            "lng": 111.873333553941
+        },
+        {
+            "polres": "POLRES TUBAN",
+            "lat": -6.89941676081175,
+            "lng": 112.045707969282
+        },
+        {
+            "polres": "POLRES LAMONGAN",
+            "lat": -7.12135689708366,
+            "lng": 112.420431880926
+        },
+        {
+            "polres": "POLRES MOJOKERTO KOTA",
+            "lat": -7.509931,
+            "lng": 112.564284
+        },
+        {
+            "polres": "POLRES PAMEKASAN",
+            "lat": -7.15705605436305,
+            "lng": 113.48740979812
+        },
+        {
+            "polres": "POLRES SIDOARJO",
+            "lat": -7.43646,
+            "lng": 112.684905
+        },
+        {
+            "polres": "POLRES PROBOLINGGO",
+            "lat": -7.781098,
+            "lng": 113.188516
+        },
+        {
+            "polres": "POLRESTABES SURABAYA",
+            "lat": -7.238389,
+            "lng": 112.736233
+        },
+        {
+            "polres": "POLRES BATU",
+            "lat": -7.905419,
+            "lng": 112.554034
+        },
+        {
+            "polres": "POLRES KEDIRI KOTA",
+            "lat": -7.81424512015983,
+            "lng": 112.012168445646
+        },
+        {
+            "polres": "POLRES MOJOKERTO",
+            "lat": -7.471238,
+            "lng": 112.433117
+        },
+        {
+            "polres": "POLRES MADIUN KOTA",
+            "lat": -7.61762467168945,
+            "lng": 111.520961615143
+        },
+        {
+            "polres": "POLRES PASURUAN KOTA",
+            "lat": -7.64017983727057,
+            "lng": 112.912852342376
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": -8.649126502784744,
+            "lng": 115.22493595526585
+        },
+        {
+            "polres": "POLRES KLUNGKUNG",
+            "lat": -8.534167,
+            "lng": 115.399722
+        },
+        {
+            "polres": "POLRES JEMBRANA",
+            "lat": -8.358889,
+            "lng": 114.625
+        },
+        {
+            "polres": "POLRES BADUNG",
+            "lat": -8.561111,
+            "lng": 115.172222
+        },
+        {
+            "polres": "POLRES BULELENG",
+            "lat": -8.123333,
+            "lng": 115.071111
+        },
+        {
+            "polres": "POLRES TABANAN",
+            "lat": -8.538889,
+            "lng": 115.133056
+        },
+        {
+            "polres": "POLRES GIANYAR",
+            "lat": -8.541389,
+            "lng": 115.323333
+        },
+        {
+            "polres": "POLRES BANGLI",
+            "lat": -8.4625,
+            "lng": 115.354167
+        },
+        {
+            "polres": "POLRES KARANG ASEM",
+            "lat": -8.449722,
+            "lng": 115.616389
+        },
+        {
+            "polres": "POLRESTA DENPASAR",
+            "lat": -8.648333,
+            "lng": 115.182778
+        },
+        {
+            "polres": "POLRESTA MATARAM",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LOMBOK TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LOMBOK TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUMBAWA BESAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES DOMPU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BIMA KOTA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LOMBOK BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BIMA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUMBAWA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LOMBOK UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUMBAWA BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KUPANG KOTA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TIMOR TENGAH SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TIMOR TENGAH UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BELU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ENDE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SIKKA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES FLORES TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES NGADA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KUPANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LEMBATA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ROTE NDAO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MANGGARAI BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ALOR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES NAGEKEO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUMBA BARAT DAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUMBA BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUMBA TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUMBA TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MANGGARAI TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SABU RAIJUA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MALAKA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MANGGARAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KETAPANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA PONTIANAK KOTA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SINTANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MELAWI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SEKADAU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KAPUAS HULU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SAMBAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SINGKAWANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LANDAK",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SANGGAU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BENGKAYANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KUBU RAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KAYONG UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MEMPAWAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANJARBARU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA BANJARMASIN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TABALONG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BARITO KUALA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES HULU SUNGAI UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BALANGAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TANAH LAUT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES HULU SUNGAI SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KOTABARU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TAPIN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES HULU SUNGAI TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TANAH BUMBU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KAPUAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA PALANGKA RAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BARITO TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PULANG PISAU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KATINGAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LAMANDAU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BARITO UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SERUYAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BARITO SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MURUNG RAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES GUNUNG MAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUKAMARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KOTAWARINGIN TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KOTAWARINGIN BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA BALIKPAPAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA SAMARINDA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PASIR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KUTAI TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BERAU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PENAJAM PASER UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BONTANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TARAKAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KUTAI BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KUTAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTABES MAKASSAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PELABUHAN MAKASSAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TANAH TORAJA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PARE-PARE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA MAROS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BULUKUMBA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SELAYAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES GOWA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TAKALAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PANGKEP",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANTAENG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES JENEPONTO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BARRU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SIDRAP",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PINRANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LUWU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ENREKANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BONE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES WAJO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SOPPENG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SINJAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LUWU UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LUWU TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA MAKASAR BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PALOPO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SIDENRENG RAPPANG \/ RAPANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PANGKAJENE KEPULAUAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TORAJA UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN SELAYAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES POSO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PALU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANGGAI KEPULAUAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES DONGGALA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANGGAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TOLI-TOLI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MOROWALI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BUOL",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANGGAI KEPULAUAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PARIGI MOUTONG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TOJO UNA-UNA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SIGI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MOROWALI UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA KENDARI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KOLAKA UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BAU-BAU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BUTON",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MUNA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KONAWE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BOMBANA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KOLAKA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KONAWE SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KONAWE UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES WAKATOBI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BUTON UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KOLAKA TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BUTON TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MINAHASA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLTABES MANADO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BITUNG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TOMOHON",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BOLAANG MONGONDOW (BOLMONG)",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BOLAANG MONGONDOW SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MINAHASA SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN SANGIHE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MINAHASA UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN TALAUD",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN SIAU TAGULANDANG BIARO (SITARO)",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BOLAANG MONGONDOW UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BOLAANG MONGONDOW TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MINAHASA TENGGARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KOTAMOBAGU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES GORONTALO KOTA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES GORONTALO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES POHUWATO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BOALEMO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES GORONTALO UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BONE BOLANGO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA P.AMBON DAN P.P. LEASE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MALUKU TENGGARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MALUKU TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PULAU BURU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MALUKU TENGGARA BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SERAM BAGIAN BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SERAM BAGIAN TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PULAU-PULAU ARU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MALUKU BARAT DAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BURU SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TUAL",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TERNATE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES HALMAHERA UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN SULA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES HALMAHERA BARAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES HALMAHERA SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES HALMAHERA TIMUR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES HALMAHERA TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TIDORE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PULAU MOROTAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "DITLANTAS",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA JAYAPURA KOTA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES JAYAPURA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SARMI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEROM",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BIAK NUMFOR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MERAUKE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MIMIKA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TOLIKARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES ASMAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SUPIORI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES NABIRE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN YAPEN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES YAHUKIMO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PANIAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PEGUNUNGAN BINTANG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PUNCAK JAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES WAROPEN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BOVEN DIGOEL",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MAPPI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES YALIMO",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES DOGIYAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES JAYA WIJAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES LANNY JAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES NDUGA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KEPULAUAN YAPEN (YAPEN WAROPEN)",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PUNCAK",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES INTAN JAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES DEIYAI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MAMBERAMO RAYA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MAMBERAMO TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MAMUJU UTARA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MAJENE",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MAMUJU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MAMASA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES POLEWALI MANDAR",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MAMUJU TENGAH",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRESTA BULUNGAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MALINAU",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES NUNUKAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TARAKAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TANA TIDUNG",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MANOKWARI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SORONG KOTA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES SORONG SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES FAKFAK",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES RAJA AMPAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES KAIMANA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TELUK BINTUNI",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TELUK WONDOMA",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MANOKWARI SELATAN",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES PEGUNUNGAN ARFAK",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES TAMBRAUW",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES MAYBRAT",
+            "lat": null,
+            "lng": null
+        },
+        {
+            "polres": "POLRES BANDARA I GUSTI NGURAH RAI",
+            "lat": -8.742821,
+            "lng": 115.17451
+        }
+    ]
+}

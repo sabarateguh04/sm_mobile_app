@@ -1,0 +1,78 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>SOP Pengamanan Data & Sistem Saat Melakukan Update/Replace Source Code</title>
+<style>
+body { font-family: 'Calibri', 'Arial', sans-serif; font-size: 11pt; line-height: 1.5; color: #000; }
+h1 { font-size: 16pt; text-align: center; margin-bottom: 24px; font-weight: bold; }
+h2 { font-size: 13pt; color: #2F5496; margin-top: 24px; margin-bottom: 10px; font-weight: bold; }
+p { margin: 0 0 10px 0; }
+ul { margin-top: 0; margin-bottom: 12px; }
+li { margin-bottom: 6px; }
+strong { font-weight: bold; }
+code { font-family: 'Consolas', 'Courier New', monospace; background-color: #f4f4f4; padding: 2px 4px; font-size: 10pt; }
+</style>
+</head>
+<body>
+<h1>SOP Pengamanan Data &amp; Sistem Saat Melakukan Update/Replace Source Code</h1>
+<p>Dokumen ini berisi pedoman wajib untuk memastikan keamanan data dan stabilitas sistem di lingkungan production/staging sebelum, selama, dan setelah melakukan pembaruan kode sumber (source code) pada aplikasi.</p>
+
+<h2>1. Persiapan &amp; Pencadangan (Backup) Utama</h2>
+<ul>
+    <li><strong>Backup Database:</strong> Lakukan export atau dump database ke format SQL sebelum mengubah kode yang berkaitan dengan struktur data, migrasi, atau logika krusial. Hal ini berfungsi sebagai langkah fail-safe jika terjadi korupsi data.</li>
+    <li><strong>Backup File Fisik:</strong> Jika mengedit file tanpa menggunakan version control atau saat melakukan modifikasi cepat (hotfix), salin file lama menjadi ekstensi cadangan (misalnya: <code>nama_file.blade.php.bak</code>) sebelum me-replace isinya.</li>
+    <li><strong>Version Control (Git):</strong>
+        <ul>
+            <li>Pastikan seluruh perubahan berada pada branch fitur atau hotfix (contoh: <code>hotfix-ui-wilayah</code>).</li>
+            <li>Jangan melakukan modifikasi langsung pada branch main/production. Pastikan working directory sudah bersih (di-commit) sebelum melakukan penarikan data (pull) atau perubahan.</li>
+        </ul>
+    </li>
+</ul>
+
+<h2>2. Isolasi Pengguna (Maintenance Mode)</h2>
+<ul>
+    <li>Jika update bersifat masif, memakan waktu, atau memodifikasi banyak modul sekaligus, wajib mengaktifkan Maintenance Mode untuk mencegah pengguna biasa berinteraksi dengan sistem selama masa transisi.</li>
+    <li>Jalankan perintah: <code>php artisan down --secret="kode_rahasia_admin"</code></li>
+    <li>(Hanya pihak yang menggunakan secret link yang dapat mengakses sistem, pengguna lain akan melihat halaman Maintenance).</li>
+</ul>
+
+<h2>3. Proses Modifikasi &amp; Replace</h2>
+<ul>
+    <li><strong>Targeted Edit:</strong> Lakukan penggantian (replace) hanya pada logic atau baris kode yang dituju (seperti pembaruan teks statis atau logika tampilan). Hindari mengubah kerangka variabel utama (terutama yang merender ID atau role akses) tanpa perencanaan.</li>
+    <li><strong>Hindari Mass Replace Tak Terkontrol:</strong> Berhati-hatilah saat menggunakan utilitas find &amp; replace secara global di seluruh project. Lakukan inspeksi visual per file untuk memastikan hanya baris yang benar yang terdampak.</li>
+</ul>
+
+<h2>4. Eksekusi &amp; Pembersihan Cache</h2>
+<p>Setelah kode sumber diperbarui, sistem wajib dibersihkan dari memori cache lama agar memuat pembaruan yang baru:</p>
+<ul>
+    <li><code>php artisan view:clear</code> (Untuk pembaruan tampilan Blade).</li>
+    <li><code>php artisan config:clear</code> dan <code>php artisan route:clear</code> (Untuk pembaruan pengaturan dan routing).</li>
+    <li><code>php artisan optimize:clear</code> (Membersihkan keseluruhan cache secara umum).</li>
+</ul>
+
+<h2>5. Quality Control (QC) &amp; Log Monitoring</h2>
+<ul>
+    <li><strong>Validasi Visual &amp; Fungsional:</strong> Periksa langsung halaman atau fitur yang baru saja di-update.</li>
+    <li><strong>Pantau Log Sistem:</strong> Selalu buka dan periksa <code>storage/logs/laravel.log</code> sesaat setelah memuat ulang halaman. Sistem terkadang menyembunyikan fatal error atau warning secara diam-diam (silent failure) di latar belakang.</li>
+</ul>
+
+<h2>6. Rencana Darurat (Rollback Plan)</h2>
+<ul>
+    <li>Jika setelah modifikasi terjadi kesalahan fatal (layar putih / Error 500), segera hentikan seluruh proses update.</li>
+    <li><strong>Lakukan Rollback:</strong>
+        <ul>
+            <li>Kembalikan file dari backup .bak atau eksekusi Git Revert / Checkout ke komit stabil sebelumnya.</li>
+            <li>Jika masalah bersumber dari kegagalan sinkronisasi atau perubahan skema tabel, lakukan restore database dari dump terbaru.</li>
+        </ul>
+    </li>
+</ul>
+
+<h2>7. Penyelesaian (Go-Live)</h2>
+<ul>
+    <li><strong>Akhiri Maintenance:</strong> Setelah seluruh proses QC selesai dan tidak ada error lanjutan, matikan maintenance mode dengan <code>php artisan up</code>.</li>
+    <li><strong>Komunikasi Tim:</strong> Informasikan kepada tim, admin, atau pengguna terkait bahwa pembaruan telah selesai. Instruksikan untuk melakukan pemuatan ulang penuh (Ctrl + F5 atau Hard Refresh) pada peramban mereka untuk memastikan aset terbaru (CSS/JS) dapat berjalan lancar.</li>
+</ul>
+</body>
+</html>

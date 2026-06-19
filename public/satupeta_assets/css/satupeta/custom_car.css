@@ -1,0 +1,142 @@
+/* Custom CSS for canvas */
+#offcanvasPerjalanan {
+	border-radius: 10px 10px 0 0;
+	border: 0px;
+	box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}
+
+.offcanvas-body {
+	padding: 5px;
+}
+
+#button-list-perjalanan {
+	position: absolute;
+	bottom: 20px; /* Adjust button position as needed */
+	left: 49%;
+	z-index: 10;
+	box-shadow: 0 0 11px rgba(33, 33, 33, 0.5);
+}
+
+.offcanvas-backdrop {
+	display: none !important;
+}
+
+.zoom {
+	transform: scale(0.95);
+	transition: transform 0.2s;
+}
+
+.zoom:hover {
+	-ms-transform: scale(1); /* IE 9 */
+	-webkit-transform: scale(1); /* Safari 3-8 */
+	transform: scale(1);
+	box-shadow: 0 0 11px rgba(33, 33, 33, 0.1);
+}
+
+/* custom scrollbar */
+/* width */
+::-webkit-scrollbar {
+	width: 5px;
+	height: 8px;
+	border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: transparent;
+	border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #273746;
+	border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #566573;
+}
+
+.custom-marker {
+	position: relative;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.custom-marker::before {
+	content: "•";
+	color: red; /* Customize the color */
+	position: absolute;
+	left: 0;
+	margin-left: 2px;
+}
+
+#iconCollapse {
+	transition: transform 0.3s ease;
+}
+
+.rotateIcon {
+	transform: rotate(180deg);
+}
+
+#custom-sidebarleft {
+	transition: transform 0.3s;
+}
+
+#custom-sidebarleft:hover {
+	background-color: #ecf0f1;
+	transform: translateY(-10%);
+}
+
+#custom-sidebarright {
+	transition: transform 0.3s;
+}
+
+#custom-sidebarright:hover {
+	background-color: #ecf0f1;
+	transform: translateY(10%);
+}
+
+#custom-left-side {
+	top: 50%;
+	left: 0;
+	z-index: 1;
+	border-radius: 14px !important;
+	margin-left: 0.7rem !important;
+	font-weight: 1000;
+	text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.2); /* Add text drop shadow */
+}
+
+#custom-right-side {
+	top: 50%;
+	right: 0;
+	z-index: 1;
+	border-radius: 14px !important;
+	margin-right: 0.7rem !important;
+	font-weight: 1000;
+	text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.2); /* Add text drop shadow */
+}
+
+.wipe {
+	background: linear-gradient(to right, #fff 0%, transparent, #fff 50%);
+	background-size: 200% auto;
+	color: #000;
+	background-clip: text;
+	text-fill-color: transparent;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-webkit-animation: shine 1s linear infinite;
+	animation: shine 1s linear infinite;
+}
+
+@-webkit-keyframes shine {
+	to {
+		background-position: 200% center;
+	}
+}
+@keyframes shine {
+	to {
+		background-position: 200% center;
+	}
+}

@@ -1,0 +1,45 @@
+#custom-default-view-map {
+	z-index: 1;
+	margin-bottom: 6rem !important;
+	margin-right: 0.7rem !important;
+	cursor: pointer;
+	border-radius: 5px;
+	background-color: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#custom-default-view-map:hover {
+	background-color: #ecf0f1 !important;
+}
+
+/* Adjust the size and position of the zoom control container */
+.custom-zoom-control {
+	position: absolute;
+	margin-bottom: 0.5rem !important;
+	margin-right: 0.7rem !important;
+	z-index: 1; /* Ensure the control appears above other elements */
+	background-color: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+/* Adjust the style of the zoom control buttons */
+.custom-zoom-control button {
+	background-color: #fff;
+	color: #333;
+	font-size: 1.25rem;
+	border: none;
+	cursor: pointer;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	margin: 0;
+}
+.custom-zoom-control button:hover {
+	background-color: #ecf0f1;
+}
