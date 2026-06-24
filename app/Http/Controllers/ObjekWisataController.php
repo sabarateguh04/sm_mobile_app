@@ -29,7 +29,9 @@ class ObjekWisataController extends BaseController
                 'usm.daerah as petugas_daerah'
             );
 
-        $this->applyHierarchy($query);
+        // Territory filter - konsisten dengan OperasionalController
+        HierarchicalHelper::applyTerritoryScopeForTable($query, 'objek_wisata', 't');
+        \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
 
         if ($request->filled('search')) {
             $s = $request->search;
@@ -43,12 +45,12 @@ class ObjekWisataController extends BaseController
 
         $data = $query->orderByDesc('t.tanggal')->paginate($request->get('per_page', 20))->withQueryString();
 
-        return view('objekwisata.index', [
+        return view('objekwisata.index', array_merge([
             'pageTitle' => 'Objek Wisata',
             'data' => $data,
             'kategori' => DB::table('t_katwisata')->orderBy('namekatwisata')->get(),
             'sboViewOnly' => \App\Support\RoleMutationPolicy::deniesAllMutations(\Illuminate\Support\Facades\Auth::user()),
-        ]);
+        ], \App\Support\TerritoryIndexFilters::viewBundle($request)));
     }
 
     public function export(Request $request, string $format = 'excel')
@@ -75,7 +77,9 @@ class ObjekWisataController extends BaseController
                 'usm.daerah as petugas_daerah'
             );
 
-        $this->applyHierarchy($query);
+        // Territory filter - konsisten dengan OperasionalController
+        HierarchicalHelper::applyTerritoryScopeForTable($query, 'objek_wisata', 't');
+        \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
 
         if ($request->filled('search')) {
             $s = $request->search;
@@ -247,13 +251,4 @@ class ObjekWisataController extends BaseController
         Storage::disk('public')->delete($path);
     }
 
-    private function applyHierarchy($query): void
-    {
-        $user = Auth::user();
-        if (! $user || HierarchicalHelper::viewerBypassesTerritoryScope()) {
-            return;
-        }
-
-        HierarchicalHelper::applyTerritoryScopeForTable($query, 'objek_wisata', 't');
-    }
 }

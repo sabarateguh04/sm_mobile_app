@@ -30,43 +30,58 @@
             @endif
         </div>
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $fotoUrl ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $fotoUrl ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Jenis Terminal</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jenisterminal ?? '-' }}</dd></div>
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Nama Terminal</dt><dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->namaterminal ?? '-' }}</dd></div>
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Jalan</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jalan ?? '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Contact Person</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->namecp ?? '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">No. Telepon</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->cp ?? '-' }}</dd></div>
+            <div class="flex flex-col gap-6">
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Jenis Terminal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jenisterminal ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Nama Terminal</dt>
+                        <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->namaterminal ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Jalan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jalan ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Contact Person</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->namecp ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">No. Telepon</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->cp ?? '-' }}</dd>
+                        
                         @if(!empty($data->koordinat))
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                            <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
-                                <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                    <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                                </a>
-                            </dd>
-                        </div>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                        <dd class="m-0 flex items-center gap-2 flex-wrap">
+                            <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                            </a>
+                        </dd>
                         @endif
+                        
                         @if(!empty($fasilitas))
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Fasilitas</dt>
-                            <dd class="m-0 flex flex-wrap gap-1.5 mt-1">
-                                @foreach($fasilitas as $chip)
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[11px] font-bold">{{ trim($chip) }}</span>
-                                @endforeach
-                            </dd>
-                        </div>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Fasilitas</dt>
+                        <dd class="m-0 flex flex-wrap gap-1.5 mt-1">
+                            @foreach($fasilitas as $chip)
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[11px] font-bold">{{ trim($chip) }}</span>
+                            @endforeach
+                        </dd>
                         @endif
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Wilayah / Daerah</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_wilayah ?? '-' }} / {{ $data->usm_daerah ?? '-' }}</dd></div>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Wilayah / Daerah</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_wilayah ?? '-' }} / {{ $data->usm_daerah ?? '-' }}</dd>
                     </dl>
                 </div>
                 @if($fotoUrl)
-                <div>
-                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2">Foto Lokasi</p>
-                    <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer">
-                        <img src="{{ $fotoUrl }}" alt="Foto Terminal" class="rounded-xl border border-slate-200 w-full" style="max-height:220px;object-fit:cover;">
+                <div class="pt-4 border-t border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Foto Lokasi</p>
+                    <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer" class="block mt-2">
+                        <img src="{{ $fotoUrl }}" alt="Foto Terminal" class="rounded-xl border border-slate-200 w-full max-w-[400px]" style="max-height:240px;object-fit:cover;">
                     </a>
                 </div>
                 @endif

@@ -44,19 +44,19 @@ class TerritoryLevelForUsm
     {
         $matrixId = \App\Helpers\MenuHelper::matrixRoleIdForUser($user);
 
+        // SuperAdmin (1) and Executive1 (7) are ALWAYS Nasional level
+        if (in_array($matrixId, [1, 7], true)) {
+            return self::NASIONAL;
+        }
+
         // Polda (2) and Executive2 (6) are ALWAYS Provinsi level
-        if (in_array($matrixId, [2, 6])) {
+        if (in_array($matrixId, [2, 6], true)) {
             return self::PROVINSI;
         }
 
         // Polres (3), Operator (4), and Executive3 (5) are ALWAYS Kab/Kota level
         if (in_array($matrixId, [3, 4, 5])) {
             return self::KAB_KOTA;
-        }
-
-        // SuperAdmin (1) and Executive1 (7) are ALWAYS Nasional level
-        if (in_array($matrixId, [1, 7])) {
-            return self::NASIONAL;
         }
 
         $kabKota = trim((string) ($user->wilayah ?? ''));

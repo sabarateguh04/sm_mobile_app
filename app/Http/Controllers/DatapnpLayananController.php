@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\HierarchicalHelper;
+use App\Support\TerritoryIndexFilters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -29,7 +30,9 @@ class DatapnpLayananController extends LegacySboOperasionalController
     protected function applyFilters($query, Request $request)
     {
         $query->leftJoin('usm', 'pnp_angkutan.piket', '=', 'usm.id_usm')
-            ->select('pnp_angkutan.*', 'usm.nama as usm_nama');
+            ->select('pnp_angkutan.*', 'usm.nama as usm_nama', 'usm.daerah as daerah_nama', 'usm.wilayah as wilayah_nama');
+
+        TerritoryIndexFilters::applyUsmFilters($query, $request);
 
         return $query;
     }
@@ -38,7 +41,8 @@ class DatapnpLayananController extends LegacySboOperasionalController
     {
         $query = DB::table($this->tableName);
         $query = $this->applyFilters($query, $request);
-        HierarchicalHelper::applyTerritoryScopeForTable($query, $this->tableName);
+        // Territory filter already applied in applyFilters() via TerritoryIndexFilters::applyUsmFilters()
+
         if ($request->filled('search')) {
             $s = $request->search;
             $query->where(function ($q) use ($s) {
@@ -48,15 +52,20 @@ class DatapnpLayananController extends LegacySboOperasionalController
                 $q->orWhere('usm.nama', 'like', "%{$s}%");
             });
         }
-        $query->orderBy('pnp_angkutan.'.$request->get('orderby', $this->defaultOrderBy), $request->get('ordertype', $this->defaultOrderType));
+
+        $query->orderBy(
+            'pnp_angkutan.'.$request->get('orderby', $this->defaultOrderBy),
+            $request->get('ordertype', $this->defaultOrderType)
+        );
+
         $data = $query->paginate($request->get('per_page', $this->perPage));
 
-        return view($this->viewFolder.'.index', [
+        return view($this->viewFolder.'.index', array_merge([
             'pageTitle' => $this->getPageTitle(),
             'data' => $data,
             'tableName' => $this->tableName,
             'primaryKey' => $this->primaryKey,
-        ]);
+        ], TerritoryIndexFilters::viewBundle($request)));
     }
 
     public function show($id)

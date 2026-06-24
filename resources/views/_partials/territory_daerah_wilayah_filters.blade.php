@@ -4,7 +4,7 @@
     $wilayahChangeSubmit = $wilayahChangeSubmit ?? true;
 @endphp
 
-@if(($userLevel ?? 'nasional') === 'nasional' || \App\Helpers\HierarchicalHelper::viewerBypassesTerritoryScope())
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
     <div class="@if($filterStyle === 'tailwind-compact') relative pmf-territory shrink-0 @elseif($filterStyle === 'tailwind') relative pmf-territory min-w-[140px] flex-1 @elseif($filterStyle === 'sidebar') mb-4 @elseif($filterStyle === 'row') col @else mb-3 @endif">
         @if($filterStyle === 'tailwind-compact')
             <select name="daerah" class="pmf-control pmf-field-text pmf-native-select w-full bg-slate-50 border border-slate-200 rounded-lg pl-2.5 pr-7 focus:border-primary focus:ring-0 focus:bg-white outline-none transition-all" data-empty-label="Polda"
@@ -29,7 +29,7 @@
     </div>
 @endif
 
-@if(in_array($userLevel ?? 'nasional', ['nasional', 'provinsi'], true) || \App\Helpers\HierarchicalHelper::viewerBypassesTerritoryScope())
+@if(\App\Support\TerritoryIndexFilters::canFilterByWilayah() && auth()->check() && !\App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()))
     <div class="@if($filterStyle === 'tailwind-compact') relative pmf-territory shrink-0 @elseif($filterStyle === 'tailwind') relative pmf-territory min-w-[140px] flex-1 @elseif($filterStyle === 'sidebar') mb-4 @elseif($filterStyle === 'row') col @else mb-3 @endif">
         @if($filterStyle === 'tailwind-compact')
             <select name="wilayah" class="pmf-control pmf-field-text pmf-native-select w-full bg-slate-50 border border-slate-200 rounded-lg pl-2.5 pr-7 focus:border-primary focus:ring-0 focus:bg-white outline-none transition-all" data-empty-label="Polres"

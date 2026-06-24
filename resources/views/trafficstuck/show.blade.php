@@ -36,12 +36,16 @@
             @include('trafficstuck._status_badges', ['item' => $data, 'expanded' => true])
         </div>
         <div class="p-5">
-            <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 mb-0">
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt><dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ strtoupper($data->daerah_nama ?? '-') }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polres</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ !empty($data->wilayah_nama) ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah_nama))) : '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Jam Peristiwa</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jamperistiwa ? \Carbon\Carbon::parse($data->jamperistiwa)->format('H:i') : '-' }}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Lokasi</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->lokasi ?? '-' }}</dd></div>
+            <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Jam Peristiwa</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jamperistiwa ? \Carbon\Carbon::parse($data->jamperistiwa)->format('H:i') . ' WIB' : '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Lokasi</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->lokasi ?? '-' }}</dd>
+                
                 @if(!empty($data->koordinat))
                 @php
                     $kParts = preg_split('/\s*,\s*/', (string) $data->koordinat, 2);
@@ -49,32 +53,49 @@
                     $kLng = $kParts[1] ?? '';
                     $kOk = $kLng !== '' && is_numeric($kLat) && is_numeric($kLng);
                 @endphp
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                    <dd class="text-[13px] text-slate-800 font-medium m-0 flex items-center gap-2 flex-wrap">
-                        <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
-                        @if($kOk)
-                            <a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                            </a>
-                        @endif
-                    </dd>
-                </div>
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0 flex items-center gap-2 flex-wrap">
+                    <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
+                    @if($kOk)
+                        <a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                            <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                        </a>
+                    @endif
+                </dd>
                 @endif
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Faktor</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->faktor ?? '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Durasi Perlambatan</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->durasi ?? '-' }}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Penyebab</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->penyebab ?? '-' }}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tim Pengurai</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->timurai ?? '-' }}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Keterangan CB</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{!! nl2br(e($data->ketcb ?? '-')) !!}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd></div>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Faktor</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->faktor ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Durasi Perlambatan</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->durasi ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Penyebab</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->penyebab ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tim Pengurai</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->timurai ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Keterangan CB</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-wrap">{!! nl2br(e($data->ketcb ?? '-')) !!}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ strtoupper($data->daerah_nama ?? '-') }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ !empty($data->wilayah_nama) ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah_nama))) : '-' }}</dd>
             </dl>
             @if(!empty($data->fotosituasi))
                 <div class="mt-4 pt-4 border-t border-slate-100">
-                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2">Foto Situasi</p>
-                    <div class="flex flex-wrap gap-2">
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Foto Situasi</p>
+                    <div class="flex flex-wrap gap-2 mt-2">
                         @foreach(explode(',', (string) $data->fotosituasi) as $foto)
                             @php $f = trim($foto); if ($f === '') continue; $url = str_starts_with($f, 'http') ? $f : asset(ltrim($f, '/')); @endphp
-                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer">
-                                <img src="{{ $url }}" alt="Foto situasi" class="rounded-xl border border-slate-200" style="max-height:100px;object-fit:cover;">
+                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="block">
+                                <img src="{{ $url }}" alt="Foto situasi" class="rounded-xl border border-slate-200 object-cover" style="width:160px;height:120px;">
                             </a>
                         @endforeach
                     </div>

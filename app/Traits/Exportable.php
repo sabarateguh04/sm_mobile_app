@@ -22,6 +22,10 @@ trait Exportable
      */
     public function exportToPdf($data, $view, $filename = 'report', $title = 'Report', $orientation = 'landscape', $paperSize = 'A4')
     {
+        // Increase memory limit and execution time for large PDF generation
+        ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time', '300');
+
         $pdf = Pdf::loadView($view, compact('data', 'title'))
             ->setPaper($paperSize, $orientation)
             ->setOption('isRemoteEnabled', true);
@@ -38,57 +42,124 @@ trait Exportable
             private $data;
             private $drawingsList = [];
             private $imageRows = [];
+            private $isSingle = false;
 
             public function __construct($data)
             {
+                $this->isSingle = count($data) === 1;
                 $processed = [];
                 $rowIndex = 2; // Row 1 is header
-                foreach ($data as $record) {
-                    $arr = is_object($record) ? (array) $record : $record;
-                    $colIndex = 1;
-                    foreach ($arr as $key => $val) {
-                        $isImg = is_string($val) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $val) && !preg_match('/\s/', $val);
-                        $imgPath = $val;
-                        if (is_string($val) && str_contains($val, ',')) {
-                            $firstVal = explode(',', $val)[0];
-                            if (preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $firstVal)) {
-                                $isImg = true;
-                                $imgPath = $firstVal;
+
+                if ($this->isSingle) {
+                    $record = is_object($data[0]) ? (array) $data[0] : $data[0];
+                    foreach ($record as $key => $val) {
+                        $label = ucwords(str_replace('_', ' ', $key));
+                        
+                        $isImg = false;
+                        $imgSrcs = [];
+                        if (is_string($val) && $val !== '') {
+                            foreach(explode(',', $val) as $v) {
+                                $v = trim($v);
+                                if (preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $v) && !preg_match('/\s/', $v)) {
+                                    $isImg = true;
+                                    $imgSrcs[] = $v;
+                                }
                             }
                         }
 
-                        if ($isImg) {
-                            $path = null;
-                            if (\Illuminate\Support\Str::startsWith($imgPath, 'http')) {
-                                $path = $imgPath;
-                            } elseif (file_exists(public_path($imgPath))) {
-                                $path = public_path($imgPath);
-                            } elseif (\Illuminate\Support\Str::startsWith($imgPath, '/storage/') && file_exists(storage_path('app/public/' . substr($imgPath, 9)))) {
-                                $path = storage_path('app/public/' . substr($imgPath, 9));
+                        if ($isImg && count($imgSrcs) > 0) {
+                            $processed[] = ['Atribut' => $label, 'Nilai' => ''];
+                            $colIndex = 2; // Column 'B' for first image
+                            foreach ($imgSrcs as $imgPath) {
+                                $path = null;
+                                if (\Illuminate\Support\Str::startsWith($imgPath, 'http')) {
+                                    $path = $imgPath;
+                                } elseif (file_exists(public_path(ltrim($imgPath, '/')))) {
+                                    $path = public_path(ltrim($imgPath, '/'));
+                                } elseif (\Illuminate\Support\Str::startsWith($imgPath, '/storage/') && file_exists(storage_path('app/public/' . substr($imgPath, 9)))) {
+                                    $path = storage_path('app/public/' . substr($imgPath, 9));
+                                }
+
+                                if ($path) {
+                                    try {
+                                        $drawing = new Drawing();
+                                        $drawing->setName('Image');
+                                        $drawing->setDescription('Image');
+                                        $drawing->setPath($path);
+                                        $drawing->setHeight(100);
+                                        $drawing->setCoordinates(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex) . $rowIndex);
+                                        $drawing->setOffsetX(5);
+                                        $drawing->setOffsetY(5);
+                                        $this->drawingsList[] = $drawing;
+                                        $this->imageRows[] = $rowIndex;
+                                        $colIndex++;
+                                    } catch (\Exception $e) {
+                                        // fallback if image fails
+                                    }
+                                }
                             }
-                            
-                            if ($path) {
-                                try {
-                                    $drawing = new Drawing();
-                                    $drawing->setName('Image');
-                                    $drawing->setDescription('Image');
-                                    $drawing->setPath($path);
-                                    $drawing->setHeight(50);
-                                    $drawing->setCoordinates(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex) . $rowIndex);
-                                    $this->drawingsList[] = $drawing;
-                                    $this->imageRows[] = $rowIndex;
-                                    $arr[$key] = ''; // clear text
-                                } catch (\Exception $e) {
+                        } else {
+                            if (in_array(strtolower($key), ['tanggal', 'tgl', 'date', 'created_at', 'updated_at', 'waktu_kejadian', 'waktu', 'tanggal_kejadian']) && strtotime((string)$val)) {
+                                $val = \Carbon\Carbon::parse($val)->locale('id')->translatedFormat('d F Y');
+                            }
+                            $processed[] = ['Atribut' => $label, 'Nilai' => $val === null ? '' : $val];
+                        }
+                        $rowIndex++;
+                    }
+                } else {
+                    foreach ($data as $record) {
+                        $arr = is_object($record) ? (array) $record : $record;
+                        $colIndex = 1;
+                        foreach ($arr as $key => $val) {
+                            $isImg = is_string($val) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $val) && !preg_match('/\s/', $val);
+                            $imgPath = $val;
+                            if (is_string($val) && str_contains($val, ',')) {
+                                $firstVal = explode(',', $val)[0];
+                                if (preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $firstVal)) {
+                                    $isImg = true;
+                                    $imgPath = $firstVal;
+                                }
+                            }
+
+                            if ($isImg) {
+                                $path = null;
+                                if (\Illuminate\Support\Str::startsWith($imgPath, 'http')) {
+                                    $path = $imgPath;
+                                } elseif (file_exists(public_path(ltrim($imgPath, '/')))) {
+                                    $path = public_path(ltrim($imgPath, '/'));
+                                } elseif (\Illuminate\Support\Str::startsWith($imgPath, '/storage/') && file_exists(storage_path('app/public/' . substr($imgPath, 9)))) {
+                                    $path = storage_path('app/public/' . substr($imgPath, 9));
+                                }
+                                
+                                if ($path) {
+                                    try {
+                                        $drawing = new Drawing();
+                                        $drawing->setName('Image');
+                                        $drawing->setDescription('Image');
+                                        $drawing->setPath($path);
+                                        $drawing->setHeight(50);
+                                        $drawing->setCoordinates(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex) . $rowIndex);
+                                        $drawing->setOffsetX(2);
+                                        $drawing->setOffsetY(2);
+                                        $this->drawingsList[] = $drawing;
+                                        $this->imageRows[] = $rowIndex;
+                                        $arr[$key] = ''; // clear text
+                                    } catch (\Exception $e) {
+                                        $arr[$key] = \Illuminate\Support\Str::startsWith($imgPath, 'http') ? $imgPath : url($imgPath);
+                                    }
+                                } else {
                                     $arr[$key] = \Illuminate\Support\Str::startsWith($imgPath, 'http') ? $imgPath : url($imgPath);
                                 }
                             } else {
-                                $arr[$key] = \Illuminate\Support\Str::startsWith($imgPath, 'http') ? $imgPath : url($imgPath);
+                                if (in_array(strtolower($key), ['tanggal', 'tgl', 'date', 'created_at', 'updated_at', 'waktu_kejadian', 'waktu', 'tanggal_kejadian']) && strtotime((string)$val)) {
+                                    $arr[$key] = \Carbon\Carbon::parse($val)->locale('id')->translatedFormat('d F Y');
+                                }
                             }
+                            $colIndex++;
                         }
-                        $colIndex++;
+                        $processed[] = $arr;
+                        $rowIndex++;
                     }
-                    $processed[] = $arr;
-                    $rowIndex++;
                 }
                 $this->data = $processed;
             }
@@ -103,6 +174,9 @@ trait Exportable
                 if (empty($this->data)) {
                     return [];
                 }
+                if ($this->isSingle) {
+                    return ['Atribut', 'Nilai'];
+                }
                 $first = $this->data[0];
                 return array_map(function($key) {
                     return ucwords(str_replace('_', ' ', $key));
@@ -111,6 +185,10 @@ trait Exportable
 
             public function styles(Worksheet $sheet)
             {
+                if ($this->isSingle) {
+                    $sheet->getColumnDimension('A')->setWidth(25);
+                    $sheet->getColumnDimension('B')->setWidth(50);
+                }
                 return [
                     1 => ['font' => ['bold' => true]],
                 ];
@@ -125,8 +203,9 @@ trait Exportable
             {
                 return [
                     AfterSheet::class => function(AfterSheet $event) {
+                        $height = $this->isSingle ? 80 : 40;
                         foreach (array_unique($this->imageRows) as $row) {
-                            $event->sheet->getDelegate()->getRowDimension($row)->setRowHeight(40);
+                            $event->sheet->getDelegate()->getRowDimension($row)->setRowHeight($height);
                         }
                     },
                 ];
@@ -145,27 +224,59 @@ trait Exportable
             return response('No data to export', 404);
         }
 
-        $headers = array_keys((array) $data[0]);
+        $isSingle = count($data) === 1;
 
-        return Response::stream(function() use ($data, $headers) {
+        return Response::stream(function() use ($data, $isSingle) {
             $output = fopen('php://output', 'w');
             fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
-            fputcsv($output, $headers);
-            foreach ($data as $record) {
-                $row = [];
-                foreach ($headers as $header) {
-                    $value = is_object($record) ? $record->$header : $record[$header] ?? '';
-                    if (is_string($value) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $value) && !preg_match('/\s/', $value)) {
-                        $value = \Illuminate\Support\Str::startsWith($value, 'http') ? $value : url($value);
-                    } elseif (is_string($value) && str_contains($value, ',')) {
-                        $firstVal = explode(',', $value)[0];
-                        if (preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $firstVal)) {
-                            $value = \Illuminate\Support\Str::startsWith($firstVal, 'http') ? $firstVal : url($firstVal);
+            
+            if ($isSingle) {
+                fputcsv($output, ['Atribut', 'Nilai']);
+                $record = is_object($data[0]) ? (array) $data[0] : $data[0];
+                foreach ($record as $key => $val) {
+                    $header = ucwords(str_replace('_', ' ', $key));
+                    $value = $val;
+                    if (is_string($value) && $value !== '') {
+                        $imgUrls = [];
+                        foreach(explode(',', $value) as $v) {
+                            $v = trim($v);
+                            if (preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $v) && !preg_match('/\s/', $v)) {
+                                $imgUrls[] = \Illuminate\Support\Str::startsWith($v, 'http') ? $v : url($v);
+                            }
+                        }
+                        if (count($imgUrls) > 0) {
+                            $value = implode(', ', $imgUrls);
+                        } else {
+                            if (in_array(strtolower($key), ['tanggal', 'tgl', 'date', 'created_at', 'updated_at', 'waktu_kejadian', 'waktu', 'tanggal_kejadian']) && strtotime((string)$value)) {
+                                $value = \Carbon\Carbon::parse($value)->locale('id')->translatedFormat('d F Y');
+                            }
                         }
                     }
-                    $row[] = $value;
+                    fputcsv($output, [$header, $value === null ? '' : $value]);
                 }
-                fputcsv($output, $row);
+            } else {
+                $headers = array_keys((array) $data[0]);
+                fputcsv($output, $headers);
+                foreach ($data as $record) {
+                    $row = [];
+                    foreach ($headers as $header) {
+                        $value = is_object($record) ? $record->$header : $record[$header] ?? '';
+                        if (is_string($value) && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $value) && !preg_match('/\s/', $value)) {
+                            $value = \Illuminate\Support\Str::startsWith($value, 'http') ? $value : url($value);
+                        } elseif (is_string($value) && str_contains($value, ',')) {
+                            $firstVal = explode(',', $value)[0];
+                            if (preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $firstVal)) {
+                                $value = \Illuminate\Support\Str::startsWith($firstVal, 'http') ? $firstVal : url($firstVal);
+                            }
+                        } else {
+                            if (in_array(strtolower($header), ['tanggal', 'tgl', 'date', 'created_at', 'updated_at', 'waktu_kejadian', 'waktu', 'tanggal_kejadian']) && strtotime((string)$value)) {
+                                $value = \Carbon\Carbon::parse($value)->locale('id')->translatedFormat('d F Y');
+                            }
+                        }
+                        $row[] = $value;
+                    }
+                    fputcsv($output, $row);
+                }
             }
             fclose($output);
         }, 200, [

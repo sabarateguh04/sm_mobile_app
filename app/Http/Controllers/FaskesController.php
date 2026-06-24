@@ -26,10 +26,9 @@ class FaskesController extends BaseController
             ->leftJoin('usm', 'usm.id_usm', '=', 't.piket')
             ->select('t.*', 'usm.nama as petugas_nama', 'usm.wilayah as petugas_wilayah', 'usm.daerah as petugas_daerah');
 
-        $user = Auth::user();
-        if ($user && (int) $user->user_role_id !== 1) {
-            HierarchicalHelper::applyTerritoryScopeForTable($query, 'data_faskes', 't');
-        }
+        // Territory filter - konsisten dengan OperasionalController
+        HierarchicalHelper::applyTerritoryScopeForTable($query, 'data_faskes', 't');
+        \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
 
         if ($request->filled('search')) {
             $s = $request->search;
@@ -43,11 +42,11 @@ class FaskesController extends BaseController
 
         $data = $query->orderByDesc('t.tanggal')->paginate($request->get('per_page', 20))->withQueryString();
 
-        return view('faskes.index', [
+        return view('faskes.index', array_merge([
             'pageTitle' => 'Data Faskes',
             'data' => $data,
             'sboViewOnly' => \App\Support\RoleMutationPolicy::deniesAllMutations(Auth::user()),
-        ]);
+        ], \App\Support\TerritoryIndexFilters::viewBundle($request)));
     }
 
     public function export(Request $request, string $format = 'excel')
@@ -68,10 +67,9 @@ class FaskesController extends BaseController
             ->leftJoin('usm', 'usm.id_usm', '=', 't.piket')
             ->select('t.*', 'usm.nama as petugas_nama', 'usm.wilayah as petugas_wilayah', 'usm.daerah as petugas_daerah');
 
-        $user = Auth::user();
-        if ($user && (int) $user->user_role_id !== 1) {
-            HierarchicalHelper::applyTerritoryScopeForTable($query, 'data_faskes', 't');
-        }
+        // Territory filter - konsisten dengan OperasionalController
+        HierarchicalHelper::applyTerritoryScopeForTable($query, 'data_faskes', 't');
+        \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
 
         if ($request->filled('search')) {
             $s = $request->search;

@@ -7,6 +7,7 @@ use App\Support\ReferensiOptions;
 use App\Support\PublicServiceLayanan;
 use App\Support\LayananToOpsdalSync;
 use App\Support\RoleMutationPolicy;
+use App\Support\TerritoryIndexFilters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -64,8 +65,9 @@ class InteraksiLayananController extends OperasionalController
             $query->where('layanan_masyarakat.kategori', $request->kategori);
         }
 
+        // Apply territory column filters for report mode
         if (PublicServiceLayanan::isReportMode($request)) {
-            $this->applyDirectDaerahWilayahFilters($query, $request);
+            TerritoryIndexFilters::applyColumnFilters($query, $request, $this->tableName);
         }
 
         return $query;
@@ -84,7 +86,7 @@ class InteraksiLayananController extends OperasionalController
         $readOnly = PublicServiceLayanan::isReportMode($request);
         $kategoriList = $this->getKategoriList();
 
-        return view($this->viewFolder.'.index', [
+        return view($this->viewFolder.'.index', array_merge([
             'pageTitle' => $readOnly ? PublicServiceLayanan::reportPageTitle($this->getPageTitle()) : $this->getPageTitle(),
             'data' => $data,
             'kategoriList' => $kategoriList,
@@ -92,10 +94,7 @@ class InteraksiLayananController extends OperasionalController
             'tableName' => $this->tableName,
             'primaryKey' => $this->primaryKey,
             'sboViewOnly' => RoleMutationPolicy::deniesAllMutations(Auth::user()),
-            'daerahList' => $readOnly ? $this->daerahOptionsFromTable() : collect(),
-            'wilayahList' => $readOnly ? $this->wilayahOptionsFromTable($request) : collect(),
-            'userLevel' => HierarchicalHelper::getUserLevel(),
-        ]);
+        ], $readOnly ? TerritoryIndexFilters::viewBundle($request, $this->tableName) : []));
     }
 
     public function create()

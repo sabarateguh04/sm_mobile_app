@@ -41,12 +41,10 @@
         <input type="hidden" name="sb_grp" value="public_service">
     @endif
     <div class="pmf-row">
-        @include('_partials.compact_filters.date_range', ['prefix' => 'layanan-masyarakat'])
-        @if($readOnly ?? false)
-            @include('_partials.compact_filters.territory')
-        @endif
-        @include('_partials.compact_filters.select', ['name' => 'kategori', 'placeholder' => 'Kategori', 'options' => $kategoriList ?? []])
         @include('_partials.compact_filters.search', ['placeholder' => 'Cari saluran, kategori, tema...'])
+        @include('_partials.compact_filters.territory')
+        @include('_partials.compact_filters.date_range', ['prefix' => 'layanan-masyarakat'])
+        @include('_partials.compact_filters.select', ['name' => 'kategori', 'placeholder' => 'Kategori', 'options' => $kategoriList ?? []])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('layanan.masyarakat.index', ($readOnly ?? false) ? ['sb_grp' => 'public_service'] : []),
             'active' => $hasFilters,
@@ -89,7 +87,9 @@
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tema</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Narsum</th>
                         @if($readOnly ?? false)
-                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                             <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                         @endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
@@ -116,7 +116,7 @@
                                 @endif
                             </td>
                             <td class="px-3 py-2.5">
-                                <span class="text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d M Y') : '-' }}</span>
+                                <span class="text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</span>
                                 @if($isOwnRow && !($readOnly ?? false))
                                     <span class="block text-[9px] font-bold text-secondary uppercase tracking-wider mt-0.5">Data Anda</span>
                                 @endif
@@ -140,9 +140,11 @@
                                 @endif
                             </td>
                             @if($readOnly ?? false)
-                                <td class="px-3 py-2.5">
-                                    <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '—') }}</span>
-                                </td>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '—') }}</span>
+                                    </td>
+@endif
                                 <td class="px-3 py-2.5">
                                     <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah))) : '—' }}</span>
                                 </td>

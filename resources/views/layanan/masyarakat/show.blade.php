@@ -46,56 +46,56 @@
         </div>
 
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $fotoUrl ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $fotoUrl ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
+            <div class="space-y-6">
+                <div>
+                    <dl class="space-y-3 mb-0">
                         @if(!empty($data->daerah) || !empty($data->wilayah) || ($readOnly ?? false))
-                            <div>
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt>
-                                <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $data->daerah ? strtoupper($data->daerah) : '—' }}</dd>
+                            <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-slate-100/80">
+                                <dt class="w-full sm:w-1/3 text-[11px] font-bold text-slate-700 uppercase tracking-wide">Polda</dt>
+                                <dd class="w-full sm:w-2/3 text-[13px] font-bold m-0 sm:pl-4" style="color:#D8A808;">{{ $data->daerah ? strtoupper($data->daerah) : '—' }}</dd>
                             </div>
-                            <div>
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polres</dt>
-                                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah))) : '—' }}</dd>
+                            <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-slate-100/80">
+                                <dt class="w-full sm:w-1/3 text-[11px] font-bold text-slate-700 uppercase tracking-wide">Polres</dt>
+                                <dd class="w-full sm:w-2/3 text-[13px] text-slate-800 font-semibold m-0 sm:pl-4">{{ $data->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah))) : '—' }}</dd>
                             </div>
                         @endif
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '—' }}</dd>
+                        <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-slate-100/80">
+                            <dt class="w-full sm:w-1/3 text-[11px] font-bold text-slate-700 uppercase tracking-wide">Tanggal</dt>
+                            <dd class="w-full sm:w-2/3 text-[13px] text-slate-800 font-semibold m-0 sm:pl-4">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '—' }}</dd>
                         </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Saluran</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->saluran ?: '—' }}</dd>
+                        <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-slate-100/80">
+                            <dt class="w-full sm:w-1/3 text-[11px] font-bold text-slate-700 uppercase tracking-wide">Saluran</dt>
+                            <dd class="w-full sm:w-2/3 text-[13px] text-slate-800 font-semibold m-0 sm:pl-4">{{ $data->saluran ?: '—' }}</dd>
                         </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Kategori</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->kategori ?: '—' }}</dd>
+                        <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-slate-100/80">
+                            <dt class="w-full sm:w-1/3 text-[11px] font-bold text-slate-700 uppercase tracking-wide">Kategori</dt>
+                            <dd class="w-full sm:w-2/3 text-[13px] text-slate-800 font-semibold m-0 sm:pl-4">{{ $data->kategori ?: '—' }}</dd>
                         </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Narasumber</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">
+                        <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-slate-100/80">
+                            <dt class="w-full sm:w-1/3 text-[11px] font-bold text-slate-700 uppercase tracking-wide">Narasumber</dt>
+                            <dd class="w-full sm:w-2/3 text-[13px] text-slate-800 font-semibold m-0 sm:pl-4">
                                 {{ $data->narsum ?: '—' }}
                                 @if($data->telp_narsum)
-                                    <span class="block text-[11px] text-slate-400 font-normal mt-0.5">{{ $data->telp_narsum }}</span>
+                                    <span class="inline-block bg-slate-100 px-2 py-0.5 rounded text-[11px] text-slate-600 font-semibold ml-2">{{ $data->telp_narsum }}</span>
                                 @endif
                             </dd>
                         </div>
-                        <div class="md:col-span-2">
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tema</dt>
-                            <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->tema ?: '—' }}</dd>
+                        <div class="flex flex-col sm:flex-row sm:items-center py-2 border-b border-slate-100/80">
+                            <dt class="w-full sm:w-1/3 text-[11px] font-bold text-slate-700 uppercase tracking-wide">Tema</dt>
+                            <dd class="w-full sm:w-2/3 text-[13px] text-slate-800 font-semibold m-0 sm:pl-4">{{ $data->tema ?: '—' }}</dd>
                         </div>
-                        <div class="md:col-span-2">
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Keterangan</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-line">{{ $data->keterangan ?: '—' }}</dd>
+                        <div class="flex flex-col sm:flex-row sm:items-start py-2 border-b border-slate-100/80">
+                            <dt class="w-full sm:w-1/3 text-[11px] font-bold text-slate-700 uppercase tracking-wide pt-0.5">Keterangan</dt>
+                            <dd class="w-full sm:w-2/3 text-[13px] text-slate-800 font-medium m-0 sm:pl-4 whitespace-pre-line">{{ $data->keterangan ?: '—' }}</dd>
                         </div>
                         @if(!empty($data->koordinat))
-                            <div class="md:col-span-2">
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                                <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                    <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px] select-all">{{ $data->koordinat }}</code>
+                            <div class="flex flex-col sm:flex-row sm:items-center py-2">
+                                <dt class="w-full sm:w-1/3 text-[11px] font-bold text-slate-700 uppercase tracking-wide">Koordinat GPS</dt>
+                                <dd class="w-full sm:w-2/3 m-0 sm:pl-4 flex items-center gap-2 flex-wrap">
+                                    <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px] select-all font-semibold">{{ $data->koordinat }}</code>
                                     @if($kOk)
                                         <a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer"
-                                           class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                           class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px] font-bold">
                                             <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
                                         </a>
                                     @endif
@@ -106,11 +106,13 @@
                 </div>
 
                 @if($fotoUrl)
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2">Foto Interaksi</p>
-                        <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer" class="block rounded-xl overflow-hidden border border-slate-200 hover:opacity-95 transition-opacity">
-                            <img src="{{ $fotoUrl }}" alt="Foto interaksi" class="w-full rounded-xl" style="max-height:220px;object-fit:cover;" referrerpolicy="no-referrer">
-                        </a>
+                    <div class="pt-4 border-t border-slate-100/80">
+                        <p class="text-[11px] font-bold text-slate-700 uppercase tracking-wide mb-2">Foto Interaksi</p>
+                        <div class="max-w-[400px]">
+                            <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer" class="block rounded-xl overflow-hidden border border-slate-200 hover:opacity-95 transition-opacity">
+                                <img src="{{ $fotoUrl }}" alt="Foto interaksi" class="w-full rounded-xl" style="max-height:300px;object-fit:cover;" referrerpolicy="no-referrer">
+                            </a>
+                        </div>
                     </div>
                 @endif
             </div>

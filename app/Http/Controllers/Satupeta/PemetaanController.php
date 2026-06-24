@@ -195,15 +195,27 @@ class PemetaanController extends BaseSatupetaController
         $dinas = $request->input('dinas');
         $poldaId = $request->input('polda_id');
 
-        $query = DB::connection('satupeta')->table('cctv');
+        $query = DB::connection('satupeta')->table('smpc_tbl_data_cctv')
+            ->select(
+                'pk_ids as id',
+                'nama_cctv',
+                'rtsp_cctv',
+                DB::raw("CONCAT(COALESCE(lat, ''), ',', COALESCE(lng, '')) as kordinat"),
+                'nama_cctv as channel_name',
+                'channel_id',
+                'rowid as trx_id',
+                'polda_id as da_id',
+                'instansi'
+            );
+
         if ($poldaId) {
-            $query->where('da_id', $poldaId);
+            $query->where('polda_id', $poldaId);
         }
 
         $rows = $query->get();
         $filtered = match ($dinas) {
-            'korlantas' => $rows->filter(fn ($v) => str_starts_with($v->channel_name, 'KORLA') || str_starts_with($v->channel_name, 'SMART')),
-            'dishub' => $rows->filter(fn ($v) => str_starts_with($v->channel_name, 'DSHB')),
+            'korlantas' => $rows->filter(fn ($v) => strtolower($v->instansi) === 'korlantas' || str_contains(strtoupper($v->nama_cctv), 'KORLA') || str_contains(strtoupper($v->nama_cctv), 'SMART')),
+            'dishub' => $rows->filter(fn ($v) => strtolower($v->instansi) === 'dishub' || str_contains(strtoupper($v->nama_cctv), 'DSHB')),
             default => $rows,
         };
 
@@ -235,7 +247,7 @@ class PemetaanController extends BaseSatupetaController
                 'traffic_kategori' => $traffic,
                 'trx_id' => $v->trx_id,
                 'channel_name' => $v->channel_name,
-                'channel_code' => $v->channel_code,
+                'channel_code' => $v->channel_id,
             ];
         }
 

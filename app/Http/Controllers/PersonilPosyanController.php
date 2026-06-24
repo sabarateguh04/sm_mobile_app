@@ -109,6 +109,10 @@ class PersonilPosyanController extends LegacySboOperasionalController
 
     protected function applyFilters($query, Request $request)
     {
+        $table = $this->sourceTable();
+        \App\Support\TerritoryIndexFilters::applyColumnFilters($query, $request, $table);
+        $this->applyPersonilBoRequestFilters($query, $table, $request);
+
         return $query;
     }
 
@@ -373,30 +377,28 @@ class PersonilPosyanController extends LegacySboOperasionalController
         if ($request->filled('induk_pemerintahan') && Schema::hasColumn($table, 'induk_pemerintahan')) {
             $org = trim((string) $request->induk_pemerintahan);
             if ($org !== '') {
-                $query->where(function ($q) use ($table, $org) {
-                    $needle = mb_strtolower($org);
-                    foreach (['induk_pemerintahan', 'pemerintahan_daerah', 'organisasi_daerah'] as $col) {
-                        if (Schema::hasColumn($table, $col)) {
-                            $q->orWhereRaw(
-                                'LOWER(TRIM(COALESCE('.$table.'.'.$col.", ''))) = ?",
-                                [$needle]
-                            );
-                        }
-                    }
-                });
+                $query->whereRaw(
+                    'LOWER(TRIM(COALESCE('.$table.".induk_pemerintahan, ''))) = ?",
+                    [mb_strtolower($org)]
+                );
+            }
+        }
+
+        if ($request->filled('unit_kerja') && Schema::hasColumn($table, 'unit_kerja')) {
+            $suborg = trim((string) $request->unit_kerja);
+            if ($suborg !== '') {
+                $query->whereRaw(
+                    'LOWER(TRIM(COALESCE('.$table.".unit_kerja, ''))) = ?",
+                    [mb_strtolower($suborg)]
+                );
             }
         }
     }
 
     /** @return \Illuminate\Support\Collection<int, string> */
-    protected function personilOrganisasiFilterOptions(string $table, Request $request): \Illuminate\Support\Collection
+    protected function distinctIndukOrganisasiFilterOptions(string $table, Request $request): \Illuminate\Support\Collection
     {
-        $columns = array_values(array_filter(
-            ['induk_pemerintahan', 'pemerintahan_daerah', 'organisasi_daerah'],
-            static fn (string $col): bool => Schema::hasColumn($table, $col)
-        ));
-
-        if ($columns === []) {
+        if (! Schema::hasColumn($table, 'induk_pemerintahan')) {
             return collect();
         }
 
@@ -404,20 +406,27 @@ class PersonilPosyanController extends LegacySboOperasionalController
         $this->applyPersonilBoTerritoryScope($query, $table);
         \App\Support\TerritoryIndexFilters::applyColumnFilters($query, $request, $table);
 
-        $options = collect();
-        foreach ($columns as $col) {
-            $opts = (clone $query)
-                ->reorder()
-                ->select($table.'.'.$col)
-                ->whereNotNull($table.'.'.$col)
-                ->where($table.'.'.$col, '!=', '')
-                ->distinct()
-                ->orderBy($table.'.'.$col)
-                ->pluck($col);
-            $options = $options->merge($opts);
+        if ($request->filled('kategori_user') && Schema::hasColumn($table, 'kategori_user')) {
+            $kat = (string) $request->kategori_user;
+            if (in_array($kat, ['organik', 'non_organik'], true)) {
+                $query->where($table.'.kategori_user', $kat);
+            }
+        }
+        if ($request->filled('unit_kerja') && Schema::hasColumn($table, 'unit_kerja')) {
+            $query->whereRaw(
+                'LOWER(TRIM(COALESCE('.$table.".unit_kerja, ''))) = ?",
+                [strtolower(trim($request->unit_kerja))]
+            );
         }
 
-        $options = $options
+        $options = (clone $query)
+            ->reorder()
+            ->select($table.'.induk_pemerintahan')
+            ->whereNotNull($table.'.induk_pemerintahan')
+            ->where($table.'.induk_pemerintahan', '!=', '')
+            ->distinct()
+            ->orderBy($table.'.induk_pemerintahan')
+            ->pluck('induk_pemerintahan')
             ->map(static fn ($v) => trim((string) $v))
             ->filter(static fn (string $v): bool => $v !== '')
             ->unique()
@@ -438,6 +447,45 @@ class PersonilPosyanController extends LegacySboOperasionalController
         }
 
         return $options;
+    }
+
+    /** @return \Illuminate\Support\Collection<int, string> */
+    protected function distinctSubOrgFilterOptions(string $table, Request $request): \Illuminate\Support\Collection
+    {
+        if (! Schema::hasColumn($table, 'unit_kerja')) {
+            return collect();
+        }
+
+        $query = $this->baseQuery();
+        $this->applyPersonilBoTerritoryScope($query, $table);
+        \App\Support\TerritoryIndexFilters::applyColumnFilters($query, $request, $table);
+
+        if ($request->filled('kategori_user') && Schema::hasColumn($table, 'kategori_user')) {
+            $kat = (string) $request->kategori_user;
+            if (in_array($kat, ['organik', 'non_organik'], true)) {
+                $query->where($table.'.kategori_user', $kat);
+            }
+        }
+        if ($request->filled('induk_pemerintahan') && Schema::hasColumn($table, 'induk_pemerintahan')) {
+            $query->whereRaw(
+                'LOWER(TRIM(COALESCE('.$table.".induk_pemerintahan, ''))) = ?",
+                [strtolower(trim($request->induk_pemerintahan))]
+            );
+        }
+
+        return (clone $query)
+            ->reorder()
+            ->select($table.'.unit_kerja')
+            ->whereNotNull($table.'.unit_kerja')
+            ->where($table.'.unit_kerja', '!=', '')
+            ->distinct()
+            ->orderBy($table.'.unit_kerja')
+            ->pluck('unit_kerja')
+            ->map(static fn ($v) => trim((string) $v))
+            ->filter(static fn (string $v): bool => $v !== '')
+            ->unique()
+            ->sort()
+            ->values();
     }
 
     /**
@@ -632,7 +680,8 @@ class PersonilPosyanController extends LegacySboOperasionalController
         $actor = Auth::user();
         $canFilterIndukOrganisasi = HierarchicalHelper::viewerBypassesTerritoryScope()
             && Schema::hasColumn($table, 'induk_pemerintahan');
-        $organisasiFilterOptions = $this->personilOrganisasiFilterOptions($table, $request);
+        $indukOrganisasiOptions = $this->distinctIndukOrganisasiFilterOptions($table, $request);
+        $subOrgOptions = $this->distinctSubOrgFilterOptions($table, $request);
 
         $canEditViaAdminUsers = $actor instanceof Usm && ! RoleMutationPolicy::deniesAllMutations($actor);
         $adminUserEditUrls = [];
@@ -658,8 +707,9 @@ class PersonilPosyanController extends LegacySboOperasionalController
             'listingTerritoryHint' => $this->listingTerritoryHint,
             'listingTerritoryBlocked' => $this->listingTerritoryBlocked,
             'canFilterIndukOrganisasi' => $canFilterIndukOrganisasi,
-            'organisasiFilterOptions' => $organisasiFilterOptions,
-            'indukOrganisasiFilterOptions' => $organisasiFilterOptions,
+            'organisasiFilterOptions' => $indukOrganisasiOptions,
+            'indukOrganisasiFilterOptions' => $indukOrganisasiOptions,
+            'subOrgFilterOptions' => $subOrgOptions,
             'actorIndukOrganisasi' => $actor instanceof Usm ? trim((string) ($actor->induk_pemerintahan ?? '')) : '',
             'canEditViaAdminUsers' => $canEditViaAdminUsers,
             'adminUserEditUrls' => $adminUserEditUrls,

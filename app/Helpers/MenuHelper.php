@@ -461,14 +461,15 @@ class MenuHelper
     }
 
     /**
-     * Menu horizontal topbar: super admin, operator, Executive 3 (kab/kota — sama operator).
-     * Executive 2/1 memakai sidebar admin penuh tanpa topbar dedupe.
+     * Menu horizontal topbar: super admin, operator, semua level executive.
+     * Executive 1/2 (pusat/provinsi) menggunakan config/executive_header_menu.php.
+     * Executive 3 (kab/kota) menggunakan config/operator_header_menu.php.
      */
     public static function showsTopbarMegaNavForLayout(?AuthenticatedUser $user): bool
     {
         return self::isSuperAdminForLayout($user)
             || self::isOperatorForLayout($user)
-            || self::isExecutiveKabKotaUser($user);
+            || self::isExecutiveForLayout($user);
     }
 
     /**

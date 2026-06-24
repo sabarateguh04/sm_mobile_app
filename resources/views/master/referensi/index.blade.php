@@ -66,7 +66,7 @@
                 <h3 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 m-0 truncate">{{ $label }}</h3>
                 <span class="text-[10px] font-semibold text-slate-400 normal-case">{{ number_format($rowTotal, 0, ',', '.') }} item</span>
             </div>
-            @if($isSuperAdmin)
+            @if($isSuperAdmin && empty($smdSource))
                 <button type="button"
                     class="flex items-center justify-center gap-1.5 px-3 py-2 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg text-[12px] transition-all shadow-sm border-0 shrink-0"
                     data-bs-toggle="modal" data-bs-target="#createModal">
@@ -98,7 +98,7 @@
                         @if(!empty($parentCol))
                             <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">{{ $parentLabel ?? 'Parent' }}</th>
                         @endif
-                        @if($isSuperAdmin)
+                        @if($isSuperAdmin && empty($smdSource))
                             <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right w-28">Aksi</th>
                         @endif
                     </tr></thead>
@@ -121,7 +121,7 @@
                                         @endif
                                     </td>
                                 @endif
-                                @if($isSuperAdmin)
+                                @if($isSuperAdmin && empty($smdSource))
                                     <td class="px-3 py-2.5 text-right">
                                         <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button type="button"
@@ -160,7 +160,7 @@
                     <a href="{{ route('master.referensi.index', ['ref' => $active]) }}" class="inline-flex items-center gap-1.5 mt-3 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-label-md transition-all text-decoration-none">
                         <span class="material-symbols-outlined text-[16px]">cached</span> Reset
                     </a>
-                @elseif($isSuperAdmin)
+                @elseif($isSuperAdmin && empty($smdSource))
                     <button type="button"
                         class="inline-flex items-center gap-1.5 mt-3 px-3 py-2 bg-primary text-white font-bold rounded-xl text-label-md transition-all border-0"
                         data-bs-toggle="modal" data-bs-target="#createModal">
@@ -173,7 +173,7 @@
 </div>
 </div>
 
-@if($isSuperAdmin)
+@if($isSuperAdmin && empty($smdSource))
     <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <form action="{{ route('master.referensi.store') }}" method="POST">

@@ -82,7 +82,9 @@
                 <thead>
                     <tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama Perangkat</th>
@@ -106,7 +108,7 @@
                                 <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $row->usm_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $row->usm_wilayah))) : '—' }}</span>
                             </td>
                             <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">
-                                {{ $row->tanggal ? \Carbon\Carbon::parse($row->tanggal)->format('d M Y') : '—' }}
+                                {{ $row->tanggal ? \Carbon\Carbon::parse($row->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}
                             </td>
                             <td class="px-3 py-2.5">
                                 <a href="{{ route('dataperangkat.show', $row->id_perangkat) }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">

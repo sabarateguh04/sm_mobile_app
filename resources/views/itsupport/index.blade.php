@@ -53,7 +53,9 @@
             <table class="w-full text-left min-w-[900px]">
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Device</th>
@@ -86,7 +88,7 @@
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $r->petugas_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $r->petugas_wilayah))) : '—' }}</span>
                             </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $r->tanggal ? \Carbon\Carbon::parse($r->tanggal)->format('d/m/Y') : '—' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $r->tanggal ? \Carbon\Carbon::parse($r->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                             <td class="px-3 py-2.5">
                                 <a href="{{ route('itsupport.show', $r->id_itsupport) }}" class="text-[12px] font-bold text-primary hover:underline text-decoration-none">{{ $r->namedevice ?: 'Detail' }}</a>
                             </td>

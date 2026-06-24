@@ -88,6 +88,7 @@ return [
         /* Patrol & monitoring */
         'map'  => [1, 2, 3, 4, 5, 6, 7],
         'patrolicctv' => [1, 2, 3, 4, 5, 6, 7],
+        'cctv-live' => [1, 2, 3, 4, 5, 6, 7],
         /** Data CCTV inventaris TIK (operator: view wil_datacctv) */
         'data-cctv' => [1, 2, 3, 4, 5, 6, 7],
         /** Alias URL legacy /datacctv (sama halaman, tanpa redirect) */
@@ -117,6 +118,8 @@ return [
         /* TIK — oprator: header IT Asset Management (Data Perangkat, CCTV, Trouble Report) */
         'itsupport'      => [1, 2, 3, 4, 5, 6, 7],
         'master/referensi' => [1, 2, 3, 4],
+        'sm/master' => [1, 2, 3, 4, 5, 6, 7],
+        'sm/transaksi' => [1, 2, 3, 4, 5, 6, 7],
 
         /* Config — setara baris ✓ (SA): hanya matrix superadmin mengubah Roles/permissions */
         'roles'             => [1],

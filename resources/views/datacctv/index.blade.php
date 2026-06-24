@@ -83,7 +83,9 @@
                 <thead>
                     <tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi / Owner</th>
@@ -108,7 +110,7 @@
                                 <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $row->usm_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $row->usm_wilayah))) : '—' }}</span>
                             </td>
                             <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">
-                                {{ $row->tanggal ? \Carbon\Carbon::parse($row->tanggal)->format('d M Y') : '—' }}
+                                {{ $row->tanggal ? \Carbon\Carbon::parse($row->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}
                             </td>
                             <td class="px-3 py-2.5">
                                 @if($recordId)
@@ -146,6 +148,9 @@
                                         <a href="{{ route('datacctv.show', $recordId) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail">
                                             <span class="material-symbols-outlined text-[18px]">visibility</span>
                                         </a>
+                                        @if(!empty($row->piket ?? $row->id_usm))
+                                            <a href="{{ route('personil.manager.show', $row->piket ?? $row->id_usm) }}" class="w-8 h-8 flex items-center justify-center text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors text-decoration-none" title="Profil Operator"><span class="material-symbols-outlined text-[18px]">account_circle</span></a>
+                                        @endif
                                         @if($canMutate)
                                             <a href="{{ route('datacctv.edit', $recordId) }}" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors text-decoration-none" title="Edit">
                                                 <span class="material-symbols-outlined text-[18px]">edit</span>

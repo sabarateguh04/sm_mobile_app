@@ -312,8 +312,12 @@ final class UserListingScope
     private static function applyExecutiveListingTerritoryScope(Builder $query, Usm $actor, int $matrixRoleId, ?UserListingScopeContext $ctx): void
     {
         if ($matrixRoleId === 7) {
-            if ($ctx !== null) {
-                $ctx->listingTerritoryHint = 'Menampilkan seluruh pengguna (hanya lihat).';
+            $daerah = trim((string) ($actor->daerah ?? ''));
+            if ($daerah !== '') {
+                self::applyColumnEqualsNormalized($query, 'usm.daerah', $daerah);
+                if ($ctx !== null) {
+                    $ctx->listingTerritoryHint = 'Menampilkan operator di provinsi: '.$daerah.'.';
+                }
             }
 
             return;
@@ -321,13 +325,14 @@ final class UserListingScope
 
         if ($matrixRoleId === (int) config('role_menu_matrix.executive_provinsi_matrix_role_id', 6)) {
             $daerah = trim((string) ($actor->daerah ?? ''));
-            if ($daerah === '') {
-                return;
-            }
+            $wilayah = trim((string) ($actor->wilayah ?? ''));
 
-            self::applyColumnEqualsNormalized($query, 'usm.daerah', $daerah);
-            if ($ctx !== null) {
-                $ctx->listingTerritoryHint = 'Menampilkan operator di provinsi: '.$daerah.'.';
+            if ($daerah !== '' && $wilayah !== '') {
+                self::applyColumnEqualsNormalized($query, 'usm.daerah', $daerah);
+                self::applyColumnEqualsNormalized($query, 'usm.wilayah', $wilayah);
+                if ($ctx !== null) {
+                    $ctx->listingTerritoryHint = 'Menampilkan operator di wilayah: '.$wilayah.' ('.$daerah.').';
+                }
             }
 
             return;
@@ -425,16 +430,27 @@ final class UserListingScope
     private static function executiveTerritoryAllowsUserRecord(Usm $actor, Usm $target, int $matrixRoleId): bool
     {
         if ($matrixRoleId === 7) {
-            return true;
-        }
-
-        if ($matrixRoleId === (int) config('role_menu_matrix.executive_provinsi_matrix_role_id', 6)) {
             $daerah = trim((string) ($actor->daerah ?? ''));
             if ($daerah === '') {
                 return true;
             }
 
             return strcasecmp(trim((string) ($target->daerah ?? '')), $daerah) === 0;
+        }
+
+        if ($matrixRoleId === (int) config('role_menu_matrix.executive_provinsi_matrix_role_id', 6)) {
+            $daerah = trim((string) ($actor->daerah ?? ''));
+            $wilayah = trim((string) ($actor->wilayah ?? ''));
+
+            if ($daerah !== '' && strcasecmp(trim((string) ($target->daerah ?? '')), $daerah) !== 0) {
+                return false;
+            }
+
+            if ($wilayah !== '' && strcasecmp(trim((string) ($target->wilayah ?? '')), $wilayah) !== 0) {
+                return false;
+            }
+
+            return true;
         }
 
         if ($matrixRoleId === (int) config('role_menu_matrix.executive_kab_kota_matrix_role_id', 5)) {

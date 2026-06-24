@@ -17,16 +17,21 @@
             <h3 class="text-[13px] font-bold text-slate-800 m-0">Detail Audit Arus</h3>
         </div>
         <div class="p-5">
-            <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 mb-0">
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Posko</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->posko_nama ?? '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Hasil Audit</dt>
-                    <dd class="m-0"><div class="mt-1 rounded-xl bg-slate-50 border border-slate-100 px-3 py-2 text-[13px] text-slate-800">{!! nl2br(e($data->hasil_audit ?? '-')) !!}</div></dd>
-                </div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Catatan</dt>
-                    <dd class="m-0"><div class="mt-1 rounded-xl bg-slate-50 border border-slate-100 px-3 py-2 text-[13px] text-slate-800">{!! nl2br(e($data->catatan ?? '-')) !!}</div></dd>
-                </div>
+            <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Posko</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->posko_nama ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Hasil Audit</dt>
+                <dd class="m-0"><div class="rounded-xl bg-slate-50 border border-slate-100 px-3 py-2 text-[13px] text-slate-800">{!! nl2br(e($data->hasil_audit ?? '-')) !!}</div></dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Catatan</dt>
+                <dd class="m-0"><div class="rounded-xl bg-slate-50 border border-slate-100 px-3 py-2 text-[13px] text-slate-800">{!! nl2br(e($data->catatan ?? '-')) !!}</div></dd>
             </dl>
             <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 flex-wrap gap-2">
                 <a href="{{ route('auditarus.index') }}" class="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-label-md transition-all text-decoration-none">

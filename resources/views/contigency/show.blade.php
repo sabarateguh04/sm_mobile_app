@@ -94,8 +94,8 @@
             @endif
         </div>
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $hasFoto ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $hasFoto ? 'lg:col-span-2' : '' }} space-y-5">
+            <div class="flex flex-col gap-6">
+                <div class="space-y-5">
                     {{-- Petugas --}}
                     <div>
                         <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 pb-1.5 border-b border-slate-100 flex items-center gap-1.5">

@@ -13,12 +13,18 @@
         <h2 class="text-[22px] font-extrabold text-on-surface tracking-tight leading-tight m-0">{{ $pageTitle }}</h2>
         <p class="text-[11px] text-slate-400 mt-0.5 m-0">Laporan patroli situasi lalu lintas dari monitoring CCTV</p>
     </div>
-    @unless(\App\Helpers\MenuHelper::isExecutiveForLayout(auth()->user()))
-    <a href="{{ route('patrolicctv.create') }}" class="flex items-center justify-center gap-2 bg-primary text-on-primary px-4 py-2.5 rounded-xl font-bold text-label-md shadow-lg shadow-primary/25 hover:shadow-xl hover:-translate-y-0.5 transition-all text-decoration-none shrink-0">
-        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
-        <span>Tambah Laporan</span>
-    </a>
-    @endunless
+    <div class="flex flex-wrap items-center gap-2 shrink-0">
+        <a href="{{ route('cctv-live.index') }}" class="flex items-center justify-center gap-2 bg-slate-800 text-white px-4 py-2.5 rounded-xl font-bold text-label-md shadow-sm hover:bg-slate-700 transition-all text-decoration-none">
+            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">live_tv</span>
+            <span>Live CCTV</span>
+        </a>
+        @unless(\App\Helpers\MenuHelper::isExecutiveForLayout(auth()->user()))
+        <a href="{{ route('patrolicctv.create') }}" class="flex items-center justify-center gap-2 bg-primary text-on-primary px-4 py-2.5 rounded-xl font-bold text-label-md shadow-lg shadow-primary/25 hover:shadow-xl hover:-translate-y-0.5 transition-all text-decoration-none shrink-0">
+            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
+            <span>Tambah Laporan</span>
+        </a>
+        @endunless
+    </div>
 </section>
 
 @if(session('success'))
@@ -133,7 +139,7 @@
                             </td>
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-bold text-slate-800">
-                                    {{ $tanggal ? \Carbon\Carbon::parse($tanggal)->format('d M Y') : '—' }}
+                                    {{ $tanggal ? \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}
                                 </span>
                             </td>
                             <td class="px-3 py-2.5 text-[11px] text-slate-700 max-w-[200px]">
@@ -167,6 +173,9 @@
                                     <a href="{{ route('patrolicctv.show', $item->{$primaryKey}) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail">
                                         <span class="material-symbols-outlined text-[18px]">visibility</span>
                                     </a>
+                                    @if(!empty($item->piket ?? $item->id_usm ?? $id))
+                                        <a href="{{ route('personil.manager.show', $item->piket ?? $item->id_usm ?? $id) }}" class="w-8 h-8 flex items-center justify-center text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors text-decoration-none" title="Profil Operator"><span class="material-symbols-outlined text-[18px]">account_circle</span></a>
+                                    @endif
                                     @unless(\App\Helpers\MenuHelper::isExecutiveForLayout(auth()->user()))
                                     <a href="{{ route('patrolicctv.edit', $item->{$primaryKey}) }}" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors text-decoration-none" title="Edit">
                                         <span class="material-symbols-outlined text-[18px]">edit</span>

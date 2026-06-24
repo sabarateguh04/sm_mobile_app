@@ -41,12 +41,10 @@
         <input type="hidden" name="sb_grp" value="public_service">
     @endif
     <div class="pmf-row">
-        @include('_partials.compact_filters.date_range', ['prefix' => 'layanan-data'])
-        @if($readOnly ?? false)
-            @include('_partials.compact_filters.territory')
-        @endif
-        @include('_partials.compact_filters.select', ['name' => 'kategori_data', 'placeholder' => 'Kategori', 'options' => $kategoriList])
         @include('_partials.compact_filters.search', ['placeholder' => 'Cari pemohon, kategori, tujuan...'])
+        @include('_partials.compact_filters.territory')
+        @include('_partials.compact_filters.date_range', ['prefix' => 'layanan-data'])
+        @include('_partials.compact_filters.select', ['name' => 'kategori_data', 'placeholder' => 'Kategori', 'options' => $kategoriList])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('layanan.data.index', ($readOnly ?? false) ? ['sb_grp' => 'public_service'] : []),
             'active' => $hasFilters,
@@ -115,7 +113,7 @@
                                     </div>
                                 @endif
                             </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d M Y') : '-' }}</td>
+                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
                             <td class="px-3 py-2.5">
                                 @if($item->kategori_data)
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->kategori_data }}</span>
@@ -131,7 +129,9 @@
                             <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $item->telp_pemohon ?? '—' }}</td>
                             @if($readOnly ?? false)
                                 <td class="px-3 py-2.5">
-                                    <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '-') }}</span>
+                                    @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '-') }}</span>
+                                    @endif
                                     <span class="block text-[10px] text-slate-400 uppercase">{{ $item->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah))) : '' }}</span>
                                 </td>
                             @endif

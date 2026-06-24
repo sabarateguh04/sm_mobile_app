@@ -16,7 +16,7 @@
         <div class="w-6 h-6 rounded-md bg-indigo-100 flex items-center justify-center">
             <span class="material-symbols-outlined text-indigo-500 text-[14px]" style="font-variation-settings:'FILL' 1;">map</span>
         </div>
-        <h6 class="m-0 font-bold text-[12px] text-slate-700">Peta Sebaran Operasional</h6>
+        <h6 class="m-0 font-bold text-[12px] text-slate-700">Peta Opsdal</h6>
     </div>
     <div class="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden relative" style="height: 450px; z-index: 10;">
         <iframe src="{{ route('map.index') }}?embed=1" width="100%" height="100%" style="border:none;" title="Map Operasional"></iframe>
@@ -125,7 +125,12 @@
 </div>
 @endif
 
-{{-- ══ 4. DASHBOARD OPERASIONAL CHARTS ══ --}}
+{{--
+    ══ 4. DASHBOARD OPERASIONAL CHARTS (HIDDEN - dipindahkan ke dashboard per-rule) ══
+    Chart "Trend Faktor Penyebab Peristiwa" dan "Trend Durasi Perlambatan" disembunyikan sementara.
+    Akan dibuatkan dashboard terpisah di masing-masing modul (trafficstuck, contigency, turjagwali, dll).
+--}}
+{{-- HIDDEN: Chart Trend Penyebab & Perlambatan
 <div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div class="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
@@ -150,6 +155,7 @@
         </div>
     </div>
 </div>
+END HIDDEN --}}
 
 {{-- ══ 5. REPORT NEWS: QR CONTIGENCY ══ --}}
 <div>

@@ -55,6 +55,7 @@ use App\Http\Controllers\MediaPublishingController;
 use App\Http\Controllers\MediaAnalyticController;
 use App\Http\Controllers\PersonilPosyanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Sm\SmDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +85,46 @@ Route::middleware('guest')->group(function () {
 
 // Peta Monitoring (dari index.html - Leaflet) - Public before login
 Route::get('/map', [MapController::class, 'index'])->name('map.index');
+Route::post('/map/update-koordinat', [MapController::class, 'updateKoordinat'])->name('map.update-koordinat')->middleware('auth');
+
+Route::get('/debug-db-structure', function () {
+    $health = \App\Support\DatabaseConnections::healthCheck();
+    $lines = ["STATUS 2 DATABASE APLIKASI\n"];
+
+    foreach (['operational', 'territory'] as $key) {
+        $db = $health[$key];
+        $label = $key === 'operational' ? 'DB UTAMA (operasional)' : 'DB KEDUA (wilayah + master SM)';
+        $lines[] = '=========================================';
+        $lines[] = $label;
+        $lines[] = "Koneksi : {$db['connection']}";
+        $lines[] = "Database: {$db['database']}";
+        $lines[] = 'Status  : '.($db['ok'] ? 'OK' : 'GAGAL');
+        if ($db['error']) {
+            $lines[] = "Error   : {$db['error']}";
+        }
+        if ($key === 'operational' && $db['ok']) {
+            if (isset($db['polda'])) {
+                $lines[] = 'Polda   : '.($db['polda'] ?? 0);
+                $lines[] = 'Polres  : '.($db['polres'] ?? 0);
+            }
+        }
+        if ($key === 'territory' && $db['ok'] && ! empty($db['tables'])) {
+            $t = $db['tables'];
+            $lines[] = "Tabel   : {$t['total']} total (wilayah {$t['wilayah']}, smd_mstr {$t['master']}, smd_tbl {$t['transaksi']}, lainnya {$t['lainnya']})";
+        }
+        $lines[] = '';
+    }
+
+    if ($health['territory']['ok']) {
+        $lines[] = \App\Support\SmSecondDatabaseReport::render(\App\Support\DatabaseConnections::territory());
+    }
+
+    $output = implode("\n", $lines);
+    file_put_contents(public_path('db_structure.txt'), $output);
+
+    return response($output, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+});
+
 
 // ============================================
 // AUTHENTICATED ROUTES (Require Authentication)
@@ -96,6 +137,14 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
     
     // Dashboard/Home Route
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    // Data SM — DB kedua (smd_mstr_* master + smd_tbl_* transaksi)
+    Route::prefix('sm')->name('sm.')->group(function () {
+        Route::get('master', [SmDataController::class, 'masterIndex'])->name('master.index');
+        Route::get('master/{table}/{id}', [SmDataController::class, 'masterShow'])->name('master.show');
+        Route::get('transaksi', [SmDataController::class, 'transaksiIndex'])->name('transaksi.index');
+        Route::get('transaksi/{table}/{id}', [SmDataController::class, 'transaksiShow'])->name('transaksi.show');
+    });
 
     // Profil akun sendiri (organisasi / sub org — setiap user)
     Route::get('/profil-saya/organisasi', [ProfileController::class, 'show'])->name('profile.show');
@@ -619,6 +668,15 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
 
     $registerPatrolCctvRoutes('patrolicctv', 'patrolicctv');
     $registerPatrolCctvRoutes('cctv', 'cctv');
+
+    // Live CCTV — stream RTSP via gateway SatuPeta
+    Route::prefix('cctv-live')->name('cctv-live.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\CctvLiveController::class, 'index'])->name('index');
+        Route::get('/debug-connection', [\App\Http\Controllers\CctvLiveController::class, 'debugConnection'])->name('debug');
+        Route::get('/{id}', [\App\Http\Controllers\CctvLiveController::class, 'show'])->name('show')->whereNumber('id');
+        Route::post('/{id}/start', [\App\Http\Controllers\CctvLiveController::class, 'startStream'])->name('start')->whereNumber('id');
+        Route::post('/{id}/stop', [\App\Http\Controllers\CctvLiveController::class, 'stopStream'])->name('stop')->whereNumber('id');
+    });
 
     Route::get('dataperangkat/export/{format}', [DataPerangkatController::class, 'export'])->name('dataperangkat.export');
     Route::resource('dataperangkat', DataPerangkatController::class)->parameters(['dataperangkat' => 'id']);

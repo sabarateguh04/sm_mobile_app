@@ -20,6 +20,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Dual Database Mapping
+    |--------------------------------------------------------------------------
+    |
+    | operational_connection — DB utama (modul operasional, usm, auth).
+    | territory_connection   — DB kedua: smd_mstr_*, smd_tbl_* (Polda/Polres dari DB operasional).
+    |
+    */
+
+    'operational_connection' => env('DB_OPERATIONAL_CONNECTION', env('DB_CONNECTION', 'mysql')),
+    'territory_connection' => env('DB_TERRITORY_CONNECTION', 'mysql_second'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Database Connections
     |--------------------------------------------------------------------------
     |
@@ -63,13 +76,33 @@ return [
             ]) : [],
         ],
 
+        'mysql_second' => [
+            'driver' => 'mysql',
+            'url' => env('DB_SECOND_URL'),
+            'host' => env('DB_SECOND_HOST', '127.0.0.1'),
+            'port' => env('DB_SECOND_PORT', '3306'),
+            'database' => env('DB_SECOND_DATABASE', 'test'),
+            'username' => env('DB_SECOND_USERNAME', 'root'),
+            'password' => env('DB_SECOND_PASSWORD', ''),
+            'unix_socket' => env('DB_SECOND_SOCKET', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'satupeta' => [
             'driver' => 'mysql',
-            'host' => env('SATUPETA_DB_HOST', env('DB_HOSTNAME', env('DB_HOST', '127.0.0.1'))),
-            'port' => env('SATUPETA_DB_PORT', env('DB_PORT', '3306')),
-            'database' => env('SATUPETA_DB_DATABASE', env('DB_DATABASE', 'laravel')),
-            'username' => env('SATUPETA_DB_USERNAME', env('DB_USERNAME', 'root')),
-            'password' => env('SATUPETA_DB_PASSWORD', env('DB_PASSWORD', '')),
+            'host' => env('SATUPETA_DB_HOST', env('DB_SECOND_HOST', env('DB_HOST', '127.0.0.1'))),
+            'port' => env('SATUPETA_DB_PORT', env('DB_SECOND_PORT', env('DB_PORT', '3306'))),
+            'database' => env('SATUPETA_DB_DATABASE', env('DB_SECOND_DATABASE', env('DB_DATABASE', 'laravel'))),
+            'username' => env('SATUPETA_DB_USERNAME', env('DB_SECOND_USERNAME', env('DB_USERNAME', 'root'))),
+            'password' => env('SATUPETA_DB_PASSWORD', env('DB_SECOND_PASSWORD', env('DB_PASSWORD', ''))),
             'charset' => 'utf8',
             'collation' => 'utf8_general_ci',
             'prefix' => '',

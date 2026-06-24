@@ -163,9 +163,11 @@ class HierarchicalHelper
 
         $query->leftJoin('usm', $table . '.piket', '=', 'usm.id_usm');
 
-        if (!empty($user->wilayah)) {
+        $level = self::getUserLevel();
+
+        if ($level === TerritoryLevelForUsm::KAB_KOTA && !empty($user->wilayah)) {
             $query->where('usm.wilayah', $user->wilayah);
-        } elseif (!empty($user->daerah)) {
+        } elseif ($level === TerritoryLevelForUsm::PROVINSI && !empty($user->daerah)) {
             $query->where('usm.daerah', $user->daerah);
         }
         return $query;
@@ -197,20 +199,21 @@ class HierarchicalHelper
 
         $prefix = $qualifiedPrefix ?? $table;
 
-        if (! empty($user->daerah) && ! empty($user->wilayah)) {
-            self::applyDaerahDanWilayahTerritoryScope($query, $table, $user->daerah, $user->wilayah, $prefix);
+        $level = self::getUserLevel();
 
-            return;
-        }
-
-        if (! empty($user->wilayah)) {
-            self::applyWilayahTerritoryScope($query, $table, $user->wilayah, $prefix);
-
-            return;
-        }
-
-        if (! empty($user->daerah)) {
-            self::applyDaerahTerritoryScope($query, $table, $user->daerah, $prefix);
+        if ($level === TerritoryLevelForUsm::KAB_KOTA) {
+            if (! empty($user->daerah) && ! empty($user->wilayah)) {
+                self::applyDaerahDanWilayahTerritoryScope($query, $table, $user->daerah, $user->wilayah, $prefix);
+                return;
+            }
+            if (! empty($user->wilayah)) {
+                self::applyWilayahTerritoryScope($query, $table, $user->wilayah, $prefix);
+                return;
+            }
+        } elseif ($level === TerritoryLevelForUsm::PROVINSI) {
+            if (! empty($user->daerah)) {
+                self::applyDaerahTerritoryScope($query, $table, $user->daerah, $prefix);
+            }
         }
     }
 
@@ -222,15 +225,16 @@ class HierarchicalHelper
         $query->where(function ($q) use ($table, $daerah, $wilayah, $prefix) {
             $any = false;
 
-            if (Schema::hasColumn($table, 'daerah') && Schema::hasColumn($table, 'wilayah')) {
+            $connName = $q->getConnection()->getName();
+            if (Schema::connection($connName)->hasColumn($table, 'daerah') && Schema::connection($connName)->hasColumn($table, 'wilayah')) {
                 $q->where($prefix.'.daerah', $daerah)->where($prefix.'.wilayah', $wilayah);
                 $any = true;
-            } elseif (Schema::hasColumn($table, 'wilayah')) {
+            } elseif (Schema::connection($connName)->hasColumn($table, 'wilayah')) {
                 $q->where($prefix.'.wilayah', $wilayah);
                 $any = true;
             }
 
-            if (Schema::hasColumn($table, 'piket')) {
+            if (Schema::connection($connName)->hasColumn($table, 'piket')) {
                 $method = $any ? 'orWhereExists' : 'whereExists';
                 $q->{$method}(function ($sub) use ($table, $daerah, $wilayah, $prefix) {
                     $sub->select(DB::raw(1))
@@ -242,7 +246,7 @@ class HierarchicalHelper
                 $any = true;
             }
 
-            if (Schema::hasColumn($table, 'id_profileposko')) {
+            if (Schema::connection($connName)->hasColumn($table, 'id_profileposko')) {
                 $method = $any ? 'orWhereExists' : 'whereExists';
                 $q->{$method}(function ($sub) use ($table, $daerah, $wilayah, $prefix) {
                     $sub->select(DB::raw(1))
@@ -265,12 +269,13 @@ class HierarchicalHelper
         $query->where(function ($q) use ($table, $wilayah, $prefix) {
             $any = false;
 
-            if (Schema::hasColumn($table, 'wilayah')) {
+            $connName = $q->getConnection()->getName();
+            if (Schema::connection($connName)->hasColumn($table, 'wilayah')) {
                 $q->where($prefix.'.wilayah', $wilayah);
                 $any = true;
             }
 
-            if (Schema::hasColumn($table, 'piket')) {
+            if (Schema::connection($connName)->hasColumn($table, 'piket')) {
                 $method = $any ? 'orWhereExists' : 'whereExists';
                 $q->{$method}(function ($sub) use ($table, $wilayah, $prefix) {
                     $sub->select(DB::raw(1))
@@ -281,7 +286,7 @@ class HierarchicalHelper
                 $any = true;
             }
 
-            if (Schema::hasColumn($table, 'id_profileposko')) {
+            if (Schema::connection($connName)->hasColumn($table, 'id_profileposko')) {
                 $method = $any ? 'orWhereExists' : 'whereExists';
                 $q->{$method}(function ($sub) use ($table, $wilayah, $prefix) {
                     $sub->select(DB::raw(1))
@@ -303,12 +308,13 @@ class HierarchicalHelper
         $query->where(function ($q) use ($table, $daerah, $prefix) {
             $any = false;
 
-            if (Schema::hasColumn($table, 'daerah')) {
+            $connName = $q->getConnection()->getName();
+            if (Schema::connection($connName)->hasColumn($table, 'daerah')) {
                 $q->where($prefix.'.daerah', $daerah);
                 $any = true;
             }
 
-            if (Schema::hasColumn($table, 'piket')) {
+            if (Schema::connection($connName)->hasColumn($table, 'piket')) {
                 $method = $any ? 'orWhereExists' : 'whereExists';
                 $q->{$method}(function ($sub) use ($table, $daerah, $prefix) {
                     $sub->select(DB::raw(1))
@@ -319,7 +325,7 @@ class HierarchicalHelper
                 $any = true;
             }
 
-            if (Schema::hasColumn($table, 'id_profileposko')) {
+            if (Schema::connection($connName)->hasColumn($table, 'id_profileposko')) {
                 $method = $any ? 'orWhereExists' : 'whereExists';
                 $q->{$method}(function ($sub) use ($table, $daerah, $prefix) {
                     $sub->select(DB::raw(1))

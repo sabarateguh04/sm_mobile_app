@@ -35,35 +35,52 @@
             @endif
         </div>
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $fotoUrl ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $fotoUrl ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Owner</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->owner ?: '—' }}</dd></div>
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Lokasi</dt><dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->lokasi ?: '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">IP Address</dt><dd class="m-0"><code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->ipaddres ?: '—' }}</code></dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Brand</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->brand ?: '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Fungsi CCTV</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->fungsicctv ?: '—' }}</dd></div>
+            <div class="flex flex-col gap-6">
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Owner</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->owner ?: '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Lokasi</dt>
+                        <dd class="text-[13px] text-slate-800 font-semibold m-0 leading-relaxed">{{ $data->lokasi ?: '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">IP Address</dt>
+                        <dd class="m-0"><code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->ipaddres ?: '—' }}</code></dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Brand</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->brand ?: '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Fungsi CCTV</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->fungsicctv ?: '—' }}</dd>
+
                         @if(!empty($data->koordinat))
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                            <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
-                                <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                    <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                                </a>
-                            </dd>
-                        </div>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                        <dd class="m-0 flex items-center gap-2 flex-wrap">
+                            <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                            </a>
+                        </dd>
                         @endif
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Petugas</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?: '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt><dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ ($data->usm_daerah ?? $data->daerah) ? strtoupper($data->usm_daerah ?? $data->daerah) : '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polres</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ ($data->usm_wilayah ?? $data->wilayah) ? strtoupper($data->usm_wilayah ?? $data->wilayah) : '—' }}</dd></div>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Petugas</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?: '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                        <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ ($data->usm_daerah ?? $data->daerah) ? strtoupper($data->usm_daerah ?? $data->daerah) : '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ ($data->usm_wilayah ?? $data->wilayah) ? strtoupper($data->usm_wilayah ?? $data->wilayah) : '—' }}</dd>
                     </dl>
                 </div>
                 @if($fotoUrl)
-                <div>
+                <div class="pt-4 border-t border-slate-100">
                     <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2">Foto Fisik CCTV</p>
-                    <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer">
-                        <img src="{{ $fotoUrl }}" alt="Foto CCTV" class="rounded-xl border border-slate-200 w-full" style="max-height:220px;object-fit:cover;">
+                    <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer" class="block rounded-xl overflow-hidden border border-slate-200 hover:opacity-95 transition-opacity max-w-[250px]">
+                        <img src="{{ $fotoUrl }}" alt="Foto CCTV" class="w-full rounded-xl" style="max-height:220px;object-fit:cover;">
                     </a>
                 </div>
                 @endif

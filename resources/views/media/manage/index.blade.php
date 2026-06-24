@@ -4,8 +4,8 @@
 
 @section('content')
 @php
-    $preserveQuery = array_filter(request()->only(['search','tanggal_dari','tanggal_sampai','daerah','wilayah','kategori_konten','media_publishing']), fn($v) => $v !== '' && $v !== null);
-    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','kategori_konten','media_publishing','search']);
+    $preserveQuery = array_filter(request()->only(['search','tanggal_dari','tanggal_sampai','daerah','wilayah','kategori_konten']), fn($v) => $v !== '' && $v !== null);
+    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','kategori_konten','search']);
 @endphp
 <div class="max-w-[1400px] mx-auto w-full space-y-4">
 
@@ -31,11 +31,10 @@
 
 <form action="{{ route('media.manage.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     <div class="pmf-row">
-        @include('_partials.compact_filters.date_range', ['prefix' => 'media-manage'])
         @include('_partials.compact_filters.territory')
+        @include('_partials.compact_filters.date_range', ['prefix' => 'media-manage'])
         @include('_partials.compact_filters.select', ['name' => 'kategori_konten', 'placeholder' => 'Kategori', 'options' => $kategoriOptions ?? []])
-        @include('_partials.compact_filters.select', ['name' => 'media_publishing', 'placeholder' => 'Media', 'options' => $mediaPublishingOptions ?? []])
-        @include('_partials.compact_filters.search', ['placeholder' => 'Cari tema, kategori, media...'])
+        @include('_partials.compact_filters.search', ['placeholder' => 'Cari tema, kategori...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('media.manage.index'),
             'active' => $hasFilters,
@@ -84,10 +83,12 @@
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
                             <td class="px-3 py-2.5">
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                                 <span class="text-[10px] font-bold block" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '—') }}</span>
+@endif
                                 <span class="text-[9px] text-slate-400 uppercase">{{ $item->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah))) : '' }}</span>
                             </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d M Y') : '—' }}</td>
+                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                             <td class="px-3 py-2.5">
                                 @if($item->kategori_konten)
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->kategori_konten }}</span>

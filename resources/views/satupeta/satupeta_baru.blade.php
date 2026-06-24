@@ -3256,9 +3256,35 @@ Promise.all([
       });
     }
 
-    if (featureFromHash) {
-      console.log('Satwil ditemukan di URL, melewati splash:', featureFromHash.properties.Satwil);
-      startAppWithSatwil(featureFromHash);
+    // Check if lat/lng query parameters are present
+    const urlParams = new URLSearchParams(window.location.search);
+    const latParam = urlParams.get('lat');
+    const lngParam = urlParams.get('lng');
+    let containingWil = null;
+    if (latParam && lngParam) {
+      const lat = parseFloat(latParam);
+      const lng = parseFloat(lngParam);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        try {
+          const queryPt = turf.point([lng, lat]);
+          containingWil = (wil.features || []).find(f => {
+            try {
+              return turf.booleanPointInPolygon(queryPt, f);
+            } catch (e) {
+              return false;
+            }
+          });
+        } catch (e) {
+          console.error('Error finding containing Satwil:', e);
+        }
+      }
+    }
+
+    const featureToLoad = featureFromHash || containingWil;
+
+    if (featureToLoad) {
+      console.log('Satwil ditemukan di URL, melewati splash:', featureToLoad.properties.Satwil || featureToLoad.properties.satwil);
+      startAppWithSatwil(featureToLoad);
     } else {
       console.log('Tidak ada Satwil valid di URL, tampilkan splash screen.');
       initSplashMap(); 
@@ -3426,6 +3452,28 @@ function initMap(polygon){
 
     try{ map.fitBounds(turf.bbox(polygon), { padding:50, maxZoom:14 }); }catch(e){}
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const latParam = urlParams.get('lat');
+    const lngParam = urlParams.get('lng');
+    if (latParam && lngParam) {
+      const lat = parseFloat(latParam);
+      const lng = parseFloat(lngParam);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        setTimeout(() => {
+          map.flyTo({
+            center: [lng, lat],
+            zoom: 17,
+            speed: 1.5
+          });
+          new maplibregl.Marker({ color: '#ff1744' })
+            .setLngLat([lng, lat])
+            .setPopup(new maplibregl.Popup({ offset: 25 }).setHTML(`<b>Titik Lokasi Terpilih</b><br>Lat: ${lat}<br>Lng: ${lng}`))
+            .addTo(map)
+            .togglePopup();
+        }, 1200);
+      }
+    }
+
     const basemapBtns = document.querySelectorAll('#basemap-tabs .tab-btn');
     basemapBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -3565,26 +3613,81 @@ function initMap(polygon){
   });
 }
 async function loadIcons(){
+  const ASSET_ICON_MAPPING = {
+    'road-closed': 'rawan-macet.png',
+    'road-disturbance': 'ambanggangguan.png',
+    'construction': 'ambanggangguan.png',
+    'perlambatan': 'rawan-macet.png',
+    'kecelakaan': 'rawan-laka.png',
+    'crash': 'crash.png',
+    'blackspot': 'blackspot2.png',
+    'cctv-on': 'cctv_icon_korlantas.png',
+    'cctv-off': 'cctv1.png',
+    'ov-plane': 'location.png',
+    'ov-hospital': 'hospital.png',
+    'ov-school': 'fasum.png',
+    'ov-government': 'objek-vital.png',
+    'ov-police': 'polisi.png',
+    'ov-train': 'location.png',
+    'ov-bus': 'Icon_terminal.png',
+    'ov-pariwisata': 'bali.png',
+    'ov-port': 'location.png',
+    'ov-mosque': 'fasum.png',
+    'ov-church': 'fasum.png',
+    'ov-vihara': 'fasum.png',
+    'ov-temple': 'fasum.png',
+    'ov-klenteng': 'fasum.png',
+    'ov-ambulance': 'car-ambulan.png',
+    'ov-bpbd': 'car-bpbd.png',
+    'ov-firetruck': 'car-damkar.png',
+    'ov-towing': 'car-dishub.png',
+    'ov-policecar': 'car-polisi.png',
+    'ov-motor:': 'motor.png',
+    'rescue-car': 'car.png',
+    'patrol-icon': 'policeman.png',
+    'acc-ringan': 'rawan-laka.png',
+    'acc-sedang': 'rawan-laka.png',
+    'acc-berat': 'rawan-laka.png'
+  };
+
+  const assetBaseUrl = "{{ asset('satupeta_assets/satupeta') }}/";
+
   for (const [id, svg] of Object.entries(ICON_SVGS)){
     await new Promise((resolve, reject)=>{
       if (map.hasImage(id)) return resolve();
       
-      const img = new Image(150, 150); 
-      
-      img.onload = () => { 
-          try { 
-              if (!map.hasImage(id)) map.addImage(id, img, { sdf: false }); 
-              resolve(); 
-          } catch(e){ reject(e); } 
-      };
-      img.onerror = (e) => {
-          console.warn('Gagal load icon:', id); 
-          resolve(); 
-      };
-      
-      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+      const fileName = ASSET_ICON_MAPPING[id];
+      if (fileName) {
+        const imageUrl = assetBaseUrl + fileName;
+        map.loadImage(imageUrl, (error, image) => {
+          if (error) {
+            console.warn(`Gagal load icon asset ${imageUrl}, fallback ke SVG:`, error);
+            loadSvgIcon(id, svg, resolve, reject);
+          } else {
+            if (!map.hasImage(id)) map.addImage(id, image);
+            resolve();
+          }
+        });
+      } else {
+        loadSvgIcon(id, svg, resolve, reject);
+      }
     });
   }
+}
+
+function loadSvgIcon(id, svg, resolve, reject) {
+  const img = new Image(150, 150); 
+  img.onload = () => { 
+      try { 
+          if (!map.hasImage(id)) map.addImage(id, img, { sdf: false }); 
+          resolve(); 
+      } catch(e){ reject(e); } 
+  };
+  img.onerror = (e) => {
+      console.warn('Gagal load icon SVG:', id); 
+      resolve(); 
+  };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 function switchBasemap(key){
   if (!map || !basemapTiles[key]) return;

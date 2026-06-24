@@ -57,74 +57,63 @@
         </div>
 
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $hasFoto ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $hasFoto ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
+            <div class="flex flex-col gap-6">
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
                         @if($poldaNama !== '' || $polresNama !== '')
-                            <div>
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt>
-                                <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $poldaNama !== '' ? strtoupper($poldaNama) : '—' }}</dd>
-                            </div>
-                            <div>
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polres</dt>
-                                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $polresNama !== '' ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $polresNama))) : '—' }}</dd>
-                            </div>
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                            <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $poldaNama !== '' ? strtoupper($poldaNama) : '—' }}</dd>
+
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $polresNama !== '' ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $polresNama))) : '—' }}</dd>
                         @endif
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $tanggal ? \Carbon\Carbon::parse($tanggal)->format('d/m/Y') : '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Petugas</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->petugas_nama ?? '—' }}</dd>
-                        </div>
-                        <div class="md:col-span-2">
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Lokasi</dt>
-                            <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $lokasi ?: '—' }}</dd>
-                        </div>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $tanggal ? \Carbon\Carbon::parse($tanggal)->format('d/m/Y') : '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Petugas</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->petugas_nama ?? '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Lokasi</dt>
+                        <dd class="text-[13px] text-slate-800 font-semibold m-0 leading-relaxed">{{ $lokasi ?: '—' }}</dd>
+
                         @if(!empty($data->koordinat))
-                            <div class="md:col-span-2">
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                                <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                    <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px] select-all">{{ $data->koordinat }}</code>
-                                    @if($kOk)
-                                        <a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer"
-                                           class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                            <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                                        </a>
-                                    @endif
-                                </dd>
-                            </div>
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                            <dd class="m-0 flex items-center gap-2 flex-wrap">
+                                <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px] select-all">{{ $data->koordinat }}</code>
+                                @if($kOk)
+                                    <a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer"
+                                       class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                        <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                                    </a>
+                                @endif
+                            </dd>
                         @endif
+
                         @if($patrolCols['situasilalin'] ?? null)
-                            <div>
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Situasi Lalin</dt>
-                                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $lalin ?: '—' }}</dd>
-                            </div>
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Situasi Lalin</dt>
+                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $lalin ?: '—' }}</dd>
                         @endif
+
                         @if($patrolCols['situasicuaca'] ?? null)
-                            <div>
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Situasi Cuaca</dt>
-                                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $cuaca ?: '—' }}</dd>
-                            </div>
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Situasi Cuaca</dt>
+                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $cuaca ?: '—' }}</dd>
                         @endif
+
                         @if($patrolCols['peristiwa'] ?? null)
-                            <div class="md:col-span-2">
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Peristiwa</dt>
-                                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $peristiwa ?: '—' }}</dd>
-                            </div>
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Peristiwa</dt>
+                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $peristiwa ?: '—' }}</dd>
                         @endif
+
                         @if($patrolCols['ketcb'] ?? null)
-                            <div class="md:col-span-2">
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">CB / Ket CB</dt>
-                                <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-line">{{ $ketcb ?: '—' }}</dd>
-                            </div>
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">CB / Ket CB</dt>
+                            <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-line">{{ $ketcb ?: '—' }}</dd>
                         @endif
                     </dl>
                 </div>
 
                 @if($hasFoto)
-                    <div>
+                    <div class="pt-4 border-t border-slate-100">
                         <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-[14px] text-primary">photo_camera</span>
                             Capture
@@ -134,9 +123,9 @@
                                 </span>
                             @endif
                         </p>
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-wrap gap-4">
                             @foreach($fotoUrls as $fotoUrl)
-                                <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer" class="block rounded-xl overflow-hidden border border-slate-200 hover:opacity-95 transition-opacity">
+                                <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer" class="block rounded-xl overflow-hidden border border-slate-200 hover:opacity-95 transition-opacity max-w-[250px]">
                                     <img src="{{ $fotoUrl }}" alt="Capture patroli" class="w-full rounded-xl" style="max-height:200px;object-fit:cover;" referrerpolicy="no-referrer">
                                 </a>
                             @endforeach

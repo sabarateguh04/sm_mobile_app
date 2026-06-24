@@ -25,35 +25,52 @@
             @endif
         </div>
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $fotoShow ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $fotoShow ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Fungsi Jalan</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->fungsijalan ?? '-' }}</dd></div>
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Nama Jalan</dt><dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->namajalan ?? '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Kerawanan</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->kerawanan ?? '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Faktor</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->faktor ?? '-' }}</dd></div>
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Penyebab</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->penyebab ?? '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Team Survayor</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->teamsurvayor ?? '-' }}</dd></div>
+            <div class="flex flex-col gap-6">
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Fungsi Jalan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->fungsijalan ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Nama Jalan</dt>
+                        <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->namajalan ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Kerawanan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->kerawanan ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Faktor</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->faktor ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Penyebab</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->penyebab ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Team Survayor</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->teamsurvayor ?? '-' }}</dd>
+                        
                         @if(!empty($data->koordinat))
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                            <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
-                                <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                    <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                                </a>
-                            </dd>
-                        </div>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                        <dd class="m-0 flex items-center gap-2 flex-wrap">
+                            <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                            </a>
+                        </dd>
                         @endif
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Wilayah / Daerah</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_wilayah ?? '-' }} / {{ $data->usm_daerah ?? '-' }}</dd></div>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Wilayah / Daerah</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_wilayah ?? '-' }} / {{ $data->usm_daerah ?? '-' }}</dd>
                     </dl>
                 </div>
                 @if($fotoShow)
-                <div>
-                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2">Foto Lokasi</p>
-                    <a href="{{ $fotoShow }}" target="_blank" rel="noopener noreferrer">
-                        <img src="{{ $fotoShow }}" alt="Foto lokasi gangguan" class="rounded-xl border border-slate-200 w-full" style="max-height:220px;object-fit:cover;">
+                <div class="pt-4 border-t border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Foto Lokasi</p>
+                    <a href="{{ $fotoShow }}" target="_blank" rel="noopener noreferrer" class="block mt-2">
+                        <img src="{{ $fotoShow }}" alt="Foto lokasi gangguan" class="rounded-xl border border-slate-200 w-full max-w-[400px]" style="max-height:240px;object-fit:cover;">
                     </a>
                 </div>
                 @endif

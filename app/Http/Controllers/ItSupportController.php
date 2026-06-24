@@ -25,10 +25,9 @@ class ItSupportController extends BaseController
             ->leftJoin('usm', 'usm.id_usm', '=', 'i.piket')
             ->select('i.*', 'usm.nama as petugas_nama', 'usm.wilayah as petugas_wilayah', 'usm.daerah as petugas_daerah');
 
-        $user = Auth::user();
-        if ($user && (int) $user->user_role_id !== 1) {
-            HierarchicalHelper::applyTerritoryScopeForTable($query, 'itsupport', 'i');
-        }
+        // Territory filter - konsisten dengan OperasionalController
+        HierarchicalHelper::applyTerritoryScopeForTable($query, 'itsupport', 'i');
+        \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
 
         if ($request->filled('search')) {
             $s = $request->search;
@@ -49,12 +48,12 @@ class ItSupportController extends BaseController
 
         $statuses = DB::table('itsupport')->select('statusticket')->distinct()->whereNotNull('statusticket')->pluck('statusticket');
 
-        return view('itsupport.index', [
+        return view('itsupport.index', array_merge([
             'pageTitle' => 'IT Support / Tiket',
             'data' => $data,
             'statuses' => $statuses,
             'sboViewOnly' => \App\Support\RoleMutationPolicy::deniesAllMutations(\Illuminate\Support\Facades\Auth::user()),
-        ]);
+        ], \App\Support\TerritoryIndexFilters::viewBundle($request)));
     }
 
     public function export(Request $request, string $format = 'excel')
@@ -75,10 +74,9 @@ class ItSupportController extends BaseController
             ->leftJoin('usm', 'usm.id_usm', '=', 'i.piket')
             ->select('i.*', 'usm.nama as petugas_nama', 'usm.wilayah as petugas_wilayah', 'usm.daerah as petugas_daerah');
 
-        $user = Auth::user();
-        if ($user && (int) $user->user_role_id !== 1) {
-            HierarchicalHelper::applyTerritoryScopeForTable($query, 'itsupport', 'i');
-        }
+        // Territory filter - konsisten dengan OperasionalController
+        HierarchicalHelper::applyTerritoryScopeForTable($query, 'itsupport', 'i');
+        \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
 
         if ($request->filled('search')) {
             $s = $request->search;

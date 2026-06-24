@@ -1,6 +1,7 @@
 /**
  * SBO GPS Auto-fill
- * Mengisi field lat/lng via tombol GPS diklik (auto-trigger dinonaktifkan untuk kemudahan testing).
+ * Mengisi field lat/lng via tombol GPS diklik.
+ * Auto-trigger saat form OPSDAL dibuka (sb_grp=opsdal / sm_lv=opsdal) jika koordinat masih kosong.
  *
  * Tombol GPS:
  *   data-sbo-gps-lat="<id input latitude>"
@@ -79,6 +80,22 @@
         );
     }
 
+    function isOpsdalForm(el) {
+        if (!el) return false;
+        var form = el.closest ? el.closest('form') : null;
+        if (form && form.querySelector(
+            'input[name="sb_grp"][value="opsdal"], input[name="sm_lv"][value="opsdal"]'
+        )) {
+            return true;
+        }
+        try {
+            var params = new URLSearchParams(window.location.search);
+            return params.get('sb_grp') === 'opsdal' || params.get('sm_lv') === 'opsdal';
+        } catch (e) {
+            return false;
+        }
+    }
+
     function init() {
         document.querySelectorAll('[data-sbo-gps-lat]').forEach(function (btn) {
             var latId = btn.getAttribute('data-sbo-gps-lat');
@@ -96,10 +113,15 @@
                 doGPS(latEl, lngEl, statusEl, btn);
             });
 
-            // Auto-trigger GPS dinonaktifkan — klik tombol GPS secara manual untuk mengisi koordinat.
-            // if (!String(latEl.value || '').trim() && !String(lngEl.value || '').trim()) {
-            //     doGPS(latEl, lngEl, statusEl, btn);
-            // }
+            // Dinonaktifkan: pengisian otomatis GPS saat form dibuka dinonaktifkan
+            // karena koordinat akan diisi oleh user dari Flutter.
+            /*
+            if (isOpsdalForm(btn) &&
+                !String(latEl.value || '').trim() &&
+                !String(lngEl.value || '').trim()) {
+                doGPS(latEl, lngEl, statusEl, btn);
+            }
+            */
         });
     }
 

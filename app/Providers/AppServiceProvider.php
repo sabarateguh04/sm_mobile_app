@@ -25,6 +25,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Auth::extend('jwt', function ($app, $name, array $config) {
+            return new \App\Services\SimpleJwtGuard(
+                Auth::createUserProvider($config['provider']),
+                $app['request']
+            );
+        });
+
         Paginator::useBootstrapFive();
 
         Blade::if('canMutateOperationalRow', function (object $row, ?string $table = null): bool {

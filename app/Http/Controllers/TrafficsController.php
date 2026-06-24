@@ -75,6 +75,12 @@ class TrafficsController extends OperasionalController
         if ($request->filled('jenisjalan')) {
             $query->where('trafficdalkot.jenisjalan', $request->jenisjalan);
         }
+        if ($request->filled('gerbangkota')) {
+            $query->where('trafficdalkot.gerbangkota', $request->gerbangkota);
+        }
+        if ($request->filled('araharus')) {
+            $query->where('trafficdalkot.araharus', $request->araharus);
+        }
 
         TerritoryIndexFilters::applyUsmFilters($query, $request);
     }

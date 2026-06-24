@@ -1,7 +1,7 @@
 <form action="{{ route('personil.manager.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     <div class="pmf-row">
-        @include('_partials.compact_filters.date_range', ['prefix' => 'personil-mgr', 'fromName' => 'tanggal_from', 'toName' => 'tanggal_to'])
         @include('_partials.compact_filters.territory')
+        @include('_partials.compact_filters.date_range', ['prefix' => 'personil-mgr', 'fromName' => 'tanggal_from', 'toName' => 'tanggal_to'])
         @if(Schema::hasColumn('usm', 'kategori_user'))
             <div class="pmf-extra">
                 <select name="kategori_user"
@@ -22,10 +22,17 @@
                 'options' => $organisasiFilterOptions ?? $indukOrganisasiFilterOptions ?? [],
             ])
         @endif
+        @if(Schema::hasColumn($tableName ?? 'usm', 'unit_kerja'))
+            @include('_partials.compact_filters.select', [
+                'name' => 'unit_kerja',
+                'placeholder' => 'Sub Org',
+                'options' => $subOrgFilterOptions ?? [],
+            ])
+        @endif
         @include('_partials.compact_filters.search', ['placeholder' => 'Cari nama, username...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('personil.manager.index'),
-            'active' => request()->hasAny(['daerah','wilayah','tanggal_from','tanggal_to','search','kategori_user','induk_pemerintahan']),
+            'active' => request()->hasAny(['daerah','wilayah','tanggal_from','tanggal_to','search','kategori_user','induk_pemerintahan','unit_kerja']),
         ])
     </div>
 </form>

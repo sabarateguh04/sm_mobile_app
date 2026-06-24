@@ -42,6 +42,7 @@ return [
             'label' => 'Patroli Online',
             'icon' => 'fas fa-video',
             'submenu' => [
+                ['path' => 'cctv-live', 'label' => 'Live CCTV', 'icon' => 'fas fa-tv'],
                 ['path' => 'master/referensi', 'query' => ['ref' => 'situasilalin'], 'label' => 'Situasi Lalin', 'icon' => 'fas fa-list'],
                 ['path' => 'master/referensi', 'query' => ['ref' => 'situasicuaca'], 'label' => 'Situasi Cuaca', 'icon' => 'fas fa-list'],
                 ['path' => 'master/referensi', 'query' => ['ref' => 'gerbangkota'], 'label' => 'Gerbang Kota', 'icon' => 'fas fa-list'],

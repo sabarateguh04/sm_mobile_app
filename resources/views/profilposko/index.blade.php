@@ -62,7 +62,9 @@
                                     <th>Nama Posko</th>
                                     <th>Kategori Ops</th>
                                     <th>Polres</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                                     <th>Polda</th>
+@endif
                                     <th>Piket</th>
                                     <th>Aksi</th>
                                 </tr>

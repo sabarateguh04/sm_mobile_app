@@ -31,7 +31,13 @@ class TerminalController extends BaseController
                 'usm.wilayah as usm_wilayah'
             );
 
+        // Territory filter - konsisten dengan OperasionalController
         HierarchicalHelper::applyTerritoryScopeForTable($query, 'data_terminal');
+        \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
+
+        if ($request->filled('jenisterminal')) {
+            $query->where('data_terminal.jenisterminal', $request->input('jenisterminal'));
+        }
 
         if ($request->filled('search')) {
             $s = $request->search;
@@ -45,7 +51,11 @@ class TerminalController extends BaseController
 
         $data = $query->orderBy('data_terminal.tanggal', 'desc')->paginate(20)->withQueryString();
         $jenisTerminal = DB::table('t_jenisterminal')->pluck('namejenisterminal');
-        return view('terminal.index', compact('data', 'jenisTerminal'));
+        
+        return view('terminal.index', array_merge(
+            compact('data', 'jenisTerminal'),
+            \App\Support\TerritoryIndexFilters::viewBundle($request)
+        ));
     }
 
     public function export(Request $request, string $format = 'excel')
@@ -71,7 +81,13 @@ class TerminalController extends BaseController
                 'usm.wilayah as usm_wilayah'
             );
 
+        // Territory filter - konsisten dengan OperasionalController
         HierarchicalHelper::applyTerritoryScopeForTable($query, 'data_terminal');
+        \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
+
+        if ($request->filled('jenisterminal')) {
+            $query->where('data_terminal.jenisterminal', $request->input('jenisterminal'));
+        }
 
         if ($request->filled('search')) {
             $s = $request->search;

@@ -69,7 +69,7 @@
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
                             <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->id_profileposko ?? '-' }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ isset($item->tanggal) ? \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') : '-' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ isset($item->tanggal) ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
                             <td class="px-3 py-2.5">
                                 <div class="text-[11px] font-medium text-slate-700">{{ $item->usm_nama ?? '-' }}</div>
                                 @if($item->piket)<div class="text-[10px] text-slate-400">{{ $item->piket }}</div>@endif
@@ -79,7 +79,7 @@
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->statarus }}</span>
                                 @else <span class="text-slate-400">-</span>@endif
                             </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ isset($item->created_at) ? \Carbon\Carbon::parse($item->created_at)->format('d/m/Y H:i') : '-' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ isset($item->created_at) ? \Carbon\Carbon::parse($item->created_at)->locale('id')->translatedFormat('d F Y H:i') : '-' }}</td>
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('arusmudik.show', $item->id_arusmudik) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none"><span class="material-symbols-outlined text-[18px]">visibility</span></a>

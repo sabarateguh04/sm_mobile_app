@@ -44,100 +44,89 @@
             </span>
         </div>
 
-        <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/20">
-            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Volume kendaraan (sama seperti export)</p>
-            <div class="grid grid-cols-5 gap-2">
-                <div class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-center">
-                    <span class="block text-[10px] font-bold text-slate-400 uppercase">R2</span>
-                    <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ (int) ($data->r2 ?? 0) }}</span>
-                </div>
-                <div class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-center">
-                    <span class="block text-[10px] font-bold text-slate-400 uppercase">R4</span>
-                    <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ (int) ($data->r4 ?? 0) }}</span>
-                </div>
-                <div class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-center">
-                    <span class="block text-[10px] font-bold text-slate-400 uppercase">R6</span>
-                    <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ (int) ($data->r6 ?? 0) }}</span>
-                </div>
-                <div class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-center">
-                    <span class="block text-[10px] font-bold text-slate-400 uppercase">R6+</span>
-                    <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ (int) ($data->r6_plus ?? 0) }}</span>
-                </div>
-                <div class="rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 text-center">
-                    <span class="block text-[10px] font-bold text-primary uppercase">Jumlah</span>
-                    <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ number_format($totalVol, 0, ',', '.') }}</span>
-                </div>
-            </div>
-        </div>
+
 
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $fotoUtama ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $fotoUtama ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt>
-                            <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $data->daerah_nama ? strtoupper($data->daerah_nama) : '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polres</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah_nama))) : '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Waktu</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $waktuLabel }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Gerbang Kota</dt>
-                            <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->gerbangkota ?: '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Arah Arus</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->araharus ?: '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Jenis Jalan</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jenisjalan ?: '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Nama Jalan</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->namajalan ?: '—' }}</dd>
-                        </div>
+            <div class="flex flex-col gap-6">
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                        <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $data->daerah_nama ? strtoupper($data->daerah_nama) : '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah_nama))) : '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Waktu</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $waktuLabel !== '—' ? $waktuLabel . ' WIB' : '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Gerbang Kota</dt>
+                        <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->gerbangkota ?: '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Arah Arus</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->araharus ?: '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Jenis Jalan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jenisjalan ?: '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Nama Jalan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->namajalan ?: '—' }}</dd>
+
                         @if(!empty($data->koordinat))
-                        <div class="md:col-span-2">
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                            <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
-                                @if($kOk)
-                                    <a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                        <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                                    </a>
-                                @endif
-                            </dd>
-                        </div>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                        <dd class="m-0 flex items-center gap-2 flex-wrap">
+                            <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
+                            @if($kOk)
+                                <a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                    <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                                </a>
+                            @endif
+                        </dd>
                         @endif
-                        <div class="md:col-span-2">
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Keterangan CB</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-wrap">{{ $data->ketcb ?: '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?: '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">ID Record</dt>
-                            <dd class="text-[13px] text-slate-600 font-mono m-0">#{{ $rowId }}</dd>
-                        </div>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Keterangan CB</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-wrap">{{ $data->ketcb ?: '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?: '—' }}</dd>
+
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">ID Record</dt>
+                        <dd class="text-[13px] text-slate-600 font-mono m-0">#{{ $rowId }}</dd>
                     </dl>
                 </div>
 
+                <div class="pt-4 border-t border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-3 m-0">Volume Kendaraan</p>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-center">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase">R2</span>
+                            <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ (int) ($data->r2 ?? 0) }}</span>
+                        </div>
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-center">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase">R4</span>
+                            <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ (int) ($data->r4 ?? 0) }}</span>
+                        </div>
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-center">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase">R6</span>
+                            <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ (int) ($data->r6 ?? 0) }}</span>
+                        </div>
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-center">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase">R6+</span>
+                            <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ (int) ($data->r6_plus ?? 0) }}</span>
+                        </div>
+                        <div class="rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 text-center md:col-span-1 col-span-2">
+                            <span class="block text-[10px] font-bold text-primary uppercase">Jumlah</span>
+                            <span class="block text-[18px] font-extrabold text-primary leading-tight">{{ number_format($totalVol, 0, ',', '.') }}</span>
+                        </div>
+                    </div>
+                </div>
+
                 @if($fotoUtama)
-                <div>
+                <div class="pt-4 border-t border-slate-100">
                     <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Foto Situasi</p>
-                    <a href="{{ $fotoUtama }}" target="_blank" rel="noopener noreferrer" class="block mb-2">
+                    <a href="{{ $fotoUtama }}" target="_blank" rel="noopener noreferrer" class="block mb-2 max-w-[400px]">
                         <img src="{{ $fotoUtama }}" alt="Foto situasi" class="rounded-xl border border-slate-200 w-full" style="max-height:240px;object-fit:cover;" referrerpolicy="no-referrer">
                     </a>
                     @if($fotoUrls->count() > 1)

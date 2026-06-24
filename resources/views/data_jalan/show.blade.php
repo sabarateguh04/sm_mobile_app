@@ -30,46 +30,60 @@
             @endif
         </div>
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $fotoUrls ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $fotoUrls ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Jenis Jalan</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jenisjalan ?? '-' }}</dd></div>
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Nama Jalan</dt><dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->namajalan ?? '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Panjang Jalan</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ number_format($data->panjangjalan ?? 0, 0, ',', '.') }} km</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Lintasan</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->lintasan ?? '-' }}</dd></div>
+            <div class="flex flex-col gap-6">
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Jenis Jalan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jenisjalan ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Nama Jalan</dt>
+                        <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->namajalan ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Panjang Jalan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ number_format($data->panjangjalan ?? 0, 0, ',', '.') }} km</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Lintasan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->lintasan ?? '-' }}</dd>
+                        
                         @if(!empty($prasjalChips))
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Prasarana Jalan</dt>
-                            <dd class="m-0 flex flex-wrap gap-1.5 mt-1">
-                                @foreach($prasjalChips as $chip)
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[11px] font-bold">{{ $chip }}</span>
-                                @endforeach
-                            </dd>
-                        </div>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Prasarana Jalan</dt>
+                        <dd class="m-0 flex flex-wrap gap-1.5 mt-1">
+                            @foreach($prasjalChips as $chip)
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[11px] font-bold">{{ $chip }}</span>
+                            @endforeach
+                        </dd>
                         @elseif(!empty($data->prasjal))
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Prasarana Jalan</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->prasjal }}</dd></div>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Prasarana Jalan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->prasjal }}</dd>
                         @endif
+                        
                         @if(!empty($data->koordinat))
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                            <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
-                                <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                    <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                                </a>
-                            </dd>
-                        </div>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                        <dd class="m-0 flex items-center gap-2 flex-wrap">
+                            <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                            </a>
+                        </dd>
                         @endif
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Wilayah / Daerah</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah_nama ?? '-' }} / {{ $data->daerah_nama ?? '-' }}</dd></div>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Wilayah / Daerah</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah_nama ?? '-' }} / {{ $data->daerah_nama ?? '-' }}</dd>
                     </dl>
                 </div>
                 @if($fotoUrls)
-                <div>
-                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2">Foto Lokasi</p>
-                    <div class="flex flex-col gap-2">
+                <div class="pt-4 border-t border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Foto Lokasi</p>
+                    <div class="flex flex-wrap gap-2 mt-2">
                         @foreach($fotoUrls as $fotoShow)
-                            <a href="{{ $fotoShow }}" target="_blank" rel="noopener noreferrer">
-                                <img src="{{ $fotoShow }}" alt="Foto jalan" class="rounded-xl border border-slate-200 w-full" style="max-height:220px;object-fit:cover;">
+                            <a href="{{ $fotoShow }}" target="_blank" rel="noopener noreferrer" class="block">
+                                <img src="{{ $fotoShow }}" alt="Foto jalan" class="rounded-xl border border-slate-200 object-cover" style="width:160px;height:120px;">
                             </a>
                         @endforeach
                     </div>

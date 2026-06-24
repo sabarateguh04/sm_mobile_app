@@ -33,10 +33,16 @@
 
 <form action="{{ route('terminal.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     <div class="pmf-row">
-        @include('_partials.compact_filters.search', ['placeholder' => 'Cari nama, jenis, jalan...'])
+        @include('_partials.compact_filters.territory')
+        @include('_partials.compact_filters.select', [
+            'name' => 'jenisterminal',
+            'placeholder' => 'Jenis Terminal',
+            'options' => $jenisTerminal ?? [],
+        ])
+        @include('_partials.compact_filters.search', ['placeholder' => 'Cari nama, jalan...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('terminal.index'),
-            'active' => request('search'),
+            'active' => request()->hasAny(['daerah', 'wilayah', 'jenisterminal', 'search']),
         ])
     </div>
 </form>
@@ -66,7 +72,7 @@
                     @foreach($data as $item)
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') : '-' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
                             <td class="px-3 py-2.5">
                                 @if($item->jenisterminal)<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->jenisterminal }}</span>@else <span class="text-slate-400">-</span>@endif
                             </td>

@@ -50,69 +50,60 @@
         </div>
 
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $fotoUrl ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $fotoUrl ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
+            <div class="flex flex-col gap-6">
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
                         @if(!empty($data->daerah) || !empty($data->wilayah) || ($readOnly ?? false))
-                            <div>
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt>
-                                <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $data->daerah ? strtoupper($data->daerah) : '—' }}</dd>
-                            </div>
-                            <div>
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polres</dt>
-                                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah))) : '—' }}</dd>
-                            </div>
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                            <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $data->daerah ? strtoupper($data->daerah) : '—' }}</dd>
+                            
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah))) : '—' }}</dd>
                         @endif
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Pemohon</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">
-                                {{ $data->pemohon ?: '—' }}
-                                @if($data->telp_pemohon)
-                                    <span class="block text-[11px] text-slate-400 font-normal mt-0.5">{{ $data->telp_pemohon }}</span>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Pemohon</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">
+                            {{ $data->pemohon ?: '—' }}
+                            @if($data->telp_pemohon)
+                                <span class="block text-[11px] text-slate-400 font-normal mt-0.5">{{ $data->telp_pemohon }}</span>
+                            @endif
+                        </dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Tujuan</dt>
+                        <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->tujuan ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Kategori</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->kategori_data ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Keterangan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-line">{{ $data->keterangan ?: '—' }}</dd>
+                        
+                        @if(!empty($data->koordinat))
+                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                            <dd class="m-0 flex items-center gap-2 flex-wrap">
+                                <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px] select-all">{{ $data->koordinat }}</code>
+                                @if($kOk)
+                                    <a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer"
+                                       class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                        <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                                    </a>
                                 @endif
                             </dd>
-                        </div>
-                        <div class="md:col-span-2">
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tujuan</dt>
-                            <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->tujuan ?: '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Kategori</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->kategori_data ?: '—' }}</dd>
-                        </div>
-                        <div class="md:col-span-2">
-                            <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Keterangan</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-line">{{ $data->keterangan ?: '—' }}</dd>
-                        </div>
-                        @if(!empty($data->koordinat))
-                            <div class="md:col-span-2">
-                                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                                <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                    <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px] select-all">{{ $data->koordinat }}</code>
-                                    @if($kOk)
-                                        <a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer"
-                                           class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                            <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                                        </a>
-                                    @endif
-                                </dd>
-                            </div>
                         @endif
                     </dl>
                 </div>
 
                 @if($fotoUrl)
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2">Foto</p>
-                        <div class="rounded-xl overflow-hidden border border-slate-200 shadow-sm cursor-zoom-in relative group"
+                    <div class="pt-4 border-t border-slate-100">
+                        <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Foto</p>
+                        <div class="rounded-xl overflow-hidden border border-slate-200 shadow-sm cursor-zoom-in relative group mt-2 max-w-[400px]"
                              data-bs-toggle="modal" data-bs-target="#layananDataPhotoModal" role="button" tabindex="0">
-                            <img src="{{ $fotoUrl }}" alt="Foto layanan data" class="w-full rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
-                                 style="max-height:220px;object-fit:cover;" referrerpolicy="no-referrer">
-                            <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
+                            <img src="{{ $fotoUrl }}" alt="Foto layanan data" class="w-full transition-transform duration-300 group-hover:scale-[1.02]"
+                                 style="max-height:240px;object-fit:cover;" referrerpolicy="no-referrer">
+                            <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <span class="material-symbols-outlined text-white text-[32px]">zoom_in</span>
                             </div>
                         </div>

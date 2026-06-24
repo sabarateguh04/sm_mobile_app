@@ -67,7 +67,9 @@
             <table class="w-full text-left min-w-[1100px]">
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Terminal</th>
@@ -86,13 +88,15 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
                             </td>
+@endif
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span>
                             </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d M Y') : '—' }}</td>
+                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                             <td class="px-3 py-2.5">
                                 <a href="{{ route('pnpangkutan.show', $rowId) }}"
                                    class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ \Str::limit($item->namaterminal ?: 'Detail', 28) }}</a>

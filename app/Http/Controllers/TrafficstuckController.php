@@ -159,6 +159,9 @@ class TrafficstuckController extends OperasionalController
         if ($request->filled('status_konfirmasi_opsdal')) {
             $query->where('trafficstuck.status_konfirmasi_opsdal', $request->status_konfirmasi_opsdal);
         }
+        if ($request->filled('lokasi')) {
+            $query->where('trafficstuck.lokasi', $request->lokasi);
+        }
 
         TerritoryIndexFilters::applyUsmFilters($query, $request);
         $this->applySbGrpScope($query, $request);
@@ -307,12 +310,20 @@ class TrafficstuckController extends OperasionalController
                 ->get();
         }
 
+        $lokasiList = DB::table($this->tableName)
+            ->whereNotNull('lokasi')
+            ->where('lokasi', '!=', '')
+            ->distinct()
+            ->orderBy('lokasi')
+            ->pluck('lokasi');
+
         return view($this->viewFolder.'.index', array_merge([
             'pageTitle' => $this->reportPageTitle($request),
             'data' => $data,
             'tabulasi' => $tabulasi,
             'tab' => $tab,
             'faktorList' => $this->lookupList('t_faktor', 'namefaktor'),
+            'lokasiList' => $lokasiList,
             'sbGrp' => $sbGrp,
             'tableName' => $this->tableName,
             'primaryKey' => $this->primaryKey,
@@ -713,6 +724,12 @@ class TrafficstuckController extends OperasionalController
         if ($request->filled('jenisjalan')) {
             $query->where('trafficdalkot.jenisjalan', $request->jenisjalan);
         }
+        if ($request->filled('gerbangkota')) {
+            $query->where('trafficdalkot.gerbangkota', $request->gerbangkota);
+        }
+        if ($request->filled('araharus')) {
+            $query->where('trafficdalkot.araharus', $request->araharus);
+        }
 
         TerritoryIndexFilters::applyUsmFilters($query, $request);
 
@@ -742,6 +759,20 @@ class TrafficstuckController extends OperasionalController
                 ->distinct()->orderBy('jenisjalan')->pluck('jenisjalan');
         }
 
+        $gerbangKotaList = \App\Support\ReferensiOptions::list(
+            'gerbangkota',
+            ['UTARA', 'SELATAN', 'TIMUR', 'BARAT'],
+            'trafficdalkot',
+            'gerbangkota'
+        );
+
+        $arahArusList = \App\Support\ReferensiOptions::list(
+            'araharus',
+            ['Masuk', 'Keluar'],
+            'trafficdalkot',
+            'araharus'
+        );
+
         return view($this->viewFolder.'.index', array_merge([
             'pageTitle' => 'Report Traffic Analytic',
             'data' => $data,
@@ -750,6 +781,8 @@ class TrafficstuckController extends OperasionalController
             'listSource' => 'trafficdalkot',
             'indexRouteName' => $indexRouteName,
             'jenisJalanList' => $jenisJalanList,
+            'gerbangKotaList' => $gerbangKotaList,
+            'arahArusList' => $arahArusList,
             'sbGrp' => $sbGrp,
             'tableName' => 'trafficdalkot',
             'primaryKey' => 'id_trafficdalkot',

@@ -23,7 +23,7 @@
         $kOk = $kLng !== '' && is_numeric($kLat) && is_numeric($kLng);
     }
 
-    $tanggalFmt = $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '—';
+    $tanggalFmt = $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '—';
     $canMutate = !($sboViewOnly ?? false) && \App\Support\RoleMutationPolicy::canMutateOperationalRow(auth()->user(), $data, $tableName ?? 'pnp_angkutan');
 @endphp
 
@@ -66,55 +66,47 @@
             <h3 class="text-[12px] font-bold text-slate-800 m-0">{{ $pageTitle }}</h3>
         </div>
         <div class="p-3 sm:p-4">
-            <div class="grid grid-cols-1 {{ $hasFoto ? 'lg:grid-cols-3' : '' }} gap-4">
-                <div class="{{ $hasFoto ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
-                        <div>
-                            <dt class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koresponden</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->koresponden ?? '—' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Kedatangan PNP</dt>
-                            <dd class="text-[18px] font-bold text-emerald-700 m-0">{{ number_format($data->kedatanganpnp ?? 0, 0, ',', '.') }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Keberangkatan PNP</dt>
-                            <dd class="text-[18px] font-bold text-rose-700 m-0">{{ number_format($data->keberangkatanpnp ?? 0, 0, ',', '.') }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Kedatangan Angkutan</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ number_format($data->kedatanganangk ?? 0, 0, ',', '.') }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Keberangkatan Angkutan</dt>
-                            <dd class="text-[13px] text-slate-800 font-medium m-0">{{ number_format($data->keberangkatanangk ?? 0, 0, ',', '.') }}</dd>
-                        </div>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Koresponden</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->koresponden ?? '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Kedatangan PNP</dt>
+                        <dd class="text-[18px] font-bold text-emerald-700 m-0">{{ number_format($data->kedatanganpnp ?? 0, 0, ',', '.') }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Keberangkatan PNP</dt>
+                        <dd class="text-[18px] font-bold text-rose-700 m-0">{{ number_format($data->keberangkatanpnp ?? 0, 0, ',', '.') }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Kedatangan Angkutan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ number_format($data->kedatanganangk ?? 0, 0, ',', '.') }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Keberangkatan Angkutan</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ number_format($data->keberangkatanangk ?? 0, 0, ',', '.') }}</dd>
+                        
                         @if(!empty($data->koordinat))
-                        <div class="md:col-span-2">
-                            <dt class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                            <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
-                                @if($kOk)
-                                    <a href="https://maps.google.com/?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                        <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                                    </a>
-                                @endif
-                            </dd>
-                        </div>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                        <dd class="m-0 flex items-center gap-2 flex-wrap">
+                            <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
+                            @if($kOk)
+                                <a href="https://maps.google.com/?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                    <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                                </a>
+                            @endif
+                        </dd>
                         @endif
                     </dl>
                 </div>
                 @if($hasFoto)
-                <div>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2">Foto Giat</p>
-                    <div class="flex flex-col gap-2">
+                <div class="pt-4 border-t border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Foto Giat</p>
+                    <div class="flex flex-wrap gap-2 mt-2">
                         @foreach($fotoUrls as $fotoUrl)
-                            <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer">
-                                <img src="{{ $fotoUrl }}" alt="Foto giat" class="rounded-lg border border-slate-200 w-full max-h-[180px] object-cover">
+                            <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer" class="block">
+                                <img src="{{ $fotoUrl }}" alt="Foto giat" class="rounded-xl border border-slate-200 object-cover" style="width:160px;height:120px;">
                             </a>
                         @endforeach
                     </div>

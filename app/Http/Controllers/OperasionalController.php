@@ -433,16 +433,12 @@ abstract class OperasionalController extends BaseController
 
     protected function canFilterByDaerah(): bool
     {
-        return HierarchicalHelper::viewerBypassesTerritoryScope()
-            || HierarchicalHelper::getUserLevel() === TerritoryLevelForUsm::NASIONAL;
+        return \App\Support\TerritoryIndexFilters::canFilterByDaerah();
     }
 
     protected function canFilterByWilayah(): bool
     {
-        $level = HierarchicalHelper::getUserLevel();
-
-        return HierarchicalHelper::viewerBypassesTerritoryScope()
-            || in_array($level, [TerritoryLevelForUsm::NASIONAL, TerritoryLevelForUsm::PROVINSI], true);
+        return \App\Support\TerritoryIndexFilters::canFilterByWilayah();
     }
 
     protected function applyDirectDaerahWilayahFilters($query, Request $request): void

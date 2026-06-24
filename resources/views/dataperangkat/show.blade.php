@@ -33,26 +33,45 @@
             @endif
         </div>
         <div class="p-5">
-            <div class="grid grid-cols-1 {{ $fotoUrl ? 'lg:grid-cols-3' : '' }} gap-6">
-                <div class="{{ $fotoUrl ? 'lg:col-span-2' : '' }}">
-                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 mb-0">
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Kategori</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->katperangkat ?: '—' }}</dd></div>
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Nama Perangkat</dt><dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->nameperangkat ?: '—' }}</dd></div>
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Lokasi</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->lokasi ?: '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Owner</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->owner ?: '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Jumlah (Qty)</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->qtty ?: '—' }}</dd></div>
-                        <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Dukungan Untuk</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->supportfor ?: '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Petugas</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?: '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt><dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $data->usm_daerah ? strtoupper($data->usm_daerah) : '—' }}</dd></div>
-                        <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polres</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_wilayah ? strtoupper($data->usm_wilayah) : '—' }}</dd></div>
+            <div class="flex flex-col gap-6">
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Kategori</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->katperangkat ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Nama Perangkat</dt>
+                        <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->nameperangkat ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Lokasi</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->lokasi ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Owner</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->owner ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Jumlah (Qty)</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->qtty ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Dukungan Untuk</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->supportfor ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Petugas</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                        <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $data->usm_daerah ? strtoupper($data->usm_daerah) : '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_wilayah ? strtoupper($data->usm_wilayah) : '—' }}</dd>
                     </dl>
                 </div>
                 @if($fotoUrl)
-                <div>
-                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2">Foto Perangkat</p>
-                    <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer">
-                        <img src="{{ $fotoUrl }}" alt="Foto {{ $data->nameperangkat }}" class="rounded-xl border border-slate-200 w-full" style="max-height:220px;object-fit:cover;">
+                <div class="pt-4 border-t border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Foto Perangkat</p>
+                    <a href="{{ $fotoUrl }}" target="_blank" rel="noopener noreferrer" class="block mt-2">
+                        <img src="{{ $fotoUrl }}" alt="Foto {{ $data->nameperangkat }}" class="rounded-xl border border-slate-200 w-full max-w-[400px]" style="max-height:240px;object-fit:cover;">
                     </a>
                 </div>
                 @endif

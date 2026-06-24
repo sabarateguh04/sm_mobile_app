@@ -29,51 +29,43 @@
             @endif
         </div>
         <div class="p-3 sm:p-4">
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-                <div class="rounded-lg border border-slate-200/80 bg-slate-50/50 px-3 py-2">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-0.5">Tanggal</p>
-                    <p class="text-[12px] font-bold text-slate-800 m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d M Y') : '—' }}</p>
-                </div>
-                <div class="rounded-lg border border-slate-200/80 bg-slate-50/50 px-3 py-2">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-0.5">Piket</p>
-                    <p class="text-[12px] font-semibold text-slate-800 m-0">{{ $data->usm_nama ?? ($data->piket ?: '—') }}</p>
-                </div>
-                <div class="rounded-lg border border-slate-200/80 bg-slate-50/50 px-3 py-2">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-0.5">Polda</p>
-                    <p class="text-[12px] font-bold m-0" style="color:#D8A808;">{{ strtoupper($data->daerah ?: '—') }}</p>
-                </div>
-                <div class="rounded-lg border border-slate-200/80 bg-slate-50/50 px-3 py-2">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-0.5">Polres</p>
-                    <p class="text-[12px] font-semibold text-slate-800 m-0">{{ !empty($data->wilayah) ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah))) : '—' }}</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
-                <div class="rounded-lg border border-slate-200/80 bg-white px-3 py-2.5">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-1">Tema</p>
-                    <p class="text-[13px] font-medium text-slate-800 m-0 leading-relaxed">{{ $data->tema ?: '—' }}</p>
-                </div>
-                <div class="rounded-lg border border-slate-200/80 bg-white px-3 py-2.5">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-1">Metode / Media</p>
-                    <p class="text-[12px] text-slate-700 m-0">{{ $data->metode ?: '—' }} · {{ $data->media_publishing ?: '—' }}</p>
-                </div>
-            </div>
-
-            <div class="rounded-lg border border-slate-200/80 bg-white px-3 py-2.5 mb-4">
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-1">Links</p>
-                @if($data->links && filter_var($data->links, FILTER_VALIDATE_URL))
-                    <a href="{{ $data->links }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline text-[12px] break-all text-decoration-none">{{ $data->links }}</a>
-                @else
-                    <p class="text-[12px] text-slate-700 m-0">{{ $data->links ?: '—' }}</p>
-                @endif
-            </div>
+            <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? ($data->piket ?: '—') }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ strtoupper($data->daerah ?: '—') }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ !empty($data->wilayah) ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah))) : '—' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Tema</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tema ?: '—' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Metode / Media</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->metode ?: '—' }} · {{ $data->media_publishing ?: '—' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Links</dt>
+                <dd class="m-0">
+                    @if($data->links && filter_var($data->links, FILTER_VALIDATE_URL))
+                        <a href="{{ $data->links }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline text-[13px] break-all text-decoration-none">{{ $data->links }}</a>
+                    @else
+                        <span class="text-[13px] text-slate-800 font-medium">{{ $data->links ?: '—' }}</span>
+                    @endif
+                </dd>
+            </dl>
 
             @if($fotodocImg)
-                <div class="rounded-lg border border-slate-200/80 bg-slate-50/50 px-3 py-2.5 mb-4">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-2">Foto Dokumentasi</p>
-                    <a href="{{ $fotodocSrc }}" target="_blank" rel="noopener noreferrer">
-                        <img src="{{ $fotodocSrc }}" alt="Foto Doc" class="rounded-lg border border-slate-200 max-h-[180px] w-full object-cover">
-                    </a>
+                <div class="pt-4 mt-4 border-t border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 m-0">Foto Dokumentasi</p>
+                    <div class="mt-2">
+                        <a href="{{ $fotodocSrc }}" target="_blank" rel="noopener noreferrer" class="block">
+                            <img src="{{ $fotodocSrc }}" alt="Foto Doc" class="rounded-xl border border-slate-200 object-cover" style="width:160px;height:120px;">
+                        </a>
+                    </div>
                 </div>
             @endif
 

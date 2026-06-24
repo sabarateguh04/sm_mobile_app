@@ -12,6 +12,8 @@ return [
     'google_maps_key' => env('API_KEY_GOOGLE', ''),
     'map_provider' => env('SATUPETA_MAP_PROVIDER', 'openstreetmap'),
     'url_stream' => env('URL_STREAM', 'https://satupeta.kodal.id:3000/'),
+    'stream_viewer_host' => env('SATUPETA_STREAM_VIEWER_HOST', 'sp.kodal.id'),
+    'stream_viewer_port' => (int) env('SATUPETA_STREAM_VIEWER_PORT', 5050),
     'lat_center' => env('LAT_CENTER', '-6.200000'),
     'lng_center' => env('LNG_CENTER', '106.816666'),
     'zoom' => env('ZOOM_PETA', 12),

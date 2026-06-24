@@ -19,7 +19,9 @@
                                 <td>{{ $data->id_da_arusmudik ?? $data->id ?? '-' }}</td>
                             </tr>
                             <tr>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                                 <th>Polda</th>
+@endif
                                 <td><span class="badge bg-warning">{{ $data->daerah ?? '-' }}</span></td>
                             </tr>
                             <tr>

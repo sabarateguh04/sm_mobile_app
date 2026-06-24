@@ -65,7 +65,9 @@
             <table class="w-full text-left min-w-[860px]">
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama Jalan</th>
@@ -82,13 +84,15 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->usm_daerah ?? '—') }}</span>
                             </td>
+@endif
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->usm_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->usm_wilayah))) : '—' }}</span>
                             </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d M Y') : '—' }}</td>
+                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                             <td class="px-3 py-2.5">
                                 <a href="{{ route('jalan_gangguan.show', $rowId) }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ \Str::limit($item->namajalan ?: 'Detail', 32) }}</a>
                             </td>
@@ -109,6 +113,9 @@
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('jalan_gangguan.show', $rowId) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail"><span class="material-symbols-outlined text-[18px]">visibility</span></a>
+                                    @if(!empty($item->piket ?? $item->id_usm))
+                                        <a href="{{ route('personil.manager.show', $item->piket ?? $item->id_usm) }}" class="w-8 h-8 flex items-center justify-center text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors text-decoration-none" title="Profil Operator"><span class="material-symbols-outlined text-[18px]">account_circle</span></a>
+                                    @endif
                                     @if($canMutate)
                                         <a href="{{ route('jalan_gangguan.edit', $rowId) }}" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors text-decoration-none" title="Edit"><span class="material-symbols-outlined text-[18px]">edit</span></a>
                                         <form action="{{ route('jalan_gangguan.destroy', $rowId) }}" method="POST" class="inline m-0" onsubmit="return confirm('Yakin hapus data gangguan ini?');">

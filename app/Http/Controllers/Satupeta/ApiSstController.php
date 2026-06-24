@@ -95,18 +95,30 @@ class ApiSstController extends BaseSatupetaController
         $output = '';
 
         foreach ($decoded->data ?? [] as $camera) {
-            $exists = DB::connection('satupeta')->table('cctv')
-                ->where('trx_id', $camera->id)
-                ->where('vendor', 'sst')
+            $exists = DB::connection('satupeta')->table('smpc_tbl_data_cctv')
+                ->where('rowid', $camera->id)
+                ->where('source_server', 'sst')
                 ->exists();
 
             if (! $exists) {
-                DB::connection('satupeta')->table('cctv')->insert([
+                $lat = null;
+                $lng = null;
+                if (!empty($camera->camgps)) {
+                    $gps = explode(',', $camera->camgps);
+                    if (count($gps) === 2) {
+                        $lat = trim($gps[0]);
+                        $lng = trim($gps[1]);
+                    }
+                }
+
+                DB::connection('satupeta')->table('smpc_tbl_data_cctv')->insert([
                     'nama_cctv' => $camera->camname,
-                    'kordinat' => $camera->camgps,
-                    'trx_id' => $camera->id,
+                    'lat' => $lat,
+                    'lng' => $lng,
+                    'rowid' => $camera->id,
                     'rtsp_cctv' => $camera->urlraw,
-                    'vendor' => 'sst',
+                    'source_server' => 'sst',
+                    'is_active' => 1,
                 ]);
                 $output .= '1</br>';
             }

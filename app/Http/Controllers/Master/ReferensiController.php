@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Support\SmMasterData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -32,6 +33,10 @@ class ReferensiController extends Controller
         $label = $activeDef[3];
         $parentCol = $activeDef[5] ?? null;
         $parentRefKey = $activeDef[6] ?? null;
+        $smdMap = config("smd_referensi_map.{$active}");
+        $smdSource = false;
+        $smdTable = null;
+
         $parentLabel = match ($parentCol) {
             'saluran' => 'Saluran',
             'kategori' => 'Kategori',
@@ -40,7 +45,20 @@ class ReferensiController extends Controller
         };
 
         $rows = collect();
-        if (Schema::hasTable($table)) {
+        if (is_array($smdMap) && SmMasterData::isAvailable() && SmMasterData::hasTable((string) $smdMap['table'])) {
+            $smdSource = true;
+            $smdTable = (string) $smdMap['table'];
+            $nameCol = (string) $smdMap['column'];
+            $idCol = 'pk_ids';
+            $parentCol = null;
+
+            $q = DB::connection(SmMasterData::connection())->table($smdTable);
+            if ($request->filled('search')) {
+                $q->where($nameCol, 'like', '%'.$request->search.'%');
+            }
+            $perPage = max(1, (int) $request->get('per_page', 10));
+            $rows = $q->orderBy($nameCol)->paginate($perPage)->withQueryString();
+        } elseif (Schema::hasTable($table)) {
             $q = DB::table($table);
             if ($request->filled('search')) {
                 $q->where($nameCol, 'like', '%' . $request->search . '%');
@@ -70,6 +88,12 @@ class ReferensiController extends Controller
             [$tab, $id, $name, $lab] = $def;
             $group = $def[4] ?? 'Lainnya';
             $count = Schema::hasTable($tab) ? DB::table($tab)->count() : 0;
+            if (SmMasterData::isAvailable()) {
+                $smdCount = count(SmMasterData::optionsForReferensi($key));
+                if ($smdCount > 0) {
+                    $count = max($count, $smdCount);
+                }
+            }
             $groups[$group][] = [
                 'key'   => $key,
                 'tab'   => $tab,
@@ -92,6 +116,8 @@ class ReferensiController extends Controller
             'parentLabel'   => $parentLabel,
             'parentOptions' => $parentOptions,
             'parentRequired' => $parentCol ? $this->columnIsNotNullable($table, $parentCol) : false,
+            'smdSource' => $smdSource,
+            'smdTable' => $smdTable,
         ]);
     }
 

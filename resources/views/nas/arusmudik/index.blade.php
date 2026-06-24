@@ -79,7 +79,7 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
-                                        <td>{{ isset($item->tanggal) ? \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') : '-' }}</td>
+                                        <td>{{ isset($item->tanggal) ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
                                         <td>{{ $item->piket ?? '-' }}</td>
                                         <td>{{ $item->usm_nama ?? '-' }}</td>
                                     </tr>

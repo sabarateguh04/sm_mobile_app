@@ -6,6 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Peta Monitoring') - Smart Management</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; }
@@ -75,6 +77,11 @@
             word-break: break-word;
             max-width: 220px;
             pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease-in-out;
+        }
+        .leaflet-marker-icon:hover .map-label {
+            opacity: 1;
         }
         .leaflet-tooltip.hud-style {
             background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(4px); border: 1px solid #555;
@@ -105,6 +112,7 @@
     @yield('content')
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     @stack('scripts')
 </body>
 </html>

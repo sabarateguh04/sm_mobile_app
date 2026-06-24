@@ -54,7 +54,9 @@
             <table class="w-full text-left min-w-[1020px]">
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama Tempat</th>
@@ -78,7 +80,7 @@
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $r->petugas_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $r->petugas_wilayah))) : '—' }}</span>
                             </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $r->tanggal ? \Carbon\Carbon::parse($r->tanggal)->format('d M Y') : '—' }}</td>
+                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $r->tanggal ? \Carbon\Carbon::parse($r->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                             <td class="px-3 py-2.5">
                                 <a href="{{ route('objekwisata.show', $rowId) }}"
                                    class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ \Str::limit($r->nametempat ?: 'Detail', 28) }}</a>

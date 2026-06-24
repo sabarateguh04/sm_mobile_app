@@ -17,8 +17,9 @@ class ReferensiOptions
      */
     public static function list(string $refKey, array $defaults = [], ?string $distinctTable = null, ?string $distinctColumn = null): array
     {
+        $fromSmd = SmMasterData::isAvailable() ? SmMasterData::optionsForReferensi($refKey) : [];
         $fromMaster = self::fromMasterTable($refKey);
-        $merged = array_values(array_unique(array_merge($defaults, $fromMaster)));
+        $merged = array_values(array_unique(array_merge($defaults, $fromSmd, $fromMaster)));
 
         if ($distinctTable !== null && $distinctColumn !== null && Schema::hasTable($distinctTable) && Schema::hasColumn($distinctTable, $distinctColumn)) {
             $fromData = DB::table($distinctTable)

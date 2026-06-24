@@ -20,7 +20,7 @@
     $subOrgLabel = $data->unit_kerja ?: '-';
 @endphp
 
-<div class="max-w-[1000px] mx-auto w-full space-y-4">
+<div class="max-w-[900px] mx-auto w-full space-y-4">
     <div class="flex items-center gap-3 flex-wrap">
         <a href="{{ route('personil.manager.index') }}" class="flex items-center gap-1.5 text-slate-500 hover:text-primary text-decoration-none text-label-md font-semibold transition-colors">
             <span class="material-symbols-outlined text-[18px]">arrow_back</span><span>Kembali</span>
@@ -56,69 +56,54 @@
         </div>
 
         <div class="p-5">
-            <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-0">
-                <div>
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Organisasi</dt>
-                    <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $organisasiLabel }}</dd>
-                </div>
-                <div>
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Sub Org</dt>
-                    <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $subOrgLabel }}</dd>
-                </div>
-                <div>
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Telepon</dt>
-                    <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->notelp ?: '—' }}</dd>
-                </div>
-                <div>
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Email</dt>
-                    <dd class="text-[13px] text-slate-800 font-medium m-0 break-all">{{ $data->email ?? '—' }}</dd>
-                </div>
+            <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ strtoupper($data->daerah ?? '—') }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah ?? '—'))) }}</dd>
+
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Organisasi</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $organisasiLabel }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Sub Org</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $subOrgLabel }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Telepon</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->notelp ?: '—' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Email</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0 break-all">{{ $data->email ?? '—' }}</dd>
 
                 @if(!$isOperatorViewer)
-                    <div>
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">NRP / NIP / NIK</dt>
-                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->nrp_nip_nik ?? '—' }}</dd>
-                    </div>
-                    <div>
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Kategori</dt>
-                        <dd class="text-[13px] text-slate-800 font-medium m-0">
-                            @if(($data->kategori_user ?? '') === 'organik')
-                                Organik
-                            @elseif(($data->kategori_user ?? '') === 'non_organik')
-                                Non-Organik
-                            @else
-                                —
-                            @endif
-                        </dd>
-                    </div>
+                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">NRP / NIP / NIK</dt>
+                    <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->nrp_nip_nik ?? '—' }}</dd>
+                    
+                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Kategori</dt>
+                    <dd class="text-[13px] text-slate-800 font-medium m-0">
+                        @if(($data->kategori_user ?? '') === 'organik')
+                            Organik
+                        @elseif(($data->kategori_user ?? '') === 'non_organik')
+                            Non-Organik
+                        @else
+                            —
+                        @endif
+                    </dd>
                 @endif
-
-                <div>
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt>
-                    <dd class="text-[13px] font-medium m-0" style="color:#D8A808;">{{ strtoupper($data->daerah ?? '—') }}</dd>
-                </div>
-                <div>
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polres</dt>
-                    <dd class="text-[13px] font-medium m-0" style="color:#D8A808;">{{ strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah ?? '—'))) }}</dd>
-                </div>
 
                 @if(!$isOperatorViewer || !empty($data->induk_pemerintahan))
-                    <div>
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Induk Organisasi</dt>
-                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->induk_pemerintahan ?: '—' }}</dd>
-                    </div>
+                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Induk Organisasi</dt>
+                    <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->induk_pemerintahan ?: '—' }}</dd>
                 @endif
+                
                 @if(!$isOperatorViewer && !empty($data->pemerintahan_daerah))
-                    <div>
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Organisasi Pusat</dt>
-                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->pemerintahan_daerah }}</dd>
-                    </div>
+                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Organisasi Pusat</dt>
+                    <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->pemerintahan_daerah }}</dd>
                 @endif
+                
                 @if(!$isOperatorViewer && !empty($data->organisasi_daerah))
-                    <div>
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Organisasi Daerah</dt>
-                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->organisasi_daerah }}</dd>
-                    </div>
+                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Organisasi Daerah</dt>
+                    <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->organisasi_daerah }}</dd>
                 @endif
             </dl>
 

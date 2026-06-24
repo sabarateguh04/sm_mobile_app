@@ -67,6 +67,9 @@ class MediaAnalyticController extends LegacySboOperasionalController
         if ($request->filled('sentimen')) {
             $query->where($this->tableName.'.sentimen', $request->sentimen);
         }
+        if ($request->filled('potensi')) {
+            $query->where($this->tableName.'.potensi', $request->potensi);
+        }
 
         return $query;
     }
@@ -92,7 +95,14 @@ class MediaAnalyticController extends LegacySboOperasionalController
         );
 
         $data = $query->paginate($request->get('per_page', $this->perPage))
-            ->appends($request->only(['search', 'tanggal_dari', 'tanggal_sampai', 'sentimen']));
+            ->appends($request->only(['search', 'tanggal_dari', 'tanggal_sampai', 'sentimen', 'potensi']));
+
+        $potensiOptions = DB::table($this->tableName)
+            ->whereNotNull('potensi')
+            ->where('potensi', '!=', '')
+            ->distinct()
+            ->orderBy('potensi')
+            ->pluck('potensi');
 
         return view($this->viewFolder.'.index', [
             'pageTitle' => 'List Media Analytic',
@@ -100,6 +110,7 @@ class MediaAnalyticController extends LegacySboOperasionalController
             'tableName' => $this->tableName,
             'primaryKey' => $this->primaryKey,
             'sentimenOptions' => $this->sentimenOptions(),
+            'potensiOptions' => $potensiOptions,
             'sboViewOnly' => RoleMutationPolicy::deniesAllMutations(Auth::user()),
             'sboOperatorOwnership' => RoleMutationPolicy::mutationMode(Auth::user()) === RoleMutationPolicy::MODE_OWN,
         ]);

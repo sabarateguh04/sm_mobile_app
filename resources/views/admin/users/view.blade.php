@@ -81,7 +81,10 @@
                                         @endif
                                     </td>
                                 </tr>
-                                <tr><th>Polda</th>
+                                <tr>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())<th>Polda</th>
+@endif
                                     <td>
                                         {{ $user->daerah ?: '—' }}
                                         @if($user->daerah && ! $user->daerah_in_master)

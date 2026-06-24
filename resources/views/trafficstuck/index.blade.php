@@ -12,8 +12,8 @@
     $isPatrolOnline = $isDalkotList
         || ($sbGrp['sb_grp'] ?? request('sb_grp') ?? session('trafficstuck_sb_grp') ?? '') === 'patrol_online';
     $hasFilters = $isDalkotList
-        ? request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','jenisjalan','search'])
-        : request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','faktor','search']);
+        ? request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','jenisjalan','gerbangkota','araharus','search'])
+        : request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','faktor','lokasi','search']);
     $createUrl = $isPatrolOnline ? route('traffics.create') : route('trafficstuck.create', $sbGrp);
 @endphp
 <div class="max-w-[1400px] mx-auto w-full space-y-4">
@@ -49,11 +49,14 @@
         @foreach($sbGrp as $k => $v)<input type="hidden" name="{{ $k }}" value="{{ $v }}">@endforeach
     @endif
     <div class="pmf-row">
-        @include('_partials.compact_filters.date_range', ['prefix' => 'trafficstuck'])
         @include('_partials.compact_filters.territory')
+        @include('_partials.compact_filters.date_range', ['prefix' => 'trafficstuck'])
         @if($isDalkotList)
             @include('_partials.compact_filters.select', ['name' => 'jenisjalan', 'placeholder' => 'Jenis Jalan', 'options' => $jenisJalanList ?? [], 'autoSubmit' => false])
+            @include('_partials.compact_filters.select', ['name' => 'gerbangkota', 'placeholder' => 'Gerbang', 'options' => $gerbangKotaList ?? [], 'autoSubmit' => false])
+            @include('_partials.compact_filters.select', ['name' => 'araharus', 'placeholder' => 'Arah Arus', 'options' => $arahArusList ?? [], 'autoSubmit' => false])
         @else
+            @include('_partials.compact_filters.select', ['name' => 'lokasi', 'placeholder' => 'Lokasi', 'options' => $lokasiList ?? [], 'autoSubmit' => false])
             @include('_partials.compact_filters.select', ['name' => 'faktor', 'placeholder' => 'Faktor', 'options' => $faktorList ?? [], 'autoSubmit' => false])
         @endif
         @include('_partials.compact_filters.search', ['placeholder' => $isDalkotList ? 'Cari gerbang, arah, jalan...' : 'Cari lokasi, faktor...'])
@@ -91,7 +94,9 @@
                     <thead><tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-14">Foto</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Waktu</th>
@@ -128,9 +133,11 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-3 py-2.5"><span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span></td>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5"><span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span></td>
+@endif
                                 <td class="px-3 py-2.5"><span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span></td>
-                                <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') : '—' }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                                 <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $item->waktu ? substr((string) $item->waktu, 0, 5) : '—' }}</td>
                                 <td class="px-3 py-2.5">
                                     <a href="{{ $showUrl }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ $item->gerbangkota ?: '—' }}</a>
@@ -166,7 +173,9 @@
                     <thead><tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-14">Foto</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
@@ -204,13 +213,15 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-3 py-2.5">
-                                    <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
-                                </td>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
+                                    </td>
+@endif
                                 <td class="px-3 py-2.5">
                                     <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span>
                                 </td>
-                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d M Y') : '—' }}</td>
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                                 <td class="px-3 py-2.5">
                                     <a href="{{ $showUrl }}"
                                        class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->lokasi ?: 'Detail', 28) }}</a>

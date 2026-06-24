@@ -4,8 +4,8 @@
 
 @section('content')
 @php
-    $preserveQuery = array_filter(request()->only(['search','tanggal_dari','tanggal_sampai','sentimen']), fn($v) => $v !== '' && $v !== null);
-    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','sentimen','search']);
+    $preserveQuery = array_filter(request()->only(['search','tanggal_dari','tanggal_sampai','potensi']), fn($v) => $v !== '' && $v !== null);
+    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','potensi','search']);
 @endphp
 <div class="max-w-[1400px] mx-auto w-full space-y-4">
 
@@ -35,7 +35,7 @@
 <form action="{{ route('media.analytic.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     <div class="pmf-row">
         @include('_partials.compact_filters.date_range', ['prefix' => 'media-analytic'])
-        @include('_partials.compact_filters.select', ['name' => 'sentimen', 'placeholder' => 'Sentimen', 'options' => $sentimenOptions ?? ['Positif', 'Negatif', 'Netral']])
+        @include('_partials.compact_filters.select', ['name' => 'potensi', 'placeholder' => 'Potensi', 'options' => $potensiOptions ?? []])
         @include('_partials.compact_filters.search', ['placeholder' => 'Cari issue, topic, potensi...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('media.analytic.index'),
@@ -75,7 +75,7 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d M Y') : '—' }}</td>
+                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                             <td class="px-3 py-2.5">
                                 <a href="{{ route('media.analytic.show', $item->id_mediaanalytic) }}"
                                    class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->issue_topic ?: 'Detail', 36) }}</a>

@@ -5,7 +5,7 @@
 @section('content')
 @php
     $sbGrp = $sbGrp ?? [];
-    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','jenis_contigency','search']);
+    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','jenis_contigency','faktor','search']);
 @endphp
 <div class="max-w-[1400px] mx-auto w-full space-y-4">
 
@@ -38,9 +38,10 @@
 <form action="{{ route('contigency.index') }}" method="GET" id="contigencyFilterForm" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     @foreach($sbGrp as $k => $v)<input type="hidden" name="{{ $k }}" value="{{ $v }}">@endforeach
     <div class="pmf-row">
-        @include('_partials.compact_filters.date_range', ['prefix' => 'contigency'])
         @include('_partials.compact_filters.territory')
+        @include('_partials.compact_filters.date_range', ['prefix' => 'contigency'])
         @include('_partials.compact_filters.select', ['name' => 'jenis_contigency', 'placeholder' => 'Jenis', 'options' => $jenisList ?? [], 'autoSubmit' => false])
+        @include('_partials.compact_filters.select', ['name' => 'faktor', 'placeholder' => 'Faktor', 'options' => $faktorList ?? [], 'autoSubmit' => false])
         @include('_partials.compact_filters.search', ['placeholder' => 'Cari lokasi, jenis...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('contigency.index', $sbGrp),
@@ -89,10 +90,12 @@
                             <tr class="hover:bg-slate-50 group">
                                 <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
                                 <td class="px-3 py-2.5">
-                                    <span class="text-[10px] font-bold block" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
+                                    @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                        <span class="text-[10px] font-bold block" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
+                                    @endif
                                     <span class="text-[9px] text-slate-400 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '' }}</span>
                                 </td>
-                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d M Y') : '—' }}</td>
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                                 <td class="px-3 py-2.5">
                                     <a href="{{ route('contigency.show', array_merge(['contigency' => $item->id_contigency], $sbGrp)) }}"
                                        class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->lokasi ?: 'Detail', 28) }}</a>
@@ -112,6 +115,9 @@
                                            class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail">
                                             <span class="material-symbols-outlined text-[18px]">visibility</span>
                                         </a>
+                                        @if(!empty($item->piket ?? $item->id_usm))
+                                            <a href="{{ route('personil.manager.show', $item->piket ?? $item->id_usm) }}" class="w-8 h-8 flex items-center justify-center text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors text-decoration-none" title="Profil Operator"><span class="material-symbols-outlined text-[18px]">account_circle</span></a>
+                                        @endif
                                         @if($canMutate)
                                             <a href="{{ route('contigency.edit', array_merge(['contigency' => $item->id_contigency], $sbGrp)) }}"
                                                class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors text-decoration-none" title="Edit">

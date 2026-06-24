@@ -5,7 +5,7 @@
 @section('content')
 @php
     $smLv = $smLv ?? [];
-    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','katgiat','search']);
+    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','peristiwa','search']);
 @endphp
 <div class="max-w-[1400px] mx-auto w-full space-y-4">
 
@@ -32,9 +32,9 @@
 <form action="{{ route('turjagwali.index') }}" method="GET" id="turjagwaliFilterForm" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     @foreach($smLv as $k => $v)<input type="hidden" name="{{ $k }}" value="{{ $v }}">@endforeach
     <div class="pmf-row">
-        @include('_partials.compact_filters.date_range', ['prefix' => 'turjagwali'])
         @include('_partials.compact_filters.territory')
-        @include('_partials.compact_filters.select', ['name' => 'katgiat', 'placeholder' => 'Kat. Giat', 'options' => $giatList ?? [], 'autoSubmit' => false])
+        @include('_partials.compact_filters.date_range', ['prefix' => 'turjagwali'])
+        @include('_partials.compact_filters.select', ['name' => 'peristiwa', 'placeholder' => 'Peristiwa', 'options' => $peristiwaList ?? [], 'autoSubmit' => false])
         @include('_partials.compact_filters.search', ['placeholder' => 'Cari lokasi, peristiwa...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('turjagwali.index', $smLv),
@@ -62,10 +62,11 @@
                 <table class="w-full text-left min-w-[960px]">
                     <thead><tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Kat. Giat</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Peristiwa</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Petugas Lap.</th>
@@ -78,20 +79,15 @@
                             @endphp
                             <tr class="hover:bg-slate-50 group">
                                 <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                                <td class="px-3 py-2.5">
-                                    <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
-                                </td>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
+                                    </td>
+@endif
                                 <td class="px-3 py-2.5">
                                     <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span>
                                 </td>
-                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d M Y') : '—' }}</td>
-                                <td class="px-3 py-2.5">
-                                    @if($item->katgiat)
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->katgiat }}</span>
-                                    @else
-                                        <span class="text-slate-400">—</span>
-                                    @endif
-                                </td>
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                                 <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($item->lokasi ?? '—', 26) }}</td>
                                 <td class="px-3 py-2.5">
                                     <a href="{{ route('turjagwali.show', array_merge(['turjagwali' => $item->id_turjagwali], $smLv)) }}"
@@ -104,6 +100,9 @@
                                            class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail">
                                             <span class="material-symbols-outlined text-[18px]">visibility</span>
                                         </a>
+                                        @if(!empty($item->piket))
+                                            <a href="{{ route('personil.manager.show', $item->piket) }}" class="w-8 h-8 flex items-center justify-center text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors text-decoration-none" title="Profil Operator"><span class="material-symbols-outlined text-[18px]">account_circle</span></a>
+                                        @endif
                                         @if($canMutate)
                                             <a href="{{ route('turjagwali.edit', array_merge(['turjagwali' => $item->id_turjagwali], $smLv)) }}"
                                                class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors text-decoration-none" title="Edit">

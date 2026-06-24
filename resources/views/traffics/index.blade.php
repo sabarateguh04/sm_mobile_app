@@ -75,7 +75,7 @@
                     @foreach($data as $item)
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') : '-' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
                             <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $item->waktu ? substr((string)$item->waktu, 0, 5) : '-' }}</td>
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-semibold text-slate-800 block">{{ $item->gerbangkota ?? '-' }}</span>

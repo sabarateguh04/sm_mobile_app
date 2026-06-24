@@ -23,19 +23,42 @@
             @endif
         </div>
         <div class="p-5">
-            <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 mb-0">
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Nama Posko</dt><dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->namaposko ?? '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Kategori Ops</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->katops ?? '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Jenis Ops</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jenisops ?? '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tahun Ops</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tahunops ?? '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polres</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah ?? '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->daerah ?? '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tema Ops</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->temaops ?? '-' }}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Lokasi Posko</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{!! nl2br(e($data->lokasiposko ?? '-')) !!}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Alamat</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->alamat ?? '-' }}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Sarana Prasarana</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{!! nl2br(e($data->sarpras ?? '-')) !!}</dd></div>
-                <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Keterangan</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{!! nl2br(e($data->keterangan ?? '-')) !!}</dd></div>
+            <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Nama Posko</dt>
+                <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->namaposko ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Kategori Ops</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->katops ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Jenis Ops</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jenisops ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tahun Ops</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tahunops ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->daerah ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tema Ops</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->temaops ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Lokasi Posko</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{!! nl2br(e($data->lokasiposko ?? '-')) !!}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Alamat</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->alamat ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Sarana Prasarana</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{!! nl2br(e($data->sarpras ?? '-')) !!}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Keterangan</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{!! nl2br(e($data->keterangan ?? '-')) !!}</dd>
             </dl>
             <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 flex-wrap gap-2">
                 <a href="{{ route('profilposko.index') }}" class="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-label-md transition-all text-decoration-none">

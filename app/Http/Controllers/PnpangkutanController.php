@@ -56,7 +56,7 @@ class PnpangkutanController extends LegacySboOperasionalController
     {
         $query = DB::table($this->tableName);
         $query = $this->applyFilters($query, $request);
-        HierarchicalHelper::applyTerritoryScopeForTable($query, $this->tableName);
+        // Territory filter already applied in applyFilters() via TerritoryIndexFilters::applyUsmFilters()
 
         if ($request->filled('search')) {
             $s = $request->search;

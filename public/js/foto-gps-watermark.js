@@ -377,9 +377,23 @@
         });
     }
 
+    function isOpsdalPage(scope) {
+        var root = (scope && scope.querySelectorAll) ? scope : document;
+        try {
+            var params = new URLSearchParams(window.location.search);
+            if (params.get('sb_grp') === 'opsdal' || params.get('sm_lv') === 'opsdal') {
+                return true;
+            }
+        } catch (e) { /* ignore */ }
+        return !!root.querySelector(
+            'input[name="sb_grp"][value="opsdal"], input[name="sm_lv"][value="opsdal"]'
+        );
+    }
+
     function init(scope) {
-        // SBO-REQ: watermark gps nonaktifkan dulu semuanya
-        return;
+        if (!isOpsdalPage(scope)) {
+            return;
+        }
 
         var root = (scope && scope.querySelectorAll) ? scope : document;
         root.querySelectorAll('input[type="file"][data-sbo-foto-gps]').forEach(bindInput);

@@ -18,7 +18,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect()->route('map.index');
+            return redirect()->route('home');
         }
         return view('auth.login');
     }
@@ -90,11 +90,7 @@ class LoginController extends Controller
 
         Auth::login($user, $remember);
 
-        // Redirect
-        $redirectUrl = session('login_redirect_url', route('map.index'));
-        session()->forget('login_redirect_url');
-
-        return redirect($redirectUrl);
+        return redirect()->intended(route('home'));
     }
 
     /**

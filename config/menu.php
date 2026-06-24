@@ -11,6 +11,7 @@
 return [
     'items' => [
         ['path' => 'home', 'label' => 'Home', 'icon' => 'fas fa-home', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
+        ['path' => 'admin/users', 'label' => 'Personil Manager', 'icon' => 'fas fa-user-tie', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
         ['path' => 'personil/manager', 'label' => 'Kuat Personil BO', 'icon' => 'fas fa-users', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
 
         [
@@ -19,6 +20,7 @@ return [
             'icon' => 'fas fa-video',
             'submenu' => [
                 ['path' => 'patrolicctv', 'label' => 'Monitoring CCTV', 'icon' => 'fas fa-camera', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
+                ['path' => 'cctv-live', 'label' => 'Live CCTV', 'icon' => 'fas fa-tv', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
                 ['path' => 'report/traffic-analytic', 'index_route' => 'report.traffic-analytic.index', 'matrix_path' => 'trafficstuck', 'label' => 'Report Traffic Analytic', 'icon' => 'fas fa-chart-line', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
             ],
         ],
@@ -85,6 +87,5 @@ return [
             ],
         ],
 
-        ['path' => 'admin/users', 'label' => 'Personil Manager', 'icon' => 'fas fa-user-tie', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
     ],
 ];

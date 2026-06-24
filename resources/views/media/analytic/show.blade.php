@@ -28,35 +28,28 @@
             @endif
         </div>
         <div class="p-3 sm:p-4">
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-                <div class="rounded-lg border border-slate-200/80 bg-slate-50/50 px-3 py-2">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-0.5">Tanggal</p>
-                    <p class="text-[12px] font-bold text-slate-800 m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d M Y') : '—' }}</p>
-                </div>
-                <div class="rounded-lg border border-slate-200/80 bg-slate-50/50 px-3 py-2">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-0.5">Vol. Percakapan</p>
-                    <p class="text-[14px] font-bold text-primary m-0">{{ number_format((int) ($data->vol_percakapan ?? 0), 0, ',', '.') }}</p>
-                </div>
-                <div class="rounded-lg border border-slate-200/80 bg-slate-50/50 px-3 py-2">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-0.5">Sentimen</p>
-                    <p class="m-0">
-                        @if($data->sentimen)
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $sc }}">{{ $data->sentimen }}</span>
-                        @else
-                            <span class="text-[12px] text-slate-400">—</span>
-                        @endif
-                    </p>
-                </div>
-                <div class="rounded-lg border border-slate-200/80 bg-slate-50/50 px-3 py-2">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-0.5">Potensi</p>
-                    <p class="text-[12px] font-semibold text-slate-800 m-0">{{ $data->potensi ?: '—' }}</p>
-                </div>
-            </div>
-
-            <div class="rounded-lg border border-slate-200/80 bg-white px-3 py-2.5">
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide m-0 mb-1">Issue / Topic</p>
-                <p class="text-[13px] font-medium text-slate-800 m-0 leading-relaxed">{{ $data->issue_topic ?: '—' }}</p>
-            </div>
+            <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Vol. Percakapan</dt>
+                <dd class="text-[14px] font-bold text-primary m-0">{{ number_format((int) ($data->vol_percakapan ?? 0), 0, ',', '.') }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Sentimen</dt>
+                <dd class="m-0">
+                    @if($data->sentimen)
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $sc }}">{{ $data->sentimen }}</span>
+                    @else
+                        <span class="text-[13px] text-slate-400">—</span>
+                    @endif
+                </dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Potensi</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->potensi ?: '—' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Issue / Topic</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->issue_topic ?: '—' }}</dd>
+            </dl>
 
             <div class="flex items-center justify-between gap-2 pt-3 mt-3 border-t border-slate-100">
                 <a href="{{ route('media.analytic.index') }}" class="flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-lg text-[12px] transition-all text-decoration-none">

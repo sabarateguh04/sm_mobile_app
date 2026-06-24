@@ -53,7 +53,9 @@
                                 <tr>
                                     <th>No</th>
                                     <th>ID</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                                     <th>Polda</th>
+@endif
                                     <th>Polres</th>
                                     <th>Kat Ops</th>
                                     <th>Jenis Ops</th>
@@ -71,7 +73,7 @@
                                         <td><span class="badge bg-secondary">{{ $item->wilayah ?? '-' }}</span></td>
                                         <td>{{ $item->katops ?? '-' }}</td>
                                         <td>{{ $item->jenisops ?? '-' }}</td>
-                                        <td>{{ isset($item->tanggal) ? \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') : '-' }}</td>
+                                        <td>{{ isset($item->tanggal) ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
                                         <td>{{ $item->namaposko ?? '-' }}</td>
                                         <td>{{ $item->arusmudik_id_profileposko ?? '-' }}</td>
                                     </tr>
