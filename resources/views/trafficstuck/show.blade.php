@@ -95,7 +95,7 @@
                         @foreach(explode(',', (string) $data->fotosituasi) as $foto)
                             @php $f = trim($foto); if ($f === '') continue; $url = str_starts_with($f, 'http') ? $f : asset(ltrim($f, '/')); @endphp
                             <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="block">
-                                <img src="{{ $url }}" alt="Foto situasi" class="rounded-xl border border-slate-200 object-cover" style="width:160px;height:120px;">
+                                <img src="{{ $url }}" alt="Foto situasi" class="rounded-xl border border-slate-200 object-cover" style="width:300px;height:400px;">
                             </a>
                         @endforeach
                     </div>

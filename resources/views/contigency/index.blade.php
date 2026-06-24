@@ -75,7 +75,7 @@
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Status</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jenis</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Petugas TPTKP</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Aksi</th>
                     </tr></thead>
                     <tbody class="divide-y divide-slate-100">
                         @foreach($data as $item)
@@ -109,8 +109,8 @@
                                     @endif
                                 </td>
                                 <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->petugastptkp ?? ($item->usm_nama ?? '—') }}</td>
-                                <td class="px-3 py-2.5 text-right">
-                                    <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                                <td class="px-3 py-2.5 text-center">
+                                    <div class="flex items-center justify-center gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <a href="{{ route('contigency.show', array_merge(['contigency' => $item->id_contigency], $sbGrp)) }}"
                                            class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail">
                                             <span class="material-symbols-outlined text-[18px]">visibility</span>

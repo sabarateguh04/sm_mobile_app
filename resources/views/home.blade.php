@@ -158,6 +158,7 @@
 END HIDDEN --}}
 
 {{-- ══ 5. REPORT NEWS: QR CONTIGENCY ══ --}}
+{{-- HIDDEN: Report News QR Contigency
 <div>
     <div class="flex items-center justify-end gap-2 mb-2 flex-wrap">
         <a href="{{ route('contigency.index', ['sb_grp' => 'quick_respons']) }}" class="flex items-center gap-1 px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold rounded-lg text-[10px] transition-all text-decoration-none">
@@ -201,6 +202,7 @@ END HIDDEN --}}
         @endforelse
     </div>
 </div>
+END HIDDEN --}}
 
 {{-- ══ STATISTIK LAINNYA (counting record + chart modul) ══ --}}
 @if($showCountingRecords)

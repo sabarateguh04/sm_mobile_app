@@ -150,7 +150,7 @@
                 $__foto = trim(explode(',', (string) $data->fotosituasi, 2)[0]);
                 $__fotoUrl = str_starts_with($__foto, 'http') ? $__foto : asset(ltrim($__foto, '/'));
             @endphp
-            <img src="{{ $__fotoUrl }}" alt="Foto situasi" class="mb-2 rounded-lg border border-slate-200 max-h-[120px] object-cover">
+            <img src="{{ $__fotoUrl }}" alt="Foto situasi" class="mb-2 rounded-lg border border-slate-200 object-cover" style="width:300px;height:400px;">
         @endif
         <label for="fotosituasi_file"
             class="flex items-center justify-center gap-2 w-full rounded-lg border border-dashed border-slate-200 bg-slate-50/80 hover:border-primary/40 hover:bg-primary/5 px-3 py-3 cursor-pointer transition-all{{ $errors->has('fotosituasi_file') ? ' border-red-300 bg-red-50/50' : '' }}">
@@ -171,8 +171,8 @@
             data-sbo-max-mb="8">
         @error('fotosituasi_file')<span class="{{ $errClass }}">{{ $message }}</span>@enderror
 
-        <div class="mt-2 d-none rounded-lg border border-slate-200 bg-slate-50 p-2" id="trafficstuck_foto_preview_wrap">
-            <img id="trafficstuck_foto_preview" src="" alt="Pratinjau" class="rounded-md border border-slate-200 max-h-[180px] w-full object-contain d-none">
+        <div class="mt-2 d-none rounded-lg border border-slate-200 bg-slate-50 p-2" id="trafficstuck_foto_preview_wrap" style="width:fit-content;">
+            <img id="trafficstuck_foto_preview" src="" alt="Pratinjau" class="rounded-md border border-slate-200 object-cover d-none" style="width:300px;height:400px;">
         </div>
     </div>
 </div>

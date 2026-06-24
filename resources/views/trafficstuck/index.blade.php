@@ -107,7 +107,7 @@
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R6</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Total</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Aksi</th>
                     </tr></thead>
                     <tbody class="divide-y divide-slate-100">
                         @foreach($data as $item)
@@ -152,8 +152,8 @@
                                 <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r6 ?? 0 }}</td>
                                 <td class="px-3 py-2.5 text-center text-[12px] font-bold text-slate-800">{{ $totalVol }}</td>
                                 <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->usm_nama ?? '—' }}</td>
-                                <td class="px-3 py-2.5 text-right">
-                                    <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                                <td class="px-3 py-2.5 text-center">
+                                    <div class="flex items-center justify-center gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <a href="{{ $showUrl }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail"><span class="material-symbols-outlined text-[18px]">visibility</span></a>
                                         @if($canMutate)
                                             <a href="{{ $editUrl }}" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors text-decoration-none" title="Edit"><span class="material-symbols-outlined text-[18px]">edit</span></a>
@@ -183,7 +183,7 @@
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Faktor</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Penyebab</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Durasi</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Aksi</th>
                     </tr></thead>
                     <tbody class="divide-y divide-slate-100">
                         @foreach($data as $item)
@@ -230,8 +230,8 @@
                                 <td class="px-3 py-2.5 text-[11px] text-slate-600 max-w-[100px] truncate" title="{{ $item->faktor ?: '—' }}">{{ \Str::limit($item->faktor ?: '—', 16) }}</td>
                                 <td class="px-3 py-2.5 text-[11px] text-slate-600 max-w-[100px] truncate" title="{{ $item->penyebab ?: '—' }}">{{ \Str::limit($item->penyebab ?: '—', 16) }}</td>
                                 <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $item->durasi ?: '—' }}</td>
-                                <td class="px-3 py-2.5 text-right">
-                                    <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                                <td class="px-3 py-2.5 text-center">
+                                    <div class="flex items-center justify-center gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <a href="{{ $showUrl }}"
                                            class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail">
                                             <span class="material-symbols-outlined text-[18px]">visibility</span>

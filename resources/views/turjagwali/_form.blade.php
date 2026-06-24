@@ -191,7 +191,7 @@
                 $__fotoGiat = trim(explode(',', (string) $data->fotogiat, 2)[0]);
                 $__fotoGiatUrl = str_starts_with($__fotoGiat, 'http') ? $__fotoGiat : asset(ltrim($__fotoGiat, '/'));
             @endphp
-            <img src="{{ $__fotoGiatUrl }}" alt="Foto giat" class="mb-2 rounded-lg border border-slate-200 max-h-[120px] object-cover">
+            <img src="{{ $__fotoGiatUrl }}" alt="Foto giat" class="mb-2 rounded-lg border border-slate-200 object-cover" style="width:300px;height:400px;">
         @endif
         <label for="fotogiat_file"
             class="flex items-center justify-center gap-2 w-full rounded-lg border border-dashed border-slate-200 bg-slate-50/80 hover:border-primary/40 hover:bg-primary/5 px-3 py-3 cursor-pointer transition-all{{ $errors->has('fotogiat_file') ? ' border-red-300 bg-red-50/50' : '' }}">
@@ -209,8 +209,8 @@
             data-sbo-preview-wrap="#turjagwali_fotogiat_preview_wrap"
             data-sbo-max-mb="8">
         @error('fotogiat_file')<span class="{{ $errClass }}">{{ $message }}</span>@enderror
-        <div class="mt-2 d-none rounded-lg border border-slate-200 bg-slate-50 p-2" id="turjagwali_fotogiat_preview_wrap">
-            <img id="turjagwali_fotogiat_preview" src="" alt="Pratinjau" class="rounded-md border border-slate-200 max-h-[180px] w-full object-contain d-none">
+        <div class="mt-2 d-none rounded-lg border border-slate-200 bg-slate-50 p-2" id="turjagwali_fotogiat_preview_wrap" style="width:fit-content;">
+            <img id="turjagwali_fotogiat_preview" src="" alt="Pratinjau" class="rounded-md border border-slate-200 object-cover d-none" style="width:300px;height:400px;">
         </div>
     </div>
 </div>
