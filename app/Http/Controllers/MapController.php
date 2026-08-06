@@ -26,6 +26,29 @@ class MapController extends Controller
     /** Zoom viewport provinsi (Executive2 / Polda). */
     private const PROVINCE_MAP_ZOOM = 9;
 
+    /**
+     * Bounding box longgar wilayah Indonesia — dipakai untuk membuang koordinat sampah
+     * (mis. "0,0"/null-island, titik desimal salah ketik, atau salah input di luar negeri)
+     * supaya peta tidak ikut fitBounds ke titik liar dan tampilan jadi berantakan/zoom dunia.
+     */
+    private const INDONESIA_BBOX = ['lat_min' => -11.5, 'lat_max' => 6.5, 'lng_min' => 94.0, 'lng_max' => 141.5];
+
+    /**
+     * Validasi koordinat masuk akal untuk peta operasional (wilayah Indonesia).
+     */
+    private function isValidIndonesiaCoordinate(?float $lat, ?float $lng): bool
+    {
+        if ($lat === null || $lng === null) {
+            return false;
+        }
+        if ($lat === 0.0 && $lng === 0.0) {
+            return false;
+        }
+
+        return $lat >= self::INDONESIA_BBOX['lat_min'] && $lat <= self::INDONESIA_BBOX['lat_max']
+            && $lng >= self::INDONESIA_BBOX['lng_min'] && $lng <= self::INDONESIA_BBOX['lng_max'];
+    }
+
     public function index()
     {
         $userCenter = null;
@@ -132,7 +155,12 @@ class MapController extends Controller
             'objekwisata' => $this->getObjekWisataMarkers(),
             'tempatibadah' => $this->getTempatIbadahMarkers(),
             'datafaskes' => $this->getDataFaskesMarkers(),
+            'opsdal' => $this->getOpsdalMarkers(),
             'cctv' => $this->getCctvMarkers(),
+            'layananData' => $this->getLayananDataMarkers(),
+            'dacolBlackspot' => $this->getDacolMarkers('sm_dacol_black_trouble_spot', 'dacol_bs'),
+            'dacolObjekVital' => $this->getDacolMarkers('sm_dacol_objek_vital', 'dacol_ov'),
+            'dacolFasum' => $this->getDacolMarkers('sm_dacol_fasilitas_umum', 'dacol_fu'),
             'userCenter' => $userCenter,
             'userZoom' => $userZoom,
             'userDaerah' => $userDaerah,
@@ -194,7 +222,7 @@ class MapController extends Controller
         }
 
         $validated = $request->validate([
-            'table' => ['required', 'string', 'in:pos_pelayanan,data_terminal,data_gangguan,contigency,trafficstuck,turjagwali,auditarus,pnp_angkutan,objek_wisata,tempatibadah,data_faskes,smpc_tbl_data_cctv'],
+            'table' => ['required', 'string', 'in:pos_pelayanan,data_terminal,data_gangguan,contigency,trafficstuck,turjagwali,auditarus,pnp_angkutan,objek_wisata,tempatibadah,data_faskes,smpc_tbl_data_cctv,layanan_data,sm_dacol_objek_vital,sm_dacol_black_trouble_spot,sm_dacol_fasilitas_umum'],
             'id'    => ['required', 'integer', 'min:1'],
             'lat'   => ['required', 'numeric', 'between:-90,90'],
             'lng'   => ['required', 'numeric', 'between:-180,180'],
@@ -229,6 +257,72 @@ class MapController extends Controller
             ]);
         }
 
+        if ($table === 'sm_dacol_objek_vital') {
+            if (!$isSuperAdmin) {
+                return response()->json(['success' => false, 'message' => 'Hanya SuperAdmin yang dapat memindahkan objek vital.'], 403);
+            }
+
+            $dbSatupeta = DB::connection('satupeta');
+            $row = $dbSatupeta->table('sm_dacol_objek_vital')->where('rowid', $id)->first();
+            if (!$row) {
+                return response()->json(['success' => false, 'message' => 'Data objek vital tidak ditemukan.'], 404);
+            }
+
+            $dbSatupeta->table('sm_dacol_objek_vital')->where('rowid', $id)->update([
+                'lat' => round($lat, 7),
+                'lng' => round($lng, 7),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Koordinat objek vital berhasil diperbarui.'
+            ]);
+        }
+
+        if ($table === 'sm_dacol_black_trouble_spot') {
+            if (!$isSuperAdmin) {
+                return response()->json(['success' => false, 'message' => 'Hanya SuperAdmin yang dapat memindahkan black / trouble spot.'], 403);
+            }
+
+            $dbSatupeta = DB::connection('satupeta');
+            $row = $dbSatupeta->table('sm_dacol_black_trouble_spot')->where('id', $id)->first();
+            if (!$row) {
+                return response()->json(['success' => false, 'message' => 'Data black/trouble spot tidak ditemukan.'], 404);
+            }
+
+            $dbSatupeta->table('sm_dacol_black_trouble_spot')->where('id', $id)->update([
+                'lat' => round($lat, 7),
+                'lng' => round($lng, 7),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Koordinat black/trouble spot berhasil diperbarui.'
+            ]);
+        }
+
+        if ($table === 'sm_dacol_fasilitas_umum') {
+            if (!$isSuperAdmin) {
+                return response()->json(['success' => false, 'message' => 'Hanya SuperAdmin yang dapat memindahkan fasilitas umum.'], 403);
+            }
+
+            $dbSatupeta = DB::connection('satupeta');
+            $row = $dbSatupeta->table('sm_dacol_fasilitas_umum')->where('id', $id)->first();
+            if (!$row) {
+                return response()->json(['success' => false, 'message' => 'Data fasilitas umum tidak ditemukan.'], 404);
+            }
+
+            $dbSatupeta->table('sm_dacol_fasilitas_umum')->where('id', $id)->update([
+                'lat' => round($lat, 7),
+                'lng' => round($lng, 7),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Koordinat fasilitas umum berhasil diperbarui.'
+            ]);
+        }
+
         // Primary key per tabel
         $pkMap = [
             'pos_pelayanan'   => 'id_posyan',
@@ -242,6 +336,7 @@ class MapController extends Controller
             'objek_wisata'    => 'id_tempatwisata',
             'tempatibadah'    => 'id_tempatibadah',
             'data_faskes'     => 'id_faskes',
+            'layanan_data'    => 'id_layanan_data',
         ];
         $pk = $pkMap[$table] ?? null;
         $opSchema = DatabaseConnections::operationalSchema();
@@ -280,110 +375,71 @@ class MapController extends Controller
      */
     private function getPoskoMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('pos_pelayanan')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('pos_pelayanan', 'koordinat')) return [];
-
-        $query = $this->scopedQuery('pos_pelayanan', 'id_posyan')
-            ->select('pos_pelayanan.id_posyan as id', 'pos_pelayanan.namaposyan as nama',
-                'pos_pelayanan.lokasiposyan as lokasi', 'pos_pelayanan.koordinat')
-            ->whereNotNull('pos_pelayanan.koordinat')
-            ->where('pos_pelayanan.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('pos_pelayanan', 'piket')) {
-            $query->leftJoin('usm', 'pos_pelayanan.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'posko_');
+        return $this->safeModuleMarkers(
+            ['pos_pelayanan', 'posyan'],
+            ['id_posyan', 'id'],
+            ['namaposyan', 'nama', 'namaposko'],
+            ['lokasiposyan', 'lokasi', 'alamat'],
+            'posko_',
+            ['fotoposyan', 'foto', 'fotogiat']
+        );
     }
 
     /**
-     * Pin Terminal (dataterminal) — kolom `koordinat` SUDAH ADA di sbo.
+     * Pin Terminal (dataterminal).
      */
     private function getTerminalMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('data_terminal')) return [];
-
-        $query = $this->scopedQuery('data_terminal', 'id_terminal')
-            ->select('data_terminal.id_terminal as id', 'data_terminal.namaterminal as nama',
-                'data_terminal.jalan as lokasi', 'data_terminal.koordinat',
-                'data_terminal.jenisterminal as jenis')
-            ->whereNotNull('data_terminal.koordinat')
-            ->where('data_terminal.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('data_terminal', 'piket')) {
-            $query->leftJoin('usm', 'data_terminal.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'terminal_', 'jenis');
+        return $this->safeModuleMarkers(
+            ['data_terminal', 'dataterminal'],
+            ['id_terminal', 'id'],
+            ['namaterminal', 'nama'],
+            ['jalan', 'lokasi', 'alamat'],
+            'terminal_',
+            [],
+            ['jenisterminal', 'jenis']
+        );
     }
 
     /**
      * Pin Jalan Gangguan (datagangguan).
-     * Kolom `koordinat` ditambah lewat migration agar bisa di-plot di peta.
      */
     private function getJalanGangguanMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('data_gangguan')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('data_gangguan', 'koordinat')) return [];
-
-        $query = $this->scopedQuery('data_gangguan', 'id_datagangguan')
-            ->select('data_gangguan.id_datagangguan as id', 'data_gangguan.namajalan as nama',
-                'data_gangguan.fungsijalan as lokasi', 'data_gangguan.koordinat',
-                'data_gangguan.levelgangguan as status')
-            ->whereNotNull('data_gangguan.koordinat')
-            ->where('data_gangguan.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('data_gangguan', 'piket')) {
-            $query->leftJoin('usm', 'data_gangguan.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'jalan_', null, 'status');
+        return $this->safeModuleMarkers(
+            ['data_gangguan', 'datagangguan'],
+            ['id_datagangguan', 'id'],
+            ['namajalan', 'nama'],
+            ['fungsijalan', 'lokasi'],
+            'jalan_',
+            [],
+            null,
+            ['levelgangguan', 'status']
+        );
     }
 
     private function getContigencyMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('contigency')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('contigency', 'koordinat')) return [];
-
-        $query = $this->scopedQuery('contigency', 'id_contigency')
-            ->select('contigency.id_contigency as id', 'contigency.jeniscontigency as nama',
-                'contigency.ketcb as lokasi', 'contigency.koordinat', 'contigency.fotosit as foto_giat')
-            ->whereNotNull('contigency.koordinat')
-            ->where('contigency.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('contigency', 'piket')) {
-            $query->leftJoin('usm', 'contigency.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'con_');
+        return $this->safeModuleMarkers(
+            ['contigency'],
+            ['id_contigency', 'id'],
+            ['jeniscontigency', 'jenis_peristiwa', 'jenis', 'nama'],
+            ['ketcb', 'lokasi', 'uraian'],
+            'con_',
+            ['fotosit', 'foto', 'fotogiat']
+        );
     }
 
     private function getTrafficstuckMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('trafficstuck')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('trafficstuck', 'koordinat')) return [];
-
-        $query = $this->scopedQuery('trafficstuck', 'id_trafficstuck')
-            ->select('trafficstuck.id_trafficstuck as id', 'trafficstuck.faktor as nama',
-                'trafficstuck.ketcb as lokasi', 'trafficstuck.koordinat', 'trafficstuck.fotosituasi as foto_giat')
-            ->whereNotNull('trafficstuck.koordinat')
-            ->where('trafficstuck.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('trafficstuck', 'piket')) {
-            $query->leftJoin('usm', 'trafficstuck.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'ts_');
+        return $this->safeModuleMarkers(
+            ['trafficstuck'],
+            ['id_trafficstuck', 'id'],
+            ['faktor', 'penyebab', 'nama'],
+            ['ketcb', 'lokasi', 'uraian'],
+            'ts_',
+            ['fotosituasi', 'fotosit', 'foto']
+        );
     }
 
     /**
@@ -391,22 +447,14 @@ class MapController extends Controller
      */
     private function getTurjagwaliMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('turjagwali')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('turjagwali', 'koordinat')) return [];
-
-        $query = $this->scopedQuery('turjagwali', 'id_turjagwali')
-            ->select('turjagwali.id_turjagwali as id', 'turjagwali.katgiat as nama',
-                'turjagwali.lokasi as lokasi', 'turjagwali.koordinat', 'turjagwali.fotogiat as foto_giat')
-            ->whereNotNull('turjagwali.koordinat')
-            ->where('turjagwali.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('turjagwali', 'piket')) {
-            $query->leftJoin('usm', 'turjagwali.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'tj_');
+        return $this->safeModuleMarkers(
+            ['turjagwali'],
+            ['id_turjagwali', 'id'],
+            ['katgiat', 'peristiwa', 'lokasi', 'status', 'keterangan'],
+            ['lokasi', 'keterangan', 'status'],
+            'tj_',
+            ['fotogiat', 'fotolokasi', 'foto']
+        );
     }
 
     /**
@@ -414,82 +462,50 @@ class MapController extends Controller
      */
     private function getAuditarusMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('auditarus')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('auditarus', 'koordinat')) return [];
-
-        $query = $this->scopedQuery('auditarus', 'id_auditarus')
-            ->select('auditarus.id_auditarus as id', 'auditarus.hasil_audit as nama',
-                'auditarus.catatan as lokasi', 'auditarus.koordinat', 'auditarus.fotolokasi as foto_giat')
-            ->whereNotNull('auditarus.koordinat')
-            ->where('auditarus.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('auditarus', 'piket')) {
-            $query->leftJoin('usm', 'auditarus.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'aa_');
+        return $this->safeModuleMarkers(
+            ['auditarus'],
+            ['id_auditarus', 'id'],
+            ['hasil_audit', 'lokasi', 'nama'],
+            ['catatan', 'lokasi', 'keterangan'],
+            'aa_',
+            ['fotolokasi', 'fotosit', 'foto']
+        );
     }
 
     private function getObjekWisataMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('objek_wisata')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('objek_wisata', 'koordinat')) return [];
-
-        $query = $this->scopedQuery('objek_wisata', 'id_tempatwisata')
-            ->select('objek_wisata.id_tempatwisata as id', 'objek_wisata.nametempat as nama',
-                'objek_wisata.lokasi as lokasi', 'objek_wisata.koordinat', 'objek_wisata.fotoobject as foto_giat')
-            ->whereNotNull('objek_wisata.koordinat')
-            ->where('objek_wisata.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('objek_wisata', 'piket')) {
-            $query->leftJoin('usm', 'objek_wisata.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'wisata_');
+        return $this->safeModuleMarkers(
+            ['objek_wisata', 'objekwisata'],
+            ['id_tempatwisata', 'id'],
+            ['nametempat', 'nama', 'namaobjek'],
+            ['lokasi', 'alamat'],
+            'wisata_',
+            ['fotoobject', 'foto', 'fotogiat']
+        );
     }
 
     private function getTempatIbadahMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('tempatibadah')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('tempatibadah', 'koordinat')) return [];
-
-        $query = $this->scopedQuery('tempatibadah', 'id_tempatibadah')
-            ->select('tempatibadah.id_tempatibadah as id', 'tempatibadah.namatempatibadah as nama',
-                'tempatibadah.lokasi as lokasi', 'tempatibadah.koordinat', 'tempatibadah.fotoobject as foto_giat')
-            ->whereNotNull('tempatibadah.koordinat')
-            ->where('tempatibadah.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('tempatibadah', 'piket')) {
-            $query->leftJoin('usm', 'tempatibadah.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'ibadah_');
+        return $this->safeModuleMarkers(
+            ['tempatibadah'],
+            ['id_tempatibadah', 'id'],
+            ['namatempatibadah', 'nama'],
+            ['lokasi', 'alamat'],
+            'ibadah_',
+            ['fotoobject', 'foto']
+        );
     }
 
     private function getDataFaskesMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('data_faskes')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('data_faskes', 'koordinat')) return [];
-
-        $query = $this->scopedQuery('data_faskes', 'id_faskes')
-            ->select('data_faskes.id_faskes as id', 'data_faskes.namafaskes as nama',
-                'data_faskes.lokasi as lokasi', 'data_faskes.koordinat', 'data_faskes.fotoobject as foto_giat')
-            ->whereNotNull('data_faskes.koordinat')
-            ->where('data_faskes.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('data_faskes', 'piket')) {
-            $query->leftJoin('usm', 'data_faskes.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
-        }
-
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'faskes_');
+        return $this->safeModuleMarkers(
+            ['data_faskes', 'datafaskes'],
+            ['id_faskes', 'id'],
+            ['namafaskes', 'nama'],
+            ['lokasi', 'alamat'],
+            'faskes_',
+            ['fotoobject', 'foto']
+        );
     }
 
     /**
@@ -497,22 +513,212 @@ class MapController extends Controller
      */
     private function getPnpangkutanMarkers(): array
     {
-        if (!DatabaseConnections::operationalSchema()->hasTable('pnp_angkutan')) return [];
-        if (!DatabaseConnections::operationalSchema()->hasColumn('pnp_angkutan', 'koordinat')) return [];
+        return $this->safeModuleMarkers(
+            ['pnp_angkutan', 'pnpangkutan', 'datapnp'],
+            ['id_datapnp', 'id_pnpangkutan', 'id'],
+            ['namaterminal', 'jenis_angkutan', 'nama'],
+            ['lokasi', 'jenisterminal', 'keterangan'],
+            'pa_',
+            ['fotosit', 'fotogiat', 'foto']
+        );
+    }
 
-        $query = $this->scopedQuery('pnp_angkutan', 'id_datapnp')
-            ->select('pnp_angkutan.id_datapnp as id', 'pnp_angkutan.namaterminal as nama',
-                'pnp_angkutan.jenisterminal as lokasi', 'pnp_angkutan.koordinat', 'pnp_angkutan.fotogiat as foto_giat')
-            ->whereNotNull('pnp_angkutan.koordinat')
-            ->where('pnp_angkutan.koordinat', '!=', '');
-            
-        if (DatabaseConnections::operationalSchema()->hasColumn('pnp_angkutan', 'piket')) {
-            $query->leftJoin('usm', 'pnp_angkutan.piket', '=', 'usm.id_usm')
-                  ->addSelect('usm.nama as petugas', 'usm.fotoprof as fotoprof');
+    /**
+     * Ambil marker modul dengan deteksi tabel/kolom dinamis + tangkap error skema.
+     *
+     * @param  list<string>  $tableCandidates
+     * @param  list<string>  $pkCandidates
+     * @param  list<string>  $namaCandidates
+     * @param  list<string>  $lokasiCandidates
+     * @param  list<string>  $fotoCandidates
+     * @param  list<string>|null  $jenisCandidates
+     * @param  list<string>|null  $statusCandidates
+     */
+    private function safeModuleMarkers(
+        array $tableCandidates,
+        array $pkCandidates,
+        array $namaCandidates,
+        array $lokasiCandidates,
+        string $prefix,
+        array $fotoCandidates = [],
+        ?array $jenisCandidates = null,
+        ?array $statusCandidates = null
+    ): array {
+        try {
+            $schema = DatabaseConnections::operationalSchema();
+            $table = $this->firstExistingTable($tableCandidates);
+            if ($table === null) {
+                return [];
+            }
+
+            $coordCol = $this->firstExistingColumn($table, ['koordinat', 'kordinat', 'coordinate']);
+            if ($coordCol === null) {
+                return [];
+            }
+
+            $pk = $this->firstExistingColumn($table, $pkCandidates);
+            $namaCol = $this->firstExistingColumn($table, $namaCandidates);
+            $lokasiCol = $this->firstExistingColumn($table, $lokasiCandidates);
+            if ($pk === null || $namaCol === null) {
+                return [];
+            }
+
+            $query = $this->scopedQuery($table, $pk)
+                ->select([
+                    $table.'.'.$pk.' as id',
+                    $table.'.'.$namaCol.' as nama',
+                    $table.'.'.$coordCol.' as koordinat',
+                ])
+                ->whereNotNull($table.'.'.$coordCol)
+                ->where($table.'.'.$coordCol, '!=', '');
+
+            if ($lokasiCol !== null) {
+                $query->addSelect($table.'.'.$lokasiCol.' as lokasi');
+            } else {
+                $query->selectRaw("'' as lokasi");
+            }
+
+            $fotoCol = $fotoCandidates !== [] ? $this->firstExistingColumn($table, $fotoCandidates) : null;
+            if ($fotoCol !== null) {
+                $query->addSelect($table.'.'.$fotoCol.' as foto_giat');
+            }
+
+            $jenisKey = null;
+            if ($jenisCandidates) {
+                $jenisCol = $this->firstExistingColumn($table, $jenisCandidates);
+                if ($jenisCol !== null) {
+                    $query->addSelect($table.'.'.$jenisCol.' as jenis');
+                    $jenisKey = 'jenis';
+                }
+            }
+
+            $statusKey = null;
+            if ($statusCandidates) {
+                $statusCol = $this->firstExistingColumn($table, $statusCandidates);
+                if ($statusCol !== null) {
+                    $query->addSelect($table.'.'.$statusCol.' as status');
+                    $statusKey = 'status';
+                }
+            }
+
+            $piketCol = $schema->hasColumn($table, 'piket') ? 'piket' : ($schema->hasColumn($table, 'id_usm') ? 'id_usm' : null);
+            if ($piketCol !== null) {
+                // Alias beda agar tidak bentrok dengan subquery territory scope ke `usm`
+                $query->leftJoin('usm as map_petugas', $table.'.'.$piketCol, '=', 'map_petugas.id_usm')
+                    ->addSelect('map_petugas.nama as petugas', 'map_petugas.fotoprof as fotoprof', $table.'.'.$piketCol.' as piket');
+            }
+
+            return $this->mapToMarkers($query->get(), $prefix, $jenisKey, $statusKey);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('MapController markers failed: '.$prefix.' '.$e->getMessage());
+
+            return [];
+        }
+    }
+
+    /**
+     * @param  list<string>  $candidates
+     */
+    private function firstExistingTable(array $candidates): ?string
+    {
+        $schema = DatabaseConnections::operationalSchema();
+        foreach ($candidates as $table) {
+            if ($schema->hasTable($table)) {
+                return $table;
+            }
         }
 
-        $rows = $query->get();
-        return $this->mapToMarkers($rows, 'pa_');
+        return null;
+    }
+
+    /**
+     * @param  list<string>  $candidates
+     */
+    private function firstExistingColumn(string $table, array $candidates): ?string
+    {
+        $schema = DatabaseConnections::operationalSchema();
+        foreach ($candidates as $column) {
+            if ($schema->hasColumn($table, $column)) {
+                return $column;
+            }
+        }
+
+        return null;
+    }
+
+    private function getLayananDataMarkers(): array
+    {
+        return $this->safeModuleMarkers(
+            ['layanan_data'],
+            ['id_layanan_data', 'id'],
+            ['kategori_data', 'pemohon', 'tujuan'],
+            ['tujuan', 'keterangan'],
+            'layanan_data_',
+            ['foto'],
+            ['kategori_data']
+        );
+    }
+
+    /**
+     * Pin data dari tabel Dacol (DB satupeta) secara generik.
+     */
+    private function getDacolMarkers(string $tableName, string $prefix): array
+    {
+        try {
+            $db = DB::connection('satupeta');
+            if (!\Illuminate\Support\Facades\Schema::connection('satupeta')->hasTable($tableName)) {
+                return [];
+            }
+
+            // Gunakan orderBy rowid jika ada, atau fallback tanpa orderBy jika error
+            $query = $db->table($tableName);
+            \App\Support\TerritoryIndexFilters::applyColumnFilters($query, request(), $tableName, 'satupeta');
+            
+            $query->limit(300);
+            if (\Illuminate\Support\Facades\Schema::connection('satupeta')->hasColumn($tableName, 'rowid')) {
+                $query->orderBy('rowid', 'desc');
+            }
+            $rows = $query->get();
+            
+            $out = [];
+            foreach ($rows as $r) {
+                // Deteksi kolom koordinat (lat/lng, latitude/longitude, koordinat)
+                $lat = $r->lat ?? $r->latitude ?? null;
+                $lng = $r->lng ?? $r->longitude ?? null;
+                if (!$lat || !$lng) {
+                    if (isset($r->koordinat)) {
+                        $parts = explode(',', $r->koordinat);
+                        if (count($parts) === 2) {
+                            $lat = trim($parts[0]);
+                            $lng = trim($parts[1]);
+                        }
+                    }
+                }
+
+                if (!is_numeric($lat) || !is_numeric($lng)) continue;
+                $lat = (float) $lat;
+                $lng = (float) $lng;
+                if (!$this->isValidIndonesiaCoordinate($lat, $lng)) continue;
+
+                // Deteksi nama, jenis, lokasi
+                $name = $r->nama_jalan ?? $r->nama_objek ?? $r->nama_fasilitas ?? $r->nama ?? ucwords(str_replace('_', ' ', str_replace('sm_dacol_', '', $tableName)));
+                $jenis = $r->kategori ?? $r->jenis ?? $r->jenis_objek ?? '';
+                $lokasi = $r->keterangan ?? $r->alamat ?? $r->lokasi ?? '';
+
+                $out[] = [
+                    'id' => $prefix . '_' . ($r->rowid ?? $r->id ?? uniqid()),
+                    'name' => $name,
+                    'coordinates' => [$lat, $lng],
+                    'lokasi' => $lokasi,
+                    'jenis' => $jenis,
+                    'status' => $r->status ?? '',
+                ];
+            }
+            return $out;
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("MapController Dacol Error [$tableName]: " . $e->getMessage());
+            return [];
+        }
     }
 
     /**
@@ -546,6 +752,7 @@ class MapController extends Controller
             if (property_exists($r, 'petugas') && !empty($r->petugas)) $marker['petugas'] = $r->petugas;
             if (property_exists($r, 'fotoprof') && !empty($r->fotoprof)) $marker['fotoprof'] = $r->fotoprof;
             if (property_exists($r, 'foto_giat') && !empty($r->foto_giat)) $marker['foto_giat'] = $r->foto_giat;
+            if (property_exists($r, 'piket') && !empty($r->piket)) $marker['piket'] = $r->piket;
             $out[] = $marker;
         }
         return $out;
@@ -560,7 +767,11 @@ class MapController extends Controller
         $parts = array_map('trim', explode(',', $val));
         if (count($parts) !== 2) return null;
         if (!is_numeric($parts[0]) || !is_numeric($parts[1])) return null;
-        return [(float) $parts[0], (float) $parts[1]];
+        $lat = (float) $parts[0];
+        $lng = (float) $parts[1];
+        if (!$this->isValidIndonesiaCoordinate($lat, $lng)) return null;
+
+        return [$lat, $lng];
     }
 
     /**
@@ -608,5 +819,427 @@ class MapController extends Controller
         } catch (\Throwable) {
             return [];
         }
+    }
+
+    /**
+     * AJAX: Ambil lokasi realtime petugas role oprator (untuk Leaflet).
+     */
+    public function getPetugasMarkers(): JsonResponse
+    {
+        if (!DatabaseConnections::operationalSchema()->hasTable('petugas_tracking')) {
+            return response()->json([]);
+        }
+
+        $operatorRoleIds = MenuHelper::personilBoOperatorUserRoleIds();
+
+        $query = DB::table('usm as u')
+            ->join('petugas_tracking as t', 'u.id_usm', '=', 't.user_id')
+            ->select(
+                'u.id_usm as id',
+                'u.nama',
+                'u.username',
+                'u.fotoprof',
+                'u.notelp',
+                'u.daerah',
+                'u.wilayah',
+                't.lat',
+                't.lng',
+                't.status',
+                't.last_updated'
+            )
+            ->whereIn('u.user_role_id', $operatorRoleIds)
+            ->whereIn('t.status', ['ONLINE', 'BERTUGAS'])
+            ->whereNotNull('t.lat')
+            ->whereNotNull('t.lng')
+            ->where('t.lat', '!=', 0)
+            ->where('t.lng', '!=', 0);
+
+        // Territory scope: LIKE (selaras CAD) agar nama daerah/wilayah tidak harus exact match
+        $user = Auth::user();
+        if ($user && !HierarchicalHelper::viewerBypassesTerritoryScope()) {
+            $userDaerah = trim((string) ($user->daerah ?? ''));
+            $userWilayah = trim((string) ($user->wilayah ?? ''));
+
+            if ($userDaerah !== '') {
+                $query->where('u.daerah', 'LIKE', '%'.$userDaerah.'%');
+                if ($userWilayah !== '') {
+                    $query->where('u.wilayah', 'LIKE', '%'.$userWilayah.'%');
+                }
+            }
+        }
+
+        $officers = $query->get()->map(function ($item) {
+            $url_image = null;
+            if ($item->fotoprof) {
+                if (filter_var($item->fotoprof, FILTER_VALIDATE_URL)) {
+                    $url_image = $item->fotoprof;
+                } else {
+                    $url_image = asset('storage/' . $item->fotoprof);
+                }
+            } else {
+                $url_image = null;
+            }
+
+            $taskLat = null;
+            $taskLng = null;
+            $taskTitle = null;
+            
+            if ($item->status === 'BERTUGAS') {
+                $assignment = DB::table('tbl_cad_assignment as a')
+                    ->join('tbl_cad_task as t', 'a.task_id', '=', 't.id')
+                    ->where('a.user_id', $item->id)
+                    ->whereIn('a.status', ['ASSIGNED', 'DITERIMA', 'MENUJU', 'TIBA'])
+                    ->select('t.latitude', 't.longitude', 't.title')
+                    ->orderBy('a.id', 'desc')
+                    ->first();
+                if ($assignment) {
+                    $taskLat = (float) $assignment->latitude;
+                    $taskLng = (float) $assignment->longitude;
+                    $taskTitle = $assignment->title;
+                }
+            }
+
+            return [
+                'id' => 'petugas_' . $item->id,
+                'name' => $item->nama,
+                'username' => $item->username,
+                'status' => $item->status,
+                'coordinates' => [(float) $item->lat, (float) $item->lng],
+                'fotoprof' => $url_image,
+                'notelp' => $item->notelp,
+                'daerah' => $item->daerah,
+                'wilayah' => $item->wilayah,
+                'last_updated' => $item->last_updated,
+                'task_lat' => $taskLat,
+                'task_lng' => $taskLng,
+                'task_title' => $taskTitle
+            ];
+        })->filter(function ($item) {
+            return $this->isValidIndonesiaCoordinate($item['coordinates'][0] ?? null, $item['coordinates'][1] ?? null);
+        })->values();
+
+        return response()->json($officers);
+    }
+
+    /**
+     * Endpoint diagnostik untuk mencari tahu mengapa marker operator tidak muncul.
+     */
+    public function debugOperatorMap(Request $request): JsonResponse
+    {
+        try {
+            $hasTable = DatabaseConnections::operationalSchema()->hasTable('petugas_tracking');
+            $operatorRoleIds = MenuHelper::personilBoOperatorUserRoleIds();
+            
+            // Cek apakah tabel usm ada
+            $hasUsmTable = DatabaseConnections::operationalSchema()->hasTable('usm');
+
+            // Hitung operator di tabel usm
+            $usmOperatorsCount = 0;
+            if ($hasUsmTable) {
+                $usmOperatorsCount = DB::table('usm')
+                    ->whereIn('user_role_id', $operatorRoleIds)
+                    ->count();
+            }
+
+            // Hitung baris di petugas_tracking
+            $trackingRowsCount = 0;
+            if ($hasTable) {
+                $trackingRowsCount = DB::table('petugas_tracking')->count();
+            }
+
+            // Wilayah user saat ini
+            $currentUser = Auth::user();
+            $userDaerah = $currentUser ? trim((string) ($currentUser->daerah ?? '')) : '';
+            $userWilayah = $currentUser ? trim((string) ($currentUser->wilayah ?? '')) : '';
+            $bypassesScope = $currentUser ? HierarchicalHelper::viewerBypassesTerritoryScope() : true;
+
+            // Gabungkan usm dan petugas_tracking untuk dianalisis satu per satu
+            $allOperatorsWithTracking = [];
+            if ($hasUsmTable) {
+                $opQuery = DB::table('usm as u');
+                if ($hasTable) {
+                    $opQuery->leftJoin('petugas_tracking as t', 'u.id_usm', '=', 't.user_id');
+                }
+                
+                $opQuery->select(
+                    'u.id_usm as id',
+                    'u.nama',
+                    'u.username',
+                    'u.user_role_id',
+                    'u.daerah',
+                    'u.wilayah'
+                );
+
+                if ($hasTable) {
+                    $opQuery->addSelect(
+                        't.lat',
+                        't.lng',
+                        't.status as tracking_status',
+                        't.last_updated'
+                    );
+                }
+
+                $opQuery->whereIn('u.user_role_id', $operatorRoleIds);
+                
+                $allRows = $opQuery->get();
+
+                foreach ($allRows as $item) {
+                    $hasTracking = isset($item->tracking_status);
+                    $statusOk = $hasTracking && in_array(strtoupper($item->tracking_status), ['ONLINE', 'BERTUGAS']);
+                    $coordsOk = $hasTracking && isset($item->lat) && isset($item->lng) && (float)$item->lat !== 0.0 && (float)$item->lng !== 0.0;
+                    
+                    // Filter wilayah
+                    $territoryDaerahMatch = true;
+                    $territoryWilayahMatch = true;
+                    if ($currentUser && !$bypassesScope) {
+                        if ($userDaerah !== '') {
+                            $territoryDaerahMatch = str_contains(strtolower($item->daerah ?? ''), strtolower($userDaerah));
+                            if ($userWilayah !== '') {
+                                $territoryWilayahMatch = str_contains(strtolower($item->wilayah ?? ''), strtolower($userWilayah));
+                            }
+                        }
+                    }
+
+                    $reasons = [];
+                    if (!$hasTracking) {
+                        $reasons[] = 'Tidak ada baris tracking di tabel petugas_tracking';
+                    } else {
+                        if (!$statusOk) {
+                            $reasons[] = 'Status tracking adalah "' . ($item->tracking_status ?: 'kosong') . '" (harus ONLINE/BERTUGAS)';
+                        }
+                        if (!$coordsOk) {
+                            $reasons[] = 'Koordinat tidak valid atau bernilai nol: ' . ($item->lat ?? 'null') . ',' . ($item->lng ?? 'null');
+                        }
+                    }
+
+                    if (!$territoryDaerahMatch) {
+                        $reasons[] = 'Terfilter oleh scope daerah (User: "' . $userDaerah . '" vs Operator: "' . ($item->daerah ?? '') . '")';
+                    }
+                    if (!$territoryWilayahMatch) {
+                        $reasons[] = 'Terfilter oleh scope wilayah (User: "' . $userWilayah . '" vs Operator: "' . ($item->wilayah ?? '') . '")';
+                    }
+
+                    $allOperatorsWithTracking[] = [
+                        'id' => $item->id,
+                        'nama' => $item->nama,
+                        'username' => $item->username,
+                        'user_role_id' => $item->user_role_id,
+                        'daerah' => $item->daerah,
+                        'wilayah' => $item->wilayah,
+                        'lat' => $hasTracking ? (float)$item->lat : null,
+                        'lng' => $hasTracking ? (float)$item->lng : null,
+                        'tracking_status' => $hasTracking ? $item->tracking_status : null,
+                        'last_updated' => $hasTracking ? $item->last_updated : null,
+                        'is_visible' => $statusOk && $coordsOk && $territoryDaerahMatch && $territoryWilayahMatch,
+                        'reasons' => $reasons,
+                    ];
+                }
+            }
+
+            // Diagnostik kontijensi yang disinkronkan dari layanan masyarakat
+            $hasContigencyTable = DatabaseConnections::operationalSchema()->hasTable('contigency');
+            $contingencyDiagnostics = [];
+            
+            if ($hasContigencyTable) {
+                $hasSourceModule = DatabaseConnections::operationalSchema()->hasColumn('contigency', 'source_module');
+                $hasStatusKonfirmasi = DatabaseConnections::operationalSchema()->hasColumn('contigency', 'status_konfirmasi_opsdal');
+                
+                $conQuery = DB::table('contigency as c')
+                    ->leftJoin('usm as u', 'c.piket', '=', 'u.id_usm');
+                
+                if ($hasSourceModule) {
+                    $conQuery->where('c.source_module', 'layanan_masyarakat');
+                } else {
+                    $conQuery->where('c.ketcb', 'LIKE', '%Layanan Masyarakat%');
+                }
+                
+                $conRows = $conQuery->select([
+                    'c.id_contigency as id',
+                    'c.jeniscontigency as jenis',
+                    'c.lokasi',
+                    'c.koordinat',
+                    'c.ketcb',
+                    'u.daerah as operator_daerah',
+                    'u.wilayah as operator_wilayah',
+                ])
+                ->when($hasStatusKonfirmasi, function($q) {
+                    $q->addSelect('c.status_konfirmasi_opsdal');
+                })
+                ->get();
+                
+                $totalCon = count($conRows);
+                $missingCoordsCount = 0;
+                $pendingConfirmCount = 0;
+                $filteredByScopeCount = 0;
+                $visibleConCount = 0;
+                
+                $sampleCon = [];
+                foreach ($conRows as $row) {
+                    $coords = trim((string)($row->koordinat ?? ''));
+                    $hasCoords = $coords !== '';
+                    
+                    // Parse koordinat
+                    $latLng = null;
+                    if ($hasCoords) {
+                        $parts = array_map('trim', explode(',', $coords));
+                        if (count($parts) === 2 && is_numeric($parts[0]) && is_numeric($parts[1])) {
+                            $latLng = [(float)$parts[0], (float)$parts[1]];
+                        }
+                    }
+                    
+                    // Filter wilayah
+                    $territoryDaerahMatch = true;
+                    $territoryWilayahMatch = true;
+                    if ($currentUser && !$bypassesScope) {
+                        if ($userDaerah !== '') {
+                            $territoryDaerahMatch = str_contains(strtolower($row->operator_daerah ?? ''), strtolower($userDaerah));
+                            if ($userWilayah !== '') {
+                                $territoryWilayahMatch = str_contains(strtolower($row->operator_wilayah ?? ''), strtolower($userWilayah));
+                            }
+                        }
+                    }
+                    
+                    $reasons = [];
+                    if (!$hasCoords) {
+                        $reasons[] = 'Koordinat kosong/null';
+                        $missingCoordsCount++;
+                    } elseif (!$latLng) {
+                        $reasons[] = 'Format koordinat tidak valid: "' . $coords . '"';
+                        $missingCoordsCount++;
+                    }
+                    
+                    if ($hasStatusKonfirmasi && isset($row->status_konfirmasi_opsdal) && strtolower($row->status_konfirmasi_opsdal) === 'menunggu') {
+                        $reasons[] = 'Status konfirmasi masih "menunggu" (belum disetujui)';
+                        $pendingConfirmCount++;
+                    }
+                    
+                    if (!$territoryDaerahMatch) {
+                        $reasons[] = 'Terfilter oleh scope daerah (User: "' . $userDaerah . '" vs Operator Pembuat: "' . ($row->operator_daerah ?? '') . '")';
+                        $filteredByScopeCount++;
+                    }
+                    if (!$territoryWilayahMatch) {
+                        $reasons[] = 'Terfilter oleh scope wilayah (User: "' . $userWilayah . '" vs Operator Pembuat: "' . ($row->operator_wilayah ?? '') . '")';
+                        $filteredByScopeCount++;
+                    }
+                    
+                    $isVisible = $hasCoords && $latLng && (!$hasStatusKonfirmasi || (isset($row->status_konfirmasi_opsdal) && strtolower($row->status_konfirmasi_opsdal) !== 'menunggu')) && $territoryDaerahMatch && $territoryWilayahMatch;
+                    
+                    if ($isVisible) {
+                        $visibleConCount++;
+                    }
+                    
+                    $sampleCon[] = [
+                        'id' => $row->id,
+                        'jenis' => $row->jenis,
+                        'lokasi' => $row->lokasi,
+                        'koordinat' => $coords,
+                        'status_konfirmasi' => $row->status_konfirmasi_opsdal ?? null,
+                        'is_visible' => $isVisible,
+                        'reasons' => $reasons,
+                    ];
+                }
+                
+                $contingencyDiagnostics = [
+                    'total_synced_records' => $totalCon,
+                    'visible_on_map' => $visibleConCount,
+                    'missing_coordinates' => $missingCoordsCount,
+                    'pending_confirmation' => $pendingConfirmCount,
+                    'filtered_by_territory_scope' => $filteredByScopeCount,
+                    'records' => $sampleCon,
+                ];
+            }
+
+            return response()->json([
+                'success' => true,
+                'diagnostics' => [
+                    'petugas_tracking_table_exists' => $hasTable,
+                    'usm_table_exists' => $hasUsmTable,
+                    'operator_role_ids' => $operatorRoleIds,
+                    'total_usm_operators' => $usmOperatorsCount,
+                    'total_tracking_rows' => $trackingRowsCount,
+                    'current_user' => [
+                        'id' => $currentUser ? $currentUser->id_usm : null,
+                        'username' => $currentUser ? $currentUser->username : null,
+                        'daerah' => $userDaerah,
+                        'wilayah' => $userWilayah,
+                        'bypasses_scope' => $bypassesScope,
+                    ],
+                    'operators_diagnostics' => $allOperatorsWithTracking,
+                    'contingency_diagnostics' => $contingencyDiagnostics,
+                ]
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Ambil marker Opsdal CAD
+     */
+    private function getOpsdalMarkers(): array
+    {
+        if (!DatabaseConnections::operationalSchema()->hasTable('tbl_cad_task')) {
+            return [];
+        }
+
+        $query = DB::table('tbl_cad_task as t')
+            ->leftJoin('usm as creator', 't.created_by', '=', 'creator.id_usm')
+            ->select('t.id', 't.title as nama', 't.address as lokasi', 't.latitude', 't.longitude', 't.status', 't.priority', 't.created_by as piket')
+            ->whereNotNull('t.latitude')
+            ->whereNotNull('t.longitude')
+            ->where('t.latitude', '!=', 0)
+            ->where('t.longitude', '!=', 0)
+            ->where('t.status', '!=', 'CLOSED') // exclude closed tasks maybe? Or not.
+            ;
+
+        // Territory scope
+        $user = Auth::user();
+        if ($user && !HierarchicalHelper::viewerBypassesTerritoryScope()) {
+            $userDaerah = trim((string) ($user->daerah ?? ''));
+            $userWilayah = trim((string) ($user->wilayah ?? ''));
+
+            if ($userDaerah !== '') {
+                $query->where(function ($q) use ($userDaerah, $userWilayah) {
+                    $q->where('creator.daerah', 'LIKE', '%' . $userDaerah . '%');
+                    if ($userWilayah !== '') {
+                        $q->where('creator.wilayah', 'LIKE', '%' . $userWilayah . '%');
+                    }
+                    
+                    $q->orWhereExists(function ($sub) use ($userDaerah, $userWilayah) {
+                        $sub->select(DB::raw(1))
+                            ->from('tbl_cad_assignment as a')
+                            ->join('usm as officer', 'a.user_id', '=', 'officer.id_usm')
+                            ->whereColumn('a.task_id', 't.id')
+                            ->where('officer.daerah', 'LIKE', '%' . $userDaerah . '%');
+                        if ($userWilayah !== '') {
+                            $sub->where('officer.wilayah', 'LIKE', '%' . $userWilayah . '%');
+                        }
+                    });
+                });
+            }
+        }
+
+        $rows = $query->get();
+        $out = [];
+        foreach ($rows as $r) {
+            $lat = (float) $r->latitude;
+            $lng = (float) $r->longitude;
+            if (!$this->isValidIndonesiaCoordinate($lat, $lng)) continue;
+
+            $out[] = [
+                'id' => 'opsdal_' . $r->id,
+                'name' => $r->nama ?? 'Opsdal Task',
+                'coordinates' => [$lat, $lng],
+                'lokasi' => $r->lokasi ?? '',
+                'status' => $r->status,
+                'jenis' => 'Prioritas: ' . $r->priority,
+                'piket' => $r->piket
+            ];
+        }
+        return $out;
     }
 }
