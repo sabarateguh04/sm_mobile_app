@@ -1,0 +1,12 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s1"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <rect x="20" y="32" width="60" height="32" rx="6" fill="#FF8C00" stroke="#E67E00" stroke-width="2" filter="url(#s1)"/>
+            <rect x="26" y="38" width="11" height="10" rx="1" fill="#FFF" opacity="0.9"/>
+            <rect x="41" y="38" width="11" height="10" rx="1" fill="#FFF" opacity="0.9"/>
+            <rect x="56" y="38" width="11" height="10" rx="1" fill="#FFF" opacity="0.9"/>
+            <circle cx="28" cy="70" r="6" fill="#2D1810" stroke="#1A0F0A" stroke-width="1.5"/>
+            <circle cx="72" cy="70" r="6" fill="#2D1810" stroke="#1A0F0A" stroke-width="1.5"/>
+            <rect x="36" y="66" width="28" height="3" fill="#E67E00"/>
+          </svg>

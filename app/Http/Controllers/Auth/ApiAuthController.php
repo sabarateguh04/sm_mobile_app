@@ -74,7 +74,15 @@ class ApiAuthController extends Controller
             ?? Usm::where('email', $username)->first();
 
         // Verifikasi password menggunakan verifier aplikasi
-        if (!$user || !UsmPasswordVerifier::verify($user, $password)) {
+        $isVerified = UsmPasswordVerifier::verify($user, $password);
+        
+        \Illuminate\Support\Facades\Log::info('Login attempt', [
+            'username' => $username,
+            'user_found' => $user ? true : false,
+            'password_verified' => $isVerified
+        ]);
+
+        if (!$user || !$isVerified) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Username atau password salah.'

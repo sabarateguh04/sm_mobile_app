@@ -46,12 +46,12 @@
 @endif
 
 <form action="{{ route('dataperangkat.index') }}" method="GET" id="dataperangkatFilterForm" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
+    @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
     <div class="pmf-row">
-        @include('_partials.compact_filters.search', ['placeholder' => 'Cari kategori, nama, lokasi, owner...'])
         @include('_partials.compact_filters.territory')
         @include('_partials.compact_filters.select', ['name' => 'katperangkat', 'placeholder' => 'Kategori', 'options' => $kategori ?? []])
-        @include('_partials.compact_filters.select', ['name' => 'owner', 'placeholder' => 'Owner', 'options' => $owners ?? []])
-        @include('_partials.compact_filters.date_range', ['prefix' => 'dataperangkat'])
+        @include('_partials.compact_filters.select', ['name' => 'owner', 'placeholder' => 'Select a value', 'options' => $owners ?? []])
+        @include('_partials.compact_filters.search', ['placeholder' => 'Nama Perangkat...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('dataperangkat.index'),
             'active' => $hasFilters,
@@ -81,16 +81,26 @@
             <table class="w-full text-left min-w-[1060px]">
                 <thead>
                     <tr class="bg-slate-50/50">
+                        @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
+                        @if($isOp)
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Name perangkat</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Qtty</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Owner</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Fungsi</th>
+                        @else
 @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
 @endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama Perangkat</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Kategori</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Name perangkat</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Qtty</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Owner</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Qty</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Fungsi</th>
+                        @endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -101,29 +111,38 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
+                            @if($isOp)
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('dataperangkat.show', $row->id_perangkat) }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">
+                                        {{ \Str::limit($row->nameperangkat ?: 'Detail', 28) }}
+                                    </a>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($row->lokasi ?? '—', 26) }}</td>
+                                <td class="px-3 py-2.5 text-center text-[11px] font-semibold text-slate-700">{{ $row->qtty ?? '—' }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $row->owner ?? '—' }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($row->supportfor ?? '—', 32) }}</td>
+                            @else
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($row->usm_daerah ?? '—') }}</span>
                             </td>
+@endif
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $row->usm_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $row->usm_wilayah))) : '—' }}</span>
                             </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">
-                                {{ $row->tanggal ? \Carbon\Carbon::parse($row->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}
+                            <td class="px-3 py-2.5">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $row->katperangkat ?? '—' }}</span>
                             </td>
                             <td class="px-3 py-2.5">
                                 <a href="{{ route('dataperangkat.show', $row->id_perangkat) }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">
                                     {{ \Str::limit($row->nameperangkat ?: 'Detail', 28) }}
                                 </a>
-                                @if($row->katperangkat)
-                                    <span class="inline-flex items-center mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $row->katperangkat }}</span>
-                                @endif
-                                @if($row->supportfor)
-                                    <span class="block text-[10px] text-slate-400 mt-0.5">{{ \Str::limit($row->supportfor, 32) }}</span>
-                                @endif
                             </td>
                             <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($row->lokasi ?? '—', 26) }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $row->owner ?? '—' }}</td>
                             <td class="px-3 py-2.5 text-center text-[11px] font-semibold text-slate-700">{{ $row->qtty ?? '—' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $row->owner ?? '—' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($row->supportfor ?? '—', 32) }}</td>
+                            @endif
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('dataperangkat.show', $row->id_perangkat) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail">

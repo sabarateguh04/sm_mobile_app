@@ -21,6 +21,16 @@
             <form action="{{ route('master.pusat.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Instansi <span class="text-error">*</span></label>
+                    <select name="instansi_id" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-primary focus:bg-white focus:ring-0 outline-none text-[13px] font-bold @error('instansi_id') border-error @enderror" required>
+                        <option value="">— Pilih Instansi —</option>
+                        @foreach($instansiList as $inst)
+                            <option value="{{ $inst->id }}" @selected(old('instansi_id') == $inst->id)>{{ $inst->nama_unit }}</option>
+                        @endforeach
+                    </select>
+                    @error('instansi_id') <p class="text-[11px] text-error mt-1 mb-0">{{ $message }}</p> @enderror
+                </div>
+                <div>
                     <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Nama Organisasi <span class="text-error">*</span></label>
                     <input type="text" name="nameorg"
                            class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-primary focus:bg-white focus:ring-0 outline-none text-[13px] font-bold uppercase @error('nameorg') border-error @enderror"
@@ -30,15 +40,7 @@
                     <p class="text-[10px] text-slate-400 mt-1 mb-0">Disimpan huruf KAPITAL.</p>
                     @error('nameorg') <p class="text-[11px] text-error mt-1 mb-0">{{ $message }}</p> @enderror
                 </div>
-                @if(\Illuminate\Support\Facades\Schema::hasColumn('org', 'singkatan'))
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Singkatan</label>
-                    <input type="text" name="singkatan"
-                           class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-primary focus:bg-white focus:ring-0 outline-none text-[12px] font-semibold uppercase"
-                           style="text-transform: uppercase;"
-                           value="{{ old('singkatan') }}" maxlength="64" placeholder="OPSIONAL">
-                </div>
-                @endif
+
                 <div class="flex justify-between gap-2 pt-2">
                     <a href="{{ route('master.pusat.index') }}" class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 text-[12px] font-bold hover:bg-slate-50 text-decoration-none">Batal</a>
                     <button type="submit" class="px-5 py-2 rounded-xl bg-primary text-on-primary text-[12px] font-bold border-0 shadow-sm">Simpan</button>

@@ -29,9 +29,14 @@
 
     <div>
         <label for="waktu" class="{{ $labelClass }}">Waktu</label>
-        <input type="time" name="waktu" id="waktu"
-            class="{{ $inputBase }}{{ $errors->has('waktu') ? $invalidBorder : '' }}"
-            value="{{ $waktuVal }}">
+        <div class="flex gap-2">
+            <input type="time" name="waktu" id="waktu"
+                class="{{ $inputBase }} flex-1 {{ $errors->has('waktu') ? $invalidBorder : '' }}"
+                value="{{ $waktuVal }}">
+            <button type="button" id="btn_fetch_analytic" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[12px] font-bold border border-slate-200 transition-colors whitespace-nowrap flex items-center gap-1" title="Tarik data dari CCTV">
+                <span class="material-symbols-outlined text-[16px]">sync</span>
+            </button>
+        </div>
         @error('waktu')<span class="{{ $errClass }}">{{ $message }}</span>@enderror
     </div>
 
@@ -200,6 +205,29 @@
     </div>
 </div>
 
+<div id="analytic_preview_container" class="mt-5 d-none">
+    <x-sbo-form-divider icon="table_chart" title="Data CCTV Terkait" class="!border-t-0 !pt-0" />
+    <div class="overflow-x-auto border border-slate-200 rounded-xl bg-white">
+        <table class="w-full text-left text-[11px] text-slate-600">
+            <thead class="bg-slate-50 text-slate-500 uppercase font-bold text-[10px]">
+                <tr>
+                    <th class="px-3 py-2 border-b border-slate-200">Jam</th>
+                    <th class="px-3 py-2 border-b border-slate-200">Gerbang</th>
+                    <th class="px-3 py-2 border-b border-slate-200">Arah</th>
+                    <th class="px-3 py-2 border-b border-slate-200">Jalan / CCTV</th>
+                    <th class="px-3 py-2 border-b border-slate-200 text-center">R2</th>
+                    <th class="px-3 py-2 border-b border-slate-200 text-center">R4</th>
+                    <th class="px-3 py-2 border-b border-slate-200 text-center">R6+</th>
+                    <th class="px-3 py-2 border-b border-slate-200 text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="analytic_preview_tbody" class="divide-y divide-slate-100">
+                <!-- Rows will be populated by JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -217,6 +245,100 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById(id)?.addEventListener('input', updateJumlah);
     });
     updateJumlah();
+
+    var fetchBtn = document.getElementById('btn_fetch_analytic');
+    var previewContainer = document.getElementById('analytic_preview_container');
+    var previewTbody = document.getElementById('analytic_preview_tbody');
+
+    if (fetchBtn) {
+        fetchBtn.addEventListener('click', function () {
+            var dateInput = document.querySelector('input[name="tanggal"]');
+            var tglVal = dateInput ? dateInput.value : '';
+            var waktu = document.getElementById('waktu').value;
+            var gerbangkota = document.getElementById('gerbangkota').value;
+
+            if (!tglVal || !waktu) {
+                alert('Pilih tanggal dan waktu terlebih dahulu untuk menarik data dari integrasi CCTV.');
+                return;
+            }
+
+            var originalHtml = fetchBtn.innerHTML;
+            fetchBtn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">sync</span>';
+            fetchBtn.disabled = true;
+            
+            previewContainer.classList.add('d-none');
+            previewTbody.innerHTML = '';
+
+            var qs = '?tanggal=' + encodeURIComponent(tglVal) + '&waktu=' + encodeURIComponent(waktu);
+
+            fetch('{{ route("api.fetch-analytic") }}' + qs)
+                .then(function(r) { return r.json(); })
+                .then(function(res) {
+                    fetchBtn.innerHTML = originalHtml;
+                    fetchBtn.disabled = false;
+                    
+                    if (res.found && res.items && res.items.length > 0) {
+                        previewContainer.classList.remove('d-none');
+                        
+                        res.items.forEach(function(item, index) {
+                            var tr = document.createElement('tr');
+                            tr.className = 'hover:bg-slate-50';
+                            
+                            var tdJam = document.createElement('td'); tdJam.className = 'px-3 py-2 font-medium text-slate-800'; tdJam.textContent = item.jam;
+                            var tdGerbang = document.createElement('td'); tdGerbang.className = 'px-3 py-2'; tdGerbang.textContent = item.category || '—';
+                            var tdArah = document.createElement('td'); tdArah.className = 'px-3 py-2'; tdArah.textContent = item.status_cctv || '—';
+                            
+                            var tdJalan = document.createElement('td'); tdJalan.className = 'px-3 py-2'; 
+                            tdJalan.innerHTML = '<span class="block text-slate-800 font-medium">' + (item.keterangan || '—') + '</span><span class="block text-[10px] text-slate-400">' + (item.nama_cctv || '') + '</span>';
+                            
+                            var tdR2 = document.createElement('td'); tdR2.className = 'px-3 py-2 text-center'; tdR2.textContent = item.motor;
+                            var tdR4 = document.createElement('td'); tdR4.className = 'px-3 py-2 text-center'; tdR4.textContent = item.minibus;
+                            var tdR6 = document.createElement('td'); tdR6.className = 'px-3 py-2 text-center font-bold text-slate-700'; tdR6.textContent = item.bus_truck;
+                            
+                            var tdAksi = document.createElement('td'); tdAksi.className = 'px-3 py-2 text-center';
+                            var btnGunakan = document.createElement('button');
+                            btnGunakan.type = 'button';
+                            btnGunakan.className = 'px-2 py-1 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 rounded text-[10px] font-bold';
+                            btnGunakan.textContent = 'Gunakan';
+                            btnGunakan.onclick = function() {
+                                if (document.getElementById('traffics_r2')) document.getElementById('traffics_r2').value = item.motor;
+                                if (document.getElementById('traffics_r4')) document.getElementById('traffics_r4').value = item.minibus;
+                                if (document.getElementById('traffics_r6')) document.getElementById('traffics_r6').value = item.bus_truck;
+                                if (document.getElementById('traffics_r6_plus')) document.getElementById('traffics_r6_plus').value = 0;
+                                if (item.status_cctv && document.getElementById('araharus')) document.getElementById('araharus').value = item.status_cctv;
+                                if (item.keterangan && document.getElementById('jenisjalan')) document.getElementById('jenisjalan').value = item.keterangan;
+                                if (item.nama_cctv && document.getElementById('namajalan')) document.getElementById('namajalan').value = item.nama_cctv;
+                                if (item.category && document.getElementById('gerbangkota')) document.getElementById('gerbangkota').value = item.category;
+                                updateJumlah();
+                                alert('Data terpilih berhasil dimasukkan ke dalam form.');
+                            };
+                            tdAksi.appendChild(btnGunakan);
+                            
+                            tr.appendChild(tdJam);
+                            tr.appendChild(tdGerbang);
+                            tr.appendChild(tdArah);
+                            tr.appendChild(tdJalan);
+                            tr.appendChild(tdR2);
+                            tr.appendChild(tdR4);
+                            tr.appendChild(tdR6);
+                            tr.appendChild(tdAksi);
+                            
+                            previewTbody.appendChild(tr);
+                        });
+                        
+                    } else {
+                        console.log("DEBUG INFO:", res.debug);
+                        var debugStr = res.debug ? JSON.stringify(res.debug, null, 2) : 'Tidak ada debug info';
+                        alert((res.message || 'Data tidak ditemukan di database integrasi CCTV.') + '\n\nDEBUG:\n' + debugStr);
+                    }
+                })
+                .catch(function(err) {
+                    fetchBtn.innerHTML = originalHtml;
+                    fetchBtn.disabled = false;
+                    alert('Terjadi kesalahan jaringan saat mengambil data dari server.');
+                });
+        });
+    }
 });
 </script>
 @endpush

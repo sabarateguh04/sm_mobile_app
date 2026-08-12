@@ -5,7 +5,7 @@
 
 @section('content')
 @php
-    $filterActive = request()->hasAny(['search', 'parent_id']);
+    $filterActive = request()->has('search');
 @endphp
 <div class="max-w-[1200px] mx-auto w-full space-y-4">
 
@@ -19,7 +19,7 @@
         </p>
     </div>
     @if(Auth::user() && \App\Helpers\MenuHelper::isSuperAdminForLayout(Auth::user()))
-    <a href="{{ route('master.kl-unit-kerja.create', request()->only('parent_id')) }}"
+    <a href="{{ route('master.kl-unit-kerja.create') }}"
        class="flex items-center justify-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-xl font-bold text-label-md shadow-lg shadow-primary/25 hover:shadow-xl hover:-translate-y-0.5 transition-all text-decoration-none shrink-0">
         <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">add</span>
         <span>Tambah Unit Kerja</span>
@@ -41,20 +41,7 @@
 
 <form method="GET" action="{{ route('master.unit-kerja.index') }}" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm">
     <div class="pmf-row">
-        @if($resorts->isNotEmpty())
-        <div class="pmf-territory">
-            <select name="parent_id"
-                    class="pmf-control pmf-field-text pmf-native-select w-full h-full bg-slate-50 border border-slate-200 rounded-lg pl-2.5 pr-7 focus:border-primary focus:ring-0 focus:bg-white outline-none transition-all {{ request('parent_id') ? '' : 'pmf-empty' }}"
-                    onchange="this.form.submit()">
-                <option value="">Semua Sub Org</option>
-                @foreach($resorts as $r)
-                    <option value="{{ $r->id }}" @selected(request('parent_id') == $r->id)>
-                        {{ strtoupper($r->resort_nama) }} — {{ strtoupper($r->daerah_nama) }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        @endif
+
         <div class="pmf-search relative flex-1 min-w-[180px]">
             <span class="absolute left-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary text-[16px] pointer-events-none">search</span>
             <input name="search" value="{{ request('search') }}"
@@ -87,26 +74,32 @@
                 <thead>
                     <tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-14">#</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-44">Instansi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-44">Organisasi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-44">Sub Organisasi</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama Unit Kerja</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-52">Sub Org</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-40">KL Daerah</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right w-28">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @foreach($rows as $r)
-                        <tr class="hover:bg-slate-50 group {{ request('parent_id') == $r->parent_id ? 'bg-primary/5' : '' }}">
+                        <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-[11px] text-slate-400 font-medium">
                                 {{ $loop->iteration + ($rows->currentPage() - 1) * $rows->perPage() }}
                             </td>
                             <td class="px-3 py-2.5">
-                                <p class="text-[13px] font-bold text-slate-800 m-0 uppercase tracking-wide">{{ strtoupper($r->nama) }}</p>
+                                <p class="text-[11px] font-bold text-slate-600 m-0 uppercase tracking-wide truncate w-40" title="{{ strtoupper($r->instansi_nama) }}">
+                                    {{ strtoupper($r->instansi_nama ?: '-') }}
+                                </p>
+                            </td>
+                            <td class="px-3 py-2.5">
+                                <span class="text-[11px] font-bold text-slate-600 uppercase">{{ strtoupper($r->org_nama ?: '-') }}</span>
                             </td>
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-bold text-primary uppercase">{{ strtoupper($r->resort_nama) }}</span>
                             </td>
                             <td class="px-3 py-2.5">
-                                <span class="text-[11px] font-bold text-[#D8A808] uppercase">{{ strtoupper($r->daerah_nama) }}</span>
+                                <p class="text-[13px] font-bold text-slate-800 m-0 uppercase tracking-wide">{{ strtoupper($r->nama) }}</p>
                             </td>
                             <td class="px-3 py-2.5 text-right">
                                 @if(Auth::user() && \App\Helpers\MenuHelper::isSuperAdminForLayout(Auth::user()))

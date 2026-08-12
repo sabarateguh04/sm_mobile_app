@@ -92,17 +92,17 @@
                 @endif
 
                 @if(!$isOperatorViewer || !empty($data->induk_pemerintahan))
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Induk Organisasi</dt>
+                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Instansi</dt>
                     <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->induk_pemerintahan ?: '—' }}</dd>
                 @endif
                 
                 @if(!$isOperatorViewer && !empty($data->pemerintahan_daerah))
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Organisasi Pusat</dt>
+                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Organisasi</dt>
                     <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->pemerintahan_daerah }}</dd>
                 @endif
                 
                 @if(!$isOperatorViewer && !empty($data->organisasi_daerah))
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Organisasi Daerah</dt>
+                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Sub organisasi</dt>
                     <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->organisasi_daerah }}</dd>
                 @endif
             </dl>
@@ -113,7 +113,7 @@
                 </a>
                 <div class="flex items-center gap-2 flex-wrap">
                     @include('_partials.show_export_dropdown', ['exportRouteName' => 'personil.manager.export', 'rowId' => $data->id_usm])
-                    @if(!empty($adminUsersEditUrl))
+                    @if(!empty($adminUsersEditUrl) && !in_array(\App\Helpers\MenuHelper::matrixRoleIdForUser(auth()->user()), [2, 3, 4]))
                         <a href="{{ $adminUsersEditUrl }}" class="flex items-center gap-2 px-4 py-2.5 bg-primary/10 hover:bg-primary/15 text-primary border border-primary/20 font-bold rounded-xl text-label-md transition-all text-decoration-none">
                             <span class="material-symbols-outlined text-[18px]">manage_accounts</span><span>Edit di Manajemen User</span>
                         </a>

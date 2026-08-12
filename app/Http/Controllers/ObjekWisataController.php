@@ -19,6 +19,29 @@ class ObjekWisataController extends BaseController
 
     public function index(Request $request)
     {
+        $tab = $request->get('tab', 'dacol_objek_vital');
+
+        if ($tab === 'dacol_objek_vital') {
+            $table = 'sm_dacol_objek_vital';
+            $dacolRows = \App\Support\SmDacolData::paginated($table, $request, 20);
+            return view('objekwisata.index', array_merge([
+                'pageTitle' => 'Objek Wisata',
+                'tab' => $tab,
+                'data' => collect(), // dummy
+                'kategori' => collect(),
+                'sboViewOnly' => true,
+                
+                'active' => $table,
+                'meta' => config("smd_tables.dacol.{$table}", []),
+                'rows' => $dacolRows,
+                'displayColumns' => \App\Support\SmDacolData::displayColumns($table),
+                'availableSources' => \App\Support\SmDacolData::availableSources($table),
+                'filterUrl' => route('objekwisata.index'),
+                'filterHiddenInputs' => '<input type="hidden" name="tab" value="'.$tab.'">',
+                'filterResetUrl' => route('objekwisata.index', ['tab' => $tab]),
+            ], \App\Support\TerritoryIndexFilters::viewBundle($request)));
+        }
+
         $query = DB::table('objek_wisata as t')
             ->leftJoin('usm', 'usm.id_usm', '=', 't.piket')
             ->select(
@@ -43,12 +66,17 @@ class ObjekWisataController extends BaseController
             });
         }
 
+        if ($request->filled('kategori')) {
+            $query->where('t.kattempatwisata', $request->kategori);
+        }
+
         $data = $query->orderByDesc('t.tanggal')->paginate($request->get('per_page', 20))->withQueryString();
 
         return view('objekwisata.index', array_merge([
             'pageTitle' => 'Objek Wisata',
+            'tab' => $tab,
             'data' => $data,
-            'kategori' => DB::table('t_katwisata')->orderBy('namekatwisata')->get(),
+            'kategori' => DB::table('t_katwisata')->orderBy('namekatwisata')->pluck('namekatwisata', 'namekatwisata'),
             'sboViewOnly' => \App\Support\RoleMutationPolicy::deniesAllMutations(\Illuminate\Support\Facades\Auth::user()),
         ], \App\Support\TerritoryIndexFilters::viewBundle($request)));
     }
@@ -89,6 +117,10 @@ class ObjekWisataController extends BaseController
                   ->orWhere('t.lokasi', 'like', "%{$s}%")
                   ->orWhere('t.cp', 'like', "%{$s}%");
             });
+        }
+
+        if ($request->filled('kategori')) {
+            $query->where('t.kattempatwisata', $request->kategori);
         }
 
         return $query->orderByDesc('t.tanggal');

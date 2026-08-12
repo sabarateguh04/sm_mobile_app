@@ -1,0 +1,574 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Smart Backoffice API",
+    "description": "API Documentation untuk integrasi Mobile (Flutter) dan Sistem Web Pihak Ketiga.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://sm.djalu.co.id",
+      "description": "Production Server"
+    },
+    {
+      "url": "http://localhost:8000",
+      "description": "Local Development Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login User",
+        "description": "Mendapatkan JWT Bearer Token untuk mengakses endpoint lain.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "operator"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Berhasil Login"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/integration/wilayah": {
+      "get": {
+        "tags": [
+          "Data Integration"
+        ],
+        "summary": "Tarik Data Master Wilayah",
+        "description": "Mengambil data master wilayah/polres.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit data per halaman",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Nomor halaman",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data berhasil ditarik"
+          }
+        }
+      }
+    },
+    "/api/integration/daerah": {
+      "get": {
+        "tags": [
+          "Data Integration"
+        ],
+        "summary": "Tarik Data Master Daerah",
+        "description": "Mengambil data master daerah/polda.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit data per halaman",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Nomor halaman",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data berhasil ditarik"
+          }
+        }
+      }
+    },
+    "/api/integration/turjagwali": {
+      "get": {
+        "tags": [
+          "Data Integration"
+        ],
+        "summary": "Tarik Data Turjagwali",
+        "description": "Mengambil data laporan giat Turjagwali (Patroli).",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Batas awal (YYYY-MM-DD)",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "Batas akhir (YYYY-MM-DD)",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit data per halaman",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Nomor halaman",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data berhasil ditarik"
+          }
+        }
+      }
+    },
+    "/api/integration/cctv": {
+      "get": {
+        "tags": [
+          "Data Integration"
+        ],
+        "summary": "Tarik Data Patroli CCTV",
+        "description": "Mengambil data laporan pemantauan Patroli CCTV.",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data berhasil ditarik"
+          }
+        }
+      }
+    },
+    "/api/integration/layanan_masyarakat": {
+      "get": {
+        "tags": [
+          "Data Integration"
+        ],
+        "summary": "Tarik Data Layanan Masyarakat",
+        "description": "Mengambil data aduan atau laporan dari masyarakat.",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data berhasil ditarik"
+          }
+        }
+      }
+    },
+    "/api/integration/contigency": {
+      "get": {
+        "tags": [
+          "Data Integration"
+        ],
+        "summary": "Tarik Data Contigency",
+        "description": "Mengambil data kejadian luar biasa (Contigency).",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data berhasil ditarik"
+          }
+        }
+      }
+    },
+    "/api/integration/trafficstuck": {
+      "get": {
+        "tags": [
+          "Data Integration"
+        ],
+        "summary": "Tarik Data Traffic Stuck",
+        "description": "Mengambil data perlambatan arus lalu lintas (Traffic Stuck).",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data berhasil ditarik"
+          }
+        }
+      }
+    },
+    "/api/cad/my-task": {
+      "get": {
+        "tags": [
+          "Mobile CAD (Dispatcher)"
+        ],
+        "summary": "Daftar Tugas Petugas",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sukses"
+          }
+        }
+      }
+    },
+    "/api/cad/terima-task": {
+      "post": {
+        "tags": [
+          "Mobile CAD (Dispatcher)"
+        ],
+        "summary": "Terima Tugas",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "taskId": {
+                    "type": "integer"
+                  },
+                  "userId": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status Diubah"
+          }
+        }
+      }
+    },
+    "/api/cad/menuju": {
+      "post": {
+        "tags": [
+          "Mobile CAD (Dispatcher)"
+        ],
+        "summary": "Menuju TKP",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "taskId": {
+                    "type": "integer"
+                  },
+                  "userId": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status Diubah"
+          }
+        }
+      }
+    },
+    "/api/cad/tiba": {
+      "post": {
+        "tags": [
+          "Mobile CAD (Dispatcher)"
+        ],
+        "summary": "Tiba di TKP",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "taskId": {
+                    "type": "integer"
+                  },
+                  "userId": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status Diubah"
+          }
+        }
+      }
+    },
+    "/api/cad/selesai": {
+      "post": {
+        "tags": [
+          "Mobile CAD (Dispatcher)"
+        ],
+        "summary": "Selesai Tugas",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "taskId": {
+                    "type": "integer"
+                  },
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "keterangan": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status Diubah"
+          }
+        }
+      }
+    },
+    "/api/update-location": {
+      "post": {
+        "tags": [
+          "Mobile Live Tracking"
+        ],
+        "summary": "Update GPS Petugas",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "lat": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "lng": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Location Updated"
+          }
+        }
+      }
+    }
+  }
+}

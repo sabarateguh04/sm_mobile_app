@@ -1,7 +1,9 @@
 <form action="{{ route('personil.manager.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     <div class="pmf-row">
         @include('_partials.compact_filters.territory')
-        @include('_partials.compact_filters.date_range', ['prefix' => 'personil-mgr', 'fromName' => 'tanggal_from', 'toName' => 'tanggal_to'])
+        @if(\App\Helpers\MenuHelper::isSuperAdminForLayout(auth()->user()))
+            @include('_partials.compact_filters.date_range', ['prefix' => 'personil-mgr', 'fromName' => 'tanggal_from', 'toName' => 'tanggal_to'])
+        @endif
         @if(Schema::hasColumn('usm', 'kategori_user'))
             <div class="pmf-extra">
                 <select name="kategori_user"

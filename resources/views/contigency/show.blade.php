@@ -58,30 +58,6 @@
         <span class="text-[13px] font-bold text-on-surface">{{ $pageTitle }}</span>
     </div>
 
-    {{-- Summary cards --}}
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm px-4 py-3">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">Polda</p>
-            <p class="text-[13px] font-bold mb-0" style="color:#D8A808;">{{ strtoupper($data->daerah_nama ?? '—') }}</p>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5 mt-2">Polres</p>
-            <p class="text-[12px] font-bold text-slate-800 mb-0">{{ !empty($data->wilayah_nama) ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah_nama))) : '—' }}</p>
-        </div>
-        <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm px-4 py-3">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">Tanggal</p>
-            <p class="text-[13px] font-bold text-slate-800 mb-0">{{ $tanggalFmt }}</p>
-            @if($jamFmt !== '-')<p class="text-[11px] text-slate-400 mt-0.5 mb-0">{{ $jamFmt }} WIB</p>@endif
-        </div>
-        <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm px-4 py-3">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">Lokasi</p>
-            <p class="text-[13px] font-bold text-slate-800 mb-0 line-clamp-2">{{ $data->lokasi ?: '-' }}</p>
-        </div>
-        <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm px-4 py-3">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">Total Korban</p>
-            <p class="text-[22px] font-bold {{ $korbanTotal > 0 ? 'text-red-600' : 'text-emerald-600' }} mb-0">{{ $korbanTotal }} <span class="text-[12px] font-normal text-slate-400">jiwa</span></p>
-            @if($kermat > 0)<p class="text-[11px] text-slate-400 mt-0.5 mb-0">{{ $kermat }} kendaraan rusak</p>@endif
-        </div>
-    </div>
-
     {{-- Main content card --}}
     <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
         <div class="px-5 py-3.5 border-b border-slate-100 bg-slate-50/30 flex items-center justify-between gap-2">
@@ -95,80 +71,70 @@
         </div>
         <div class="p-5">
             <div class="flex flex-col gap-6">
-                <div class="space-y-5">
-                    {{-- Petugas --}}
-                    <div>
-                        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 pb-1.5 border-b border-slate-100 flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-[14px]">group</span>Petugas &amp; Pelapor
-                        </h4>
-                        <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5">
-                            <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Petugas TPTKP</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->petugastptkp ?: '-' }}</dd></div>
-                            <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket (Input)</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd></div>
-                            <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Status</dt><dd class="m-0">@include('trafficstuck._status_badges', ['item' => $data])</dd></div>
-                        </dl>
-                    </div>
+                <div>
+                    <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
 
-                    {{-- Lokasi --}}
-                    <div>
-                        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 pb-1.5 border-b border-slate-100 flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-[14px]">location_on</span>Lokasi Kejadian
-                        </h4>
-                        <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5">
-                            <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Alamat / Lokasi</dt><dd class="text-[13px] text-slate-800 font-medium m-0 break-all">{{ $data->lokasi ?: '-' }}</dd></div>
-                            @if(! empty($data->koordinat))
-                            <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Koordinat GPS</dt>
-                                <dd class="m-0 flex items-center gap-2 flex-wrap">
-                                    <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
-                                    @if($kOk)<a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]"><span class="material-symbols-outlined text-[14px]">map</span>Google Maps</a>@endif
-                                </dd>
-                            </div>
-                            @endif
-                        </dl>
-                    </div>
 
-                    {{-- Analisis --}}
-                    <div>
-                        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 pb-1.5 border-b border-slate-100 flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-[14px]">search</span>Analisis Peristiwa
-                        </h4>
-                        <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5">
-                            <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Jenis Contigency</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jeniscontigency ?: '-' }}</dd></div>
-                            <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Faktor</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->faktor ?: '-' }}</dd></div>
-                            <div class="md:col-span-2"><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Penyebab</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->penyebab ?: '-' }}</dd></div>
-                        </dl>
-                    </div>
-
-                    {{-- Korban --}}
-                    <div>
-                        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 pb-1.5 border-b border-slate-100 flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-[14px]">personal_injury</span>Korban &amp; Kerusakan
-                        </h4>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl {{ $korbanMd > 0 ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-500' }} text-[12px] font-bold">
-                                MD: <span class="text-[16px]">{{ $korbanMd }}</span>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                        <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ strtoupper($data->daerah_nama ?? '—') }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ !empty($data->wilayah_nama) ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah_nama))) : '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $tanggalFmt }} @if($jamFmt !== '-')<span class="text-[11px] text-slate-400 ml-1">{{ $jamFmt }} WIB</span>@endif</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket (Input)</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Petugas TPTKP</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->petugastptkp ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Status Opsdal</dt>
+                        <dd class="m-0">@include('trafficstuck._status_badges', ['item' => $data])</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Lokasi Kejadian</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0 break-all">{{ $data->lokasi ?: '—' }}</dd>
+                        
+                        @if(! empty($data->koordinat))
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
+                        <dd class="m-0 flex items-center gap-2 flex-wrap">
+                            <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
+                            @if($kOk)<a href="https://www.google.com/maps?q={{ $kLat }},{{ $kLng }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]"><span class="material-symbols-outlined text-[14px]">map</span>Google Maps</a>@endif
+                        </dd>
+                        @endif
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Jenis Contigency</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jeniscontigency ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Faktor</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->faktor ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Penyebab</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->penyebab ?: '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Korban &amp; Kerusakan</dt>
+                        <dd class="m-0 flex flex-wrap gap-2">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl {{ $korbanMd > 0 ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-500' }} text-[12px] font-bold">
+                                MD: <span class="text-[14px]">{{ $korbanMd }}</span>
                             </span>
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl {{ $korbanLb > 0 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500' }} text-[12px] font-bold">
-                                LB: <span class="text-[16px]">{{ $korbanLb }}</span>
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl {{ $korbanLb > 0 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500' }} text-[12px] font-bold">
+                                LB: <span class="text-[14px]">{{ $korbanLb }}</span>
                             </span>
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl {{ $korbanLr > 0 ? 'bg-sky-100 text-sky-700' : 'bg-slate-100 text-slate-500' }} text-[12px] font-bold">
-                                LR: <span class="text-[16px]">{{ $korbanLr }}</span>
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl {{ $korbanLr > 0 ? 'bg-sky-100 text-sky-700' : 'bg-slate-100 text-slate-500' }} text-[12px] font-bold">
+                                LR: <span class="text-[14px]">{{ $korbanLr }}</span>
                             </span>
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl {{ $kermat > 0 ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-500' }} text-[12px] font-bold">
-                                Kermat: <span class="text-[16px]">{{ $kermat }}</span>
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl {{ $kermat > 0 ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-500' }} text-[12px] font-bold">
+                                Kermat: <span class="text-[14px]">{{ $kermat }}</span>
                             </span>
-                        </div>
-                        <p class="text-[11px] text-slate-400 mb-0">MD = Meninggal Dunia · LB = Luka Berat · LR = Luka Ringan</p>
-                    </div>
-
-                    {{-- Keterangan CB --}}
-                    @if(! empty(trim((string) ($data->ketcb ?? ''))))
-                    <div>
-                        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 pb-1.5 border-b border-slate-100 flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-[14px]">comment</span>Keterangan CB
-                        </h4>
-                        <div class="bg-slate-50 rounded-xl px-4 py-3 text-[13px] text-slate-700 break-all">{!! nl2br(e($data->ketcb)) !!}</div>
-                    </div>
-                    @endif
+                        </dd>
+                        
+                        @if(! empty(trim((string) ($data->ketcb ?? ''))))
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Keterangan CB</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-wrap bg-slate-50 rounded-xl px-4 py-3 break-all">{!! nl2br(e($data->ketcb)) !!}</dd>
+                        @endif
+                    </dl>
                 </div>
 
                 {{-- Foto gallery --}}

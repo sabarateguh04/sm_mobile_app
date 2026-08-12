@@ -44,7 +44,12 @@ class InteraksiLayananController extends OperasionalController
 
     protected function applyFilters($query, Request $request)
     {
-        $query->select('layanan_masyarakat.*');
+        $query->select('layanan_masyarakat.*', 'usm.nama as nama_petugas');
+        if (\Illuminate\Support\Facades\Schema::hasColumn('layanan_masyarakat', 'id_usm')) {
+            $query->leftJoin('usm', 'layanan_masyarakat.id_usm', '=', 'usm.id_usm');
+        } elseif (\Illuminate\Support\Facades\Schema::hasColumn('layanan_masyarakat', 'piket')) {
+            $query->leftJoin('usm', 'layanan_masyarakat.piket', '=', 'usm.id_usm');
+        }
 
         if ($request->filled('search')) {
             $s = $request->search;
@@ -52,6 +57,7 @@ class InteraksiLayananController extends OperasionalController
                 foreach ($this->searchFields as $field) {
                     $q->orWhere('layanan_masyarakat.'.$field, 'like', "%{$s}%");
                 }
+                $q->orWhere('usm.nama', 'like', "%{$s}%");
             });
         }
 
@@ -68,6 +74,7 @@ class InteraksiLayananController extends OperasionalController
         // Apply territory column filters for report mode
         if (PublicServiceLayanan::isReportMode($request)) {
             TerritoryIndexFilters::applyColumnFilters($query, $request, $this->tableName);
+            TerritoryIndexFilters::applyUsmFilters($query, $request);
         }
 
         return $query;
@@ -100,6 +107,9 @@ class InteraksiLayananController extends OperasionalController
     public function create()
     {
         PublicServiceLayanan::assertWritable(request());
+        if (in_array(auth()->user()->user_role_id, [1, 2, 3, 8])) {
+            abort(403, 'Admin tidak diizinkan menambah data.');
+        }
 
         return view($this->viewFolder.'.create', [
             'pageTitle'    => 'Tambah '.$this->getPageTitle(),
@@ -113,11 +123,15 @@ class InteraksiLayananController extends OperasionalController
     public function show($id)
     {
         $data = $this->findOperationalRowOrFail($id);
+        $readOnly = PublicServiceLayanan::isReportMode(request());
+        $baseTitle = $readOnly
+            ? PublicServiceLayanan::reportPageTitle($this->getPageTitle())
+            : $this->getPageTitle();
 
         return view($this->viewFolder.'.show', array_merge([
-            'pageTitle' => 'Detail '.$this->getPageTitle(),
+            'pageTitle' => 'Detail '.$baseTitle,
             'data' => $data,
-            'readOnly' => PublicServiceLayanan::isReportMode(request()),
+            'readOnly' => $readOnly,
             'tableName' => $this->tableName,
         ], $this->operationalRecordViewFlags($data), [
             'sboViewOnly' => RoleMutationPolicy::deniesAllMutations(Auth::user()),
@@ -229,6 +243,9 @@ class InteraksiLayananController extends OperasionalController
     public function store(Request $request)
     {
         PublicServiceLayanan::assertWritable($request);
+        if (in_array(auth()->user()->user_role_id, [1, 2, 3, 8])) {
+            abort(403, 'Admin tidak diizinkan menambah data.');
+        }
         $rules = $this->getValidationRules('store');
         $rules['foto_file'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192';
         $validated = $request->validate($rules);

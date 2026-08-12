@@ -4,6 +4,13 @@
 @section('form_heading', 'Masuk ke akun Anda')
 
 @section('alerts')
+    @if(session('error'))
+        <div class="auth-alert auth-alert-danger">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">error</span>
+            {{ session('error') }}
+        </div>
+    @endif
+
     @if(session('registered') && !session('registration_needs_activation'))
         <div class="auth-alert auth-alert-success">
             <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>

@@ -37,12 +37,12 @@
 
 <form action="{{ route('contigency.index') }}" method="GET" id="contigencyFilterForm" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     @foreach($sbGrp as $k => $v)<input type="hidden" name="{{ $k }}" value="{{ $v }}">@endforeach
+    @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
     <div class="pmf-row">
         @include('_partials.compact_filters.territory')
         @include('_partials.compact_filters.date_range', ['prefix' => 'contigency'])
-        @include('_partials.compact_filters.select', ['name' => 'jenis_contigency', 'placeholder' => 'Jenis', 'options' => $jenisList ?? [], 'autoSubmit' => false])
-        @include('_partials.compact_filters.select', ['name' => 'faktor', 'placeholder' => 'Faktor', 'options' => $faktorList ?? [], 'autoSubmit' => false])
-        @include('_partials.compact_filters.search', ['placeholder' => 'Cari lokasi, jenis...'])
+        @include('_partials.compact_filters.select', ['name' => 'jenis_contigency', 'placeholder' => 'Pilih Jenis...', 'options' => collect($jenisList ?? [])->mapWithKeys(fn($v) => [$v => $v])->all(), 'autoSubmit' => false])
+        @include('_partials.compact_filters.search', ['placeholder' => 'Pencarian...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('contigency.index', $sbGrp),
             'active' => $hasFilters,
@@ -69,12 +69,23 @@
                 <table class="w-full text-left min-w-[900px]">
                     <thead><tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Wilayah</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Status</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jenis</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Petugas TPTKP</th>
+                        @if($isOp)
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Contigency</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jam Peristiwa</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Faktor</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Penyebab</th>
+                        @else
+                            @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+                            @endif
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Contigency</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Petugas TPTKP</th>
+                        @endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Aksi</th>
                     </tr></thead>
                     <tbody class="divide-y divide-slate-100">
@@ -89,18 +100,37 @@
                             @endphp
                             <tr class="hover:bg-slate-50 group">
                                 <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
+                                @if($isOp)
+                                    <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                    <td class="px-3 py-2.5">
+                                        <a href="{{ route('contigency.show', array_merge(['contigency' => $item->id_contigency], $sbGrp)) }}"
+                                           class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->lokasi ?: 'Detail', 28) }}</a>
+                                    </td>
+                                    <td class="px-3 py-2.5">
+                                        @if($item->jeniscontigency)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-white">{{ $item->jeniscontigency }}</span>
+                                        @else
+                                            <span class="text-slate-400">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->jamperistiwa ? substr((string)$item->jamperistiwa, 0, 5) : '—' }}</td>
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($item->faktor ?? '—', 16) }}</td>
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($item->penyebab ?? '—', 16) }}</td>
+                                @else
+                                
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                                 <td class="px-3 py-2.5">
-                                    @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
-                                        <span class="text-[10px] font-bold block" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
-                                    @endif
-                                    <span class="text-[9px] text-slate-400 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '' }}</span>
+                                    <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
+                                </td>
+@endif
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span>
                                 </td>
                                 <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                                 <td class="px-3 py-2.5">
                                     <a href="{{ route('contigency.show', array_merge(['contigency' => $item->id_contigency], $sbGrp)) }}"
                                        class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->lokasi ?: 'Detail', 28) }}</a>
                                 </td>
-                                <td class="px-3 py-2.5">@include('trafficstuck._status_badges', ['item' => $item])</td>
                                 <td class="px-3 py-2.5">
                                     @if($item->jeniscontigency)
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-white">{{ $item->jeniscontigency }}</span>
@@ -108,7 +138,8 @@
                                         <span class="text-slate-400">—</span>
                                     @endif
                                 </td>
-                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->petugastptkp ?? ($item->usm_nama ?? '—') }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->petugastptkp ?? '—' }}</td>
+                                @endif
                                 <td class="px-3 py-2.5 text-center">
                                     <div class="flex items-center justify-center gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <a href="{{ route('contigency.show', array_merge(['contigency' => $item->id_contigency], $sbGrp)) }}"

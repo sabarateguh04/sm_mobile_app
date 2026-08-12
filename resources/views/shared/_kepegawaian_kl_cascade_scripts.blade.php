@@ -122,10 +122,15 @@
         var induk = indukEl.value || '';
         var pemda = resetSelection ? '' : selectedPemda;
         selectedPemda = pemda;
+        var names = orgPusatNamesForInduk(induk);
+        if (!pemda && names.length === 1 && names[0] === '-') {
+            pemda = '-';
+            selectedPemda = '-';
+        }
         refillSelect(
             pemdaEl,
             induk ? '— Pilih organisasi pusat —' : '— Pilih induk organisasi dulu —',
-            orgPusatNamesForInduk(induk),
+            names,
             pemda,
             true
         );
@@ -145,10 +150,15 @@
         var orgPusat = pemdaEl.value || '';
         var orgDaerah = resetSelection ? '' : selectedOrgDaerah;
         selectedOrgDaerah = orgDaerah;
+        var names = organisasiDaerahNamesFor(induk, orgPusat);
+        if (!orgDaerah && names.length === 1 && names[0] === '-') {
+            orgDaerah = '-';
+            selectedOrgDaerah = '-';
+        }
         refillSelect(
             orgDaerahEl,
             orgPusat ? '— Pilih organisasi daerah —' : '— Pilih organisasi pusat dulu —',
-            organisasiDaerahNamesFor(induk, orgPusat),
+            names,
             orgDaerah,
             true
         );

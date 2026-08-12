@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Sm;
 
 use App\Http\Controllers\Controller;
+use App\Support\SmDacolData;
 use App\Support\SmMasterData;
 use App\Support\SmRecordPresenter;
 use App\Support\SmTransactionData;
@@ -90,6 +91,48 @@ class SmDataController extends Controller
             'row' => $row,
             'fields' => SmRecordPresenter::fieldRows(SmTransactionData::connection(), $table, $row),
             'coordinates' => $coordinates,
+        ]);
+    }
+
+    public function dacolIndex(Request $request)
+    {
+        $tables  = SmDacolData::tableRegistry();
+        $active  = $this->resolveActiveTable($request->get('table'), $tables);
+        $meta    = $active ? config("smd_tables.dacol.{$active}") : null;
+        $rows    = $active
+            ? SmDacolData::paginated($active, $request, 50)
+            : null;
+        $displayColumns  = $active ? SmDacolData::displayColumns($active) : [];
+        $availableSources = $active ? SmDacolData::availableSources($active) : [];
+
+        return view('sm.dacol.index', array_merge([
+            'pageTitle'       => 'Data Koleksi (sm_dacol)',
+            'tables'          => $tables,
+            'active'          => $active,
+            'meta'            => $meta,
+            'rows'            => $rows,
+            'displayColumns'  => $displayColumns,
+            'availableSources' => $availableSources,
+            'available'       => SmDacolData::isAvailable(),
+        ], TerritoryIndexFilters::viewBundle($request)));
+    }
+
+    public function dacolShow(string $table, int|string $id)
+    {
+        abort_unless(SmDacolData::hasTable($table), 404);
+
+        $row = SmDacolData::find($id, $table);
+        abort_if($row === null, 404);
+
+        $registry = SmDacolData::tableRegistry();
+
+        return view('sm.dacol.show', [
+            'pageTitle'   => ($registry[$table]['label'] ?? $table).' — Detail',
+            'table'       => $table,
+            'meta'        => config("smd_tables.dacol.{$table}", []),
+            'row'         => $row,
+            'fields'      => SmRecordPresenter::fieldRows(SmDacolData::connection(), $table, $row),
+            'coordinates' => SmRecordPresenter::coordinates($row),
         ]);
     }
 

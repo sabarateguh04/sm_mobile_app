@@ -34,20 +34,61 @@ class RolePermissionController extends Controller
             $matrix[$row->page_name][$row->action_name][(int) $row->role_id] = (int) $row->permission_id;
         }
 
-        $pages = collect(array_keys($matrix))->sort()->values();
+        $defaultPages = [
+            'usm',
+            'roles',
+            'role_permissions',
+            'appsetting',
+            // Master Data
+            'daerah',
+            'wilayah',
+            'organisasi',
+            'master_kl_unit_kerja',
+            'master_kl_resort',
+            'master_kl_pusat',
+            'master_kl_daerah',
+            'kab_kota',
+            'referensi',
+            'data_terminal',
+            // Lalu Lintas & Arus
+            'turjagwali',
+            'contigency',
+            'trafficstuck',
+            'opsdal_cad',
+            'opsdal/cad',
+            'trafficdalkot',
+            't_datajalan',
+            'data_gangguan',
+            // Layanan & IT
+            'patrolicctv',
+            'interaksi',
+            'layanan_data',
+            'itsupport',
+            // Terminal & Penumpang
+            'pnpangkutan',
+            // Wisata & Ibadah
+            'objekwisata',
+            'kunjunganwisata',
+            'tempatibadah',
+            'faskes',
+            // Operasional Wilayah
+            'wil/arusmudik',
+            'da/arusmudik',
+            'nas/arusmudik',
+            'auditarus',
+            'profilposko',
+            'ops_wanjol',
+            // Smart Management
+            'sm/master',
+            'sm/transaksi',
+            'sm/dacol',
+        ];
 
-        $actionSet = [];
-        foreach ($matrix as $actions) {
-            foreach (array_keys($actions) as $a) {
-                $actionSet[$a] = true;
-            }
-        }
-        $orderedActions = array_keys($actionSet);
-        usort($orderedActions, function (string $a, string $b): int {
-            $order = ['list' => 0, 'view' => 1, 'add' => 2, 'edit' => 3, 'editfield' => 4, 'delete' => 5, 'import_data' => 6, 'export_data' => 7];
-
-            return ($order[$a] ?? 100).$a <=> ($order[$b] ?? 100).$b;
-        });
+        $pages = collect(array_keys($matrix))
+            ->concat($defaultPages)
+            ->unique()
+            ->sort()
+            ->values();
 
         $sortFn = static function (string $a, string $b): int {
             $order = ['list' => 0, 'view' => 1, 'add' => 2, 'edit' => 3, 'editfield' => 4, 'delete' => 5, 'import_data' => 6, 'export_data' => 7];
@@ -55,11 +96,13 @@ class RolePermissionController extends Controller
             return ($order[$a] ?? 100).$a <=> ($order[$b] ?? 100).$b;
         };
 
+        $standardActions = ['list', 'view', 'add', 'edit', 'delete'];
+
         /** @var array<string, array<int, string>> $actionsPerPage */
         $actionsPerPage = [];
         foreach ($pages as $page) {
             $union = [];
-            foreach ($orderedActions as $a) {
+            foreach ($standardActions as $a) {
                 $union[$a] = true;
             }
             foreach (array_keys($matrix[$page] ?? []) as $a) {

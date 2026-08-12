@@ -190,68 +190,60 @@ class UsmMasterReferensi
      */
     public static function kepegawaianMasterKlHierarchyJson(): array
     {
-        if (! static::masterKlTigaTingkatAktif()) {
-            return [];
-        }
-
-        $empatTingkat = static::masterKlEmpatTingkatAktif();
         $hierarchy = [];
 
-        foreach (static::masterKlPusatIndukCollection() as $pusat) {
-            $canonicalKey = static::canonicalIndukOrganisasiKey((string) $pusat->nama);
-            if (! isset($hierarchy[$canonicalKey])) {
-                $hierarchy[$canonicalKey] = [];
-            }
+        // Gunakan struktur dari SOTK Baru (Instansi -> Org -> Resort -> Unit Kerja)
+        if (Schema::hasTable('master_pemerintahan_instansi')) {
+            $instansiRows = DB::table('master_pemerintahan_instansi')->get();
+            $orgRows = DB::table('org')->get()->groupBy('instansi_id');
+            $resortRows = DB::table('master_kl_resort')->get()->groupBy('org_id');
+            $unitKerjaRows = DB::table('master_kl_unit_kerja')->get()->groupBy('parent_id');
 
-            $orgPusatRows = DB::table('master_kl_daerah')
-                ->where('parent_id', $pusat->id)
-                ->orderBy('nama')
-                ->get(['id', 'nama']);
+            foreach ($instansiRows as $row) {
+                $instansi = trim(strtoupper((string) $row->nama_unit));
+                if ($instansi === '') continue;
 
-            foreach ($orgPusatRows as $orgPusat) {
-                $orgPusatNama = (string) $orgPusat->nama;
+                $canonicalKey = static::canonicalIndukOrganisasiKey($instansi);
+                if (!isset($hierarchy[$canonicalKey])) {
+                    $hierarchy[$canonicalKey] = [];
+                }
+                
+                $orgsForInstansi = $orgRows->get($row->id) ?? [];
+                if (count($orgsForInstansi) === 0) {
+                    $hierarchy[$canonicalKey]['-'] = ['-' => []];
+                }
+                
+                foreach ($orgsForInstansi as $orgRow) {
+                    $org = trim(strtoupper((string) $orgRow->nameorg));
+                    if ($org === '') $org = '-';
 
-                if (! $empatTingkat) {
-                    $units = [];
-                    if (Schema::hasTable('master_kl_resort')) {
-                        $units = DB::table('master_kl_resort')
-                            ->where('parent_id', $orgPusat->id)
-                            ->orderBy('nama')
-                            ->pluck('nama')
-                            ->map(static fn ($nama): string => (string) $nama)
-                            ->values()
-                            ->all();
+                    if (!isset($hierarchy[$canonicalKey][$org]) || !is_array($hierarchy[$canonicalKey][$org])) {
+                        $hierarchy[$canonicalKey][$org] = [];
                     }
-                    $existing = $hierarchy[$canonicalKey][$orgPusatNama] ?? [];
-                    $hierarchy[$canonicalKey][$orgPusatNama] = array_values(array_unique(array_merge(
-                        is_array($existing) ? $existing : [],
-                        $units
-                    )));
 
-                    continue;
-                }
+                    $resortsForOrg = $resortRows->get($orgRow->id_org) ?? [];
+                    if (count($resortsForOrg) === 0) {
+                        $hierarchy[$canonicalKey][$org]['-'] = [];
+                    }
 
-                if (! isset($hierarchy[$canonicalKey][$orgPusatNama]) || ! is_array($hierarchy[$canonicalKey][$orgPusatNama])) {
-                    $hierarchy[$canonicalKey][$orgPusatNama] = [];
-                }
+                    foreach ($resortsForOrg as $resortRow) {
+                        $subOrg = trim(strtoupper((string) $resortRow->nama));
+                        if ($subOrg === '') $subOrg = '-';
 
-                $resortRows = DB::table('master_kl_resort')
-                    ->where('parent_id', $orgPusat->id)
-                    ->orderBy('nama')
-                    ->get(['id', 'nama']);
+                        if (!isset($hierarchy[$canonicalKey][$org][$subOrg]) || !is_array($hierarchy[$canonicalKey][$org][$subOrg])) {
+                            $hierarchy[$canonicalKey][$org][$subOrg] = [];
+                        }
 
-                foreach ($resortRows as $resort) {
-                    $resortNama = (string) $resort->nama;
-                    $unitNames = DB::table('master_kl_unit_kerja')
-                        ->where('parent_id', $resort->id)
-                        ->orderBy('nama')
-                        ->pluck('nama')
-                        ->map(static fn ($nama): string => (string) $nama)
-                        ->values()
-                        ->all();
-
-                    $existingUnits = $hierarchy[$canonicalKey][$orgPusatNama][$resortNama] ?? [];
-                    $hierarchy[$canonicalKey][$orgPusatNama][$resortNama] = array_values(array_unique(array_merge($existingUnits, $unitNames)));
+                        $unitsForResort = $unitKerjaRows->get($resortRow->id) ?? [];
+                        foreach ($unitsForResort as $unitRow) {
+                            $unitKerja = trim(strtoupper((string) $unitRow->nama));
+                            if ($unitKerja !== '') {
+                                if (!in_array($unitKerja, $hierarchy[$canonicalKey][$org][$subOrg], true)) {
+                                    $hierarchy[$canonicalKey][$org][$subOrg][] = $unitKerja;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -279,11 +271,9 @@ class UsmMasterReferensi
      */
     public static function masterKlTigaTingkatAktif(): bool
     {
-        if (! static::registrationPakaiMasterKlDaerah()) {
-            return false;
-        }
-
-        return Schema::hasTable('master_kl_pusat');
+        return Schema::hasTable('master_pemerintahan_instansi')
+            && Schema::hasTable('org')
+            && Schema::hasTable('master_kl_resort');
     }
 
     /** Hierarki kepegawaian 4 tingkat (tabel `master_kl_unit_kerja` tersedia). */
@@ -370,6 +360,30 @@ class UsmMasterReferensi
 
         $daerahNameSet = $daerahList->pluck('namadaerah')->flip()->all();
 
+        // Paksa ubah DKI JAKARTA menjadi METRO JAYA
+        foreach ($daerahList as $d) {
+            if (strtoupper(trim($d->namadaerah)) === 'DKI JAKARTA') {
+                $d->namadaerah = 'METRO JAYA';
+            }
+        }
+        $daerahNameSet = $daerahList->pluck('namadaerah')->flip()->all();
+
+        if (isset($wilayahByDaerahJson['DKI JAKARTA']) || isset($wilayahByDaerahJson['DKI Jakarta'])) {
+            $key = isset($wilayahByDaerahJson['DKI JAKARTA']) ? 'DKI JAKARTA' : 'DKI Jakarta';
+            $wilayahByDaerahJson['METRO JAYA'] = $wilayahByDaerahJson[$key];
+            unset($wilayahByDaerahJson[$key]);
+        }
+
+        $newWilayahPairMap = [];
+        foreach ($wilayahPairMap as $pairKey => $val) {
+            if (str_starts_with(strtoupper($pairKey), 'DKI JAKARTA|')) {
+                $newWilayahPairMap['METRO JAYA|' . $val] = $val;
+            } else {
+                $newWilayahPairMap[$pairKey] = $val;
+            }
+        }
+        $wilayahPairMap = $newWilayahPairMap;
+
         return [
             'daerahList' => $daerahList,
             'wilayahByDaerahJson' => $wilayahByDaerahJson,
@@ -426,6 +440,32 @@ class UsmMasterReferensi
             $out = static::wilayahDaerahBundleLegacy();
         }
         $out['wilayahPakaiMasterTerritori'] = static::wilayahPakaiMasterTerritori();
+
+        // Paksa ubah DKI JAKARTA menjadi METRO JAYA untuk semua dropdown
+        foreach ($out['daerahList'] as $d) {
+            if (strtoupper(trim($d->namadaerah)) === 'DKI JAKARTA') {
+                $d->namadaerah = 'METRO JAYA';
+            }
+        }
+        
+        // Perbarui name set & JSON map agar sinkron
+        $out['daerahNameSet'] = $out['daerahList']->pluck('namadaerah')->flip()->all();
+        
+        if (isset($out['wilayahByDaerahJson']['DKI JAKARTA']) || isset($out['wilayahByDaerahJson']['DKI Jakarta'])) {
+            $key = isset($out['wilayahByDaerahJson']['DKI JAKARTA']) ? 'DKI JAKARTA' : 'DKI Jakarta';
+            $out['wilayahByDaerahJson']['METRO JAYA'] = $out['wilayahByDaerahJson'][$key];
+            unset($out['wilayahByDaerahJson'][$key]);
+        }
+        
+        $newWilayahPairMap = [];
+        foreach ($out['wilayahPairMap'] as $pairKey => $val) {
+            if (str_starts_with(strtoupper($pairKey), 'DKI JAKARTA|')) {
+                $newWilayahPairMap['METRO JAYA|' . $val] = $val;
+            } else {
+                $newWilayahPairMap[$pairKey] = $val;
+            }
+        }
+        $out['wilayahPairMap'] = $newWilayahPairMap;
 
         return $out;
     }
@@ -845,17 +885,43 @@ class UsmMasterReferensi
             return;
         }
 
-        if ($labelMasterKl) {
+        if ($d === '' && $w === '') {
+            if ($labelMasterKl) {
+                throw ValidationException::withMessages([
+                    'daerah' => ['Pilih daerah (KL) dan resort. Data ini memastikan administrator di wilayah Anda melihat akun Anda di menu Daftar User untuk diverifikasi (status Pending).'],
+                    'wilayah' => ['Pilih resort — wajib untuk registrasi mandiri agar akun masuk daftar verifikasi wilayah kerja.'],
+                ]);
+            }
+
             throw ValidationException::withMessages([
-                'daerah' => ['Pilih daerah (KL) dan resort. Data ini memastikan administrator di wilayah Anda melihat akun Anda di menu Daftar User untuk diverifikasi (status Pending).'],
-                'wilayah' => ['Pilih resort — wajib untuk registrasi mandiri agar akun masuk daftar verifikasi wilayah kerja.'],
+                'daerah' => ['Pilih provinsi dan kab/kota. Data ini memastikan administrator di wilayah Anda melihat akun Anda di menu Daftar User untuk diverifikasi (status Pending).'],
+                'wilayah' => ['Pilih kab/kota — wajib untuk registrasi mandiri agar akun masuk daftar verifikasi wilayah kerja.'],
             ]);
         }
 
-        throw ValidationException::withMessages([
-            'daerah' => ['Pilih provinsi dan kab/kota. Data ini memastikan administrator di wilayah Anda melihat akun Anda di menu Daftar User untuk diverifikasi (status Pending).'],
-            'wilayah' => ['Pilih kab/kota — wajib untuk registrasi mandiri agar akun masuk daftar verifikasi wilayah kerja.'],
-        ]);
+        if ($d === '') {
+            if ($labelMasterKl) {
+                throw ValidationException::withMessages([
+                    'daerah' => ['Pilih daerah (KL). Data ini memastikan administrator di wilayah Anda melihat akun Anda di menu Daftar User untuk diverifikasi (status Pending).'],
+                ]);
+            }
+
+            throw ValidationException::withMessages([
+                'daerah' => ['Pilih provinsi. Data ini memastikan administrator di wilayah Anda melihat akun Anda di menu Daftar User untuk diverifikasi (status Pending).'],
+            ]);
+        }
+
+        if ($w === '') {
+            if ($labelMasterKl) {
+                throw ValidationException::withMessages([
+                    'wilayah' => ['Pilih resort — wajib untuk registrasi mandiri agar akun masuk daftar verifikasi wilayah kerja.'],
+                ]);
+            }
+
+            throw ValidationException::withMessages([
+                'wilayah' => ['Pilih kab/kota — wajib untuk registrasi mandiri agar akun masuk daftar verifikasi wilayah kerja.'],
+            ]);
+        }
     }
 
     public static function indukPemerintahanSelectAktif(): bool
@@ -1024,13 +1090,48 @@ class UsmMasterReferensi
             return;
         }
 
-        static::validasiOrganisasiDaerahTerhadapIndukKl($indukPusat, $orgPusat);
+        $indukPusat = trim((string) $indukPusat);
+        $orgPusat = trim((string) $orgPusat);
+        $organisasiDaerah = trim((string) $organisasiDaerah);
+        $unitKerja = trim((string) $unitKerja);
 
-        if (static::masterKlEmpatTingkatAktif()) {
-            static::validasiOrganisasiDaerahResortTerhadapPusatKl($indukPusat, $orgPusat, $organisasiDaerah);
-            static::validasiUnitKerjaTerhadapOrganisasiDaerahKl($indukPusat, $orgPusat, $organisasiDaerah, $unitKerja);
-        } else {
-            static::validasiUnitKerjaTerhadapOrganisasiDaerahKl($indukPusat, $orgPusat, $unitKerja);
+        if ($indukPusat === '' || $indukPusat === '-') return;
+
+        $instansi = DB::table('master_pemerintahan_instansi')->where('nama_unit', $indukPusat)->first();
+
+        if ($orgPusat !== '' && $orgPusat !== '-') {
+            $org = DB::table('org')->where('nameorg', $orgPusat)->where('instansi_id', $instansi ? $instansi->id : -1)->first();
+            if (!$org) {
+                throw ValidationException::withMessages([
+                    'pemerintahan_daerah' => ['Organisasi pusat tidak sesuai dengan induk organisasi yang dipilih.'],
+                ]);
+            }
+
+            if ($organisasiDaerah !== '' && $organisasiDaerah !== '-') {
+                $resort = DB::table('master_kl_resort')->where('nama', $organisasiDaerah)->where('org_id', $org->id_org)->first();
+                if (!$resort) {
+                    throw ValidationException::withMessages([
+                        'organisasi_daerah' => ['Organisasi daerah tidak sesuai dengan organisasi pusat yang dipilih.'],
+                    ]);
+                }
+
+                if ($unitKerja !== '' && $unitKerja !== '-' && static::masterKlEmpatTingkatAktif()) {
+                    $unit = DB::table('master_kl_unit_kerja')->where('nama', $unitKerja)->where('parent_id', $resort->id)->first();
+                    if (!$unit) {
+                        throw ValidationException::withMessages([
+                            'unit_kerja' => ['Unit kerja tidak sesuai dengan organisasi daerah yang dipilih.'],
+                        ]);
+                    }
+                }
+            } elseif ($unitKerja !== '' && static::masterKlEmpatTingkatAktif()) {
+                throw ValidationException::withMessages([
+                    'unit_kerja' => ['Pilih organisasi daerah terlebih dahulu.'],
+                ]);
+            }
+        } elseif ($organisasiDaerah !== '' || $unitKerja !== '') {
+            throw ValidationException::withMessages([
+                'pemerintahan_daerah' => ['Pilih organisasi pusat terlebih dahulu.'],
+            ]);
         }
     }
 
@@ -1063,103 +1164,81 @@ class UsmMasterReferensi
     /** Aturan kepegawaian untuk POST `/register` bila memakai master KL. */
     public static function registrationKepegawaianValidationRules(): array
     {
-        if (! static::masterKlTigaTingkatAktif()) {
-            return static::kepegawaianValidationRules();
-        }
-
-        $empatTingkat = static::masterKlEmpatTingkatAktif();
-
         $rules = [
             'nrp_nip_nik' => ['nullable', 'string', 'max:191'],
+            'kategori_user' => ['nullable', 'in:organik,non_organik'],
             'induk_pemerintahan' => [
                 'nullable',
                 'string',
                 'max:255',
-                function (string $attribute, mixed $value, \Closure $fail): void {
-                    $value = trim((string) $value);
-                    if ($value === '') {
-                        return;
-                    }
-                    if (static::masterKlPusatIdsForInduk($value) === []) {
-                        $fail('Induk organisasi tidak valid.');
-                    }
-                },
             ],
             'pemerintahan_daerah' => [
                 'nullable',
                 'string',
                 'max:255',
-                Rule::exists('master_kl_daerah', 'nama')->where(function ($query): void {
-                    $induk = trim((string) Request::input('induk_pemerintahan', ''));
-                    if ($induk === '') {
-                        $query->whereRaw('1 = 0');
-
-                        return;
-                    }
-                    $ids = static::masterKlDaerahIdsForOrgAndInduk($induk, (string) Request::input('pemerintahan_daerah', ''));
-                    $query->whereIn('id', $ids !== [] ? $ids : [-1]);
-                }),
             ],
-            'kategori_user' => ['nullable', 'in:organik,non_organik'],
+            'organisasi_daerah' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
+            'unit_kerja' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
         ];
 
-        if ($empatTingkat) {
-            $rules['organisasi_daerah'] = [
-                'nullable',
-                'string',
-                'max:255',
-                Rule::exists('master_kl_resort', 'nama')->where(function ($query): void {
-                    $orgPusat = trim((string) Request::input('pemerintahan_daerah', ''));
-                    if ($orgPusat === '') {
-                        $query->whereRaw('1 = 0');
+        $induk = trim((string) Request::input('induk_pemerintahan', ''));
+        if ($induk !== '' && $induk !== '-') {
+            $rules['induk_pemerintahan'][] = Rule::exists('master_pemerintahan_instansi', 'nama_unit');
+        }
 
-                        return;
-                    }
-                    $ids = static::masterKlDaerahIdsForOrgAndInduk(
-                        (string) Request::input('induk_pemerintahan', ''),
-                        $orgPusat
-                    );
-                    $query->whereIn('parent_id', $ids !== [] ? $ids : [-1]);
-                }),
-            ];
-            $rules['unit_kerja'] = [
-                'nullable',
-                'string',
-                'max:255',
-                Rule::exists('master_kl_unit_kerja', 'nama')->where(function ($query): void {
-                    $organisasiDaerah = trim((string) Request::input('organisasi_daerah', ''));
-                    if ($organisasiDaerah === '') {
-                        $query->whereRaw('1 = 0');
+        $orgNama = trim((string) Request::input('pemerintahan_daerah', ''));
+        if ($orgNama !== '' && $orgNama !== '-') {
+            $rules['pemerintahan_daerah'][] = Rule::exists('org', 'nameorg')->where(function ($query) use ($induk): void {
+                if ($induk === '' || $induk === '-') {
+                    $query->whereRaw('1 = 0');
+                    return;
+                }
+                $instansi = DB::table('master_pemerintahan_instansi')->where('nama_unit', $induk)->first();
+                $query->where('instansi_id', $instansi ? $instansi->id : -1);
+            });
+        }
 
-                        return;
-                    }
-                    $resortIds = static::masterKlResortIdsForHierarchy(
-                        (string) Request::input('induk_pemerintahan', ''),
-                        (string) Request::input('pemerintahan_daerah', ''),
-                        $organisasiDaerah
-                    );
-                    $query->whereIn('parent_id', $resortIds !== [] ? $resortIds : [-1]);
-                }),
-            ];
-        } else {
-            $rules['unit_kerja'] = [
-                'nullable',
-                'string',
-                'max:255',
-                Rule::exists('master_kl_resort', 'nama')->where(function ($query): void {
-                    $orgPusat = trim((string) Request::input('pemerintahan_daerah', ''));
-                    if ($orgPusat === '') {
-                        $query->whereRaw('1 = 0');
+        $subOrg = trim((string) Request::input('organisasi_daerah', ''));
+        if ($subOrg !== '' && $subOrg !== '-') {
+            $rules['organisasi_daerah'][] = Rule::exists('master_kl_resort', 'nama')->where(function ($query) use ($orgNama, $induk): void {
+                if ($orgNama === '' || $orgNama === '-') {
+                    $query->whereRaw('1 = 0');
+                    return;
+                }
+                
+                $instansi = DB::table('master_pemerintahan_instansi')->where('nama_unit', $induk)->first();
+                
+                $orgs = DB::table('org')
+                    ->where('nameorg', $orgNama)
+                    ->where('instansi_id', $instansi ? $instansi->id : -1)
+                    ->pluck('id_org');
+                    
+                $query->whereIn('org_id', $orgs->isNotEmpty() ? $orgs : [-1]);
+            });
+        }
 
-                        return;
-                    }
-                    $ids = static::masterKlDaerahIdsForOrgAndInduk(
-                        (string) Request::input('induk_pemerintahan', ''),
-                        $orgPusat
-                    );
-                    $query->whereIn('parent_id', $ids !== [] ? $ids : [-1]);
-                }),
-            ];
+        $unitKerja = trim((string) Request::input('unit_kerja', ''));
+        if ($unitKerja !== '' && $unitKerja !== '-') {
+            $rules['unit_kerja'][] = Rule::exists('master_kl_unit_kerja', 'nama')->where(function ($query) use ($subOrg, $orgNama, $induk): void {
+                if ($subOrg === '' || $subOrg === '-') {
+                    $query->whereRaw('1 = 0');
+                    return;
+                }
+                
+                $instansi = DB::table('master_pemerintahan_instansi')->where('nama_unit', $induk)->first();
+                $orgs = DB::table('org')->where('nameorg', $orgNama)->where('instansi_id', $instansi ? $instansi->id : -1)->pluck('id_org');
+                $resorts = DB::table('master_kl_resort')->where('nama', $subOrg)->whereIn('org_id', $orgs->isNotEmpty() ? $orgs : [-1])->pluck('id');
+                    
+                $query->whereIn('parent_id', $resorts->isNotEmpty() ? $resorts : [-1]);
+            });
         }
 
         return $rules;
@@ -1170,71 +1249,80 @@ class UsmMasterReferensi
      *
      * @return array<string, mixed>
      */
-    public static function registrationKepegawaianFormBundle(?Usm $user = null): array
+    /**
+     * Ambil data dari master_pemerintahan_instansi sebagai daftar instansi tambahan.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function pemerintahanInstansiCollection(): \Illuminate\Support\Collection
     {
-        if (! static::masterKlTigaTingkatAktif()) {
-            return array_merge(static::kepegawaianFormBundle($user), [
-                'pemerintahanDaerahUseSelect' => false,
-                'pemerintahanDaerahResorts' => collect(),
-                'organisasiDaerahUseSelect' => false,
-                'organisasiDaerahList' => collect(),
-                'filterKepegawaianIndukPemerintahanDaerah' => false,
-                'filterKepegawaianOrganisasiDaerahUnit' => false,
-                'filterKepegawaianOrganisasiPusatDaerah' => false,
-                'kepegawaianKlTigaTingkat' => false,
-                'kepegawaianKlEmpatTingkat' => false,
-            ]);
+        if (! Schema::hasTable('master_pemerintahan_instansi')) {
+            return collect();
         }
 
-        $empatTingkat = static::masterKlEmpatTingkatAktif();
-        $pusatRows = static::masterKlPusatIndukCollection();
-        $orgsInduk = $pusatRows->map(fn ($r) => (object) [
-            'id_org' => (int) $r->id,
-            'nameorg' => (string) $r->nama,
-        ]);
+        return DB::table('master_pemerintahan_instansi')
+            ->orderBy('nama_unit')
+            ->get(['id', 'nama_unit'])
+            ->map(fn ($r) => (object) [
+                'id_org'  => (int) $r->id,
+                'nameorg' => (string) $r->nama_unit,
+            ]);
+    }
 
-        $orgPusatList = DB::table('master_kl_daerah as d')
-            ->join('master_kl_pusat as p', 'p.id', '=', 'd.parent_id')
-            ->orderBy('p.nama')
-            ->orderBy('d.nama')
-            ->get(['d.id', 'd.nama as nama', 'p.nama as nameorg']);
+    public static function registrationKepegawaianFormBundle(?Usm $user = null): array
+    {
+        // Hanya gunakan data dari master_pemerintahan_instansi (OTK)
+        $orgsInduk = static::pemerintahanInstansiCollection()
+            ->unique(fn($r) => strtolower(trim($r->nameorg)))
+            ->sortBy('nameorg')
+            ->values();
 
+        $empatTingkat = true; // Paksa 4 tingkat karena master_pemerintahan_instansi mendukung sampai Unit Kerja
+        $orgPusatList = collect();
         $organisasiDaerahList = collect();
         $unitKerjaList = collect();
 
-        if ($empatTingkat && Schema::hasTable('master_kl_resort')) {
-            $organisasiDaerahList = DB::table('master_kl_resort as r')
-                ->join('master_kl_daerah as d', 'd.id', '=', 'r.parent_id')
-                ->join('master_kl_pusat as p', 'p.id', '=', 'd.parent_id')
-                ->orderBy('p.nama')
-                ->orderBy('d.nama')
-                ->orderBy('r.nama')
-                ->get(['r.nama as nama', 'd.nama as org_pusat', 'p.nama as induk_pusat']);
-        }
-
-        if ($empatTingkat && Schema::hasTable('master_kl_unit_kerja')) {
-            $unitKerjaList = DB::table('master_kl_unit_kerja as u')
+        if (Schema::hasTable('master_pemerintahan_instansi')) {
+            $orgRows = DB::table('org')
+                ->join('master_pemerintahan_instansi as i', 'i.id', '=', 'org.instansi_id')
+                ->select('org.id_org', 'org.nameorg', 'i.nama_unit as instansi_nama')
+                ->get();
+                
+            $resortRows = DB::table('master_kl_resort as r')
+                ->join('org', 'org.id_org', '=', 'r.org_id')
+                ->join('master_pemerintahan_instansi as i', 'i.id', '=', 'r.instansi_id')
+                ->select('r.id', 'r.nama', 'org.nameorg as org_nama', 'i.nama_unit as instansi_nama')
+                ->get();
+                
+            $unitKerjaRows = DB::table('master_kl_unit_kerja as u')
                 ->join('master_kl_resort as r', 'r.id', '=', 'u.parent_id')
-                ->join('master_kl_daerah as d', 'd.id', '=', 'r.parent_id')
-                ->join('master_kl_pusat as p', 'p.id', '=', 'd.parent_id')
-                ->orderBy('p.nama')
-                ->orderBy('d.nama')
-                ->orderBy('r.nama')
-                ->orderBy('u.nama')
-                ->get([
-                    'u.nama as namesuborg',
-                    'r.nama as org_daerah',
-                    'd.nama as org_pusat',
-                    'p.nama as induk_pusat',
-                ]);
-        } elseif (Schema::hasTable('master_kl_resort')) {
-            $unitKerjaList = DB::table('master_kl_resort as r')
-                ->join('master_kl_daerah as d', 'd.id', '=', 'r.parent_id')
-                ->join('master_kl_pusat as p', 'p.id', '=', 'd.parent_id')
-                ->orderBy('p.nama')
-                ->orderBy('d.nama')
-                ->orderBy('r.nama')
-                ->get(['r.nama as namesuborg', 'd.nama as nameorg', 'p.nama as induk_pusat']);
+                ->join('org', 'org.id_org', '=', 'r.org_id')
+                ->join('master_pemerintahan_instansi as i', 'i.id', '=', 'r.instansi_id')
+                ->select('u.nama', 'r.nama as sub_org', 'org.nameorg as org_nama', 'i.nama_unit as instansi_nama')
+                ->get();
+            
+            // 2. Organisasi (pemerintahan_daerah)
+            $orgPusatList = $orgRows->map(fn($r) => (object) [
+                    'id' => $r->id_org,
+                    'nama' => trim((string)$r->nameorg) !== '' ? trim(strtoupper($r->nameorg)) : '-',
+                    'nameorg' => trim(strtoupper($r->instansi_nama)),
+                ])->unique(fn($r) => $r->nama . '-' . $r->nameorg)->values();
+
+            // 3. Sub Org (organisasi_daerah)
+            $organisasiDaerahList = $resortRows->map(fn($r) => (object) [
+                    'nama' => trim((string)$r->nama) !== '' ? trim(strtoupper($r->nama)) : '-',
+                    'org_pusat' => trim((string)$r->org_nama) !== '' ? trim(strtoupper($r->org_nama)) : '-',
+                    'induk_pusat' => trim(strtoupper($r->instansi_nama)),
+                ])->unique(fn($r) => $r->nama . '-' . $r->org_pusat . '-' . $r->induk_pusat)->values();
+
+            // 4. Unit Kerja (unit_kerja)
+            $unitKerjaList = $unitKerjaRows->filter(fn($r) => trim((string)$r->nama) !== '')
+                ->map(fn($r) => (object) [
+                    'namesuborg' => trim(strtoupper($r->nama)),
+                    'org_daerah' => trim((string)$r->sub_org) !== '' ? trim(strtoupper($r->sub_org)) : '-',
+                    'org_pusat' => trim((string)$r->org_nama) !== '' ? trim(strtoupper($r->org_nama)) : '-',
+                    'induk_pusat' => trim(strtoupper($r->instansi_nama)),
+                ])->unique(fn($r) => $r->namesuborg . '-' . $r->org_daerah . '-' . $r->org_pusat . '-' . $r->induk_pusat)->values();
         }
 
         if ($user && trim((string) ($user->induk_pemerintahan ?? '')) !== ''
@@ -1297,12 +1385,12 @@ class UsmMasterReferensi
             }
         }
 
-        $orgPusatSelect = $orgPusatList->isNotEmpty();
-        $organisasiDaerahSelect = $organisasiDaerahList->isNotEmpty();
-        $unitSelect = $unitKerjaList->isNotEmpty();
+        $orgPusatSelect = true; // Selalu dropdown
+        $organisasiDaerahSelect = true; // Selalu dropdown
+        $unitSelect = true; // Selalu dropdown
 
         return [
-            'indukPemerintahanUseSelect' => $orgsInduk->isNotEmpty(),
+            'indukPemerintahanUseSelect' => true, // Selalu dropdown
             'orgsInduk' => $orgsInduk,
             'unitKerjaUseSelect' => $unitSelect,
             'suborgsUnitKerja' => $unitKerjaList,
@@ -1329,34 +1417,6 @@ class UsmMasterReferensi
      */
     public static function kepegawaianFormBundle(?Usm $user = null): array
     {
-        $orgBundle = static::organisasiFormBundle($user);
-        $orgsInduk = $orgBundle['orgs'];
-        $suborgsUnit = $orgBundle['suborgs'];
-
-        if ($user && trim((string) ($user->induk_pemerintahan ?? '')) !== ''
-            && $orgsInduk->isNotEmpty()
-            && ! $orgsInduk->pluck('nameorg')->contains($user->induk_pemerintahan)) {
-            $orgsInduk = $orgsInduk->prepend((object) ['id_org' => null, 'nameorg' => $user->induk_pemerintahan]);
-        }
-
-        if ($user
-            && trim((string) ($user->unit_kerja ?? '')) !== ''
-            && trim((string) ($user->induk_pemerintahan ?? '')) !== ''
-            && $suborgsUnit->isNotEmpty()) {
-            $pair = $suborgsUnit->first(fn ($s) => $s->namesuborg === $user->unit_kerja && $s->nameorg === $user->induk_pemerintahan);
-            if ($pair === null) {
-                $suborgsUnit = $suborgsUnit->prepend((object) [
-                    'namesuborg' => $user->unit_kerja,
-                    'nameorg' => $user->induk_pemerintahan,
-                ]);
-            }
-        }
-
-        return [
-            'indukPemerintahanUseSelect' => static::indukPemerintahanSelectAktif(),
-            'orgsInduk' => $orgsInduk,
-            'unitKerjaUseSelect' => static::unitKerjaSelectAktif(),
-            'suborgsUnitKerja' => $suborgsUnit,
-        ];
+        return static::registrationKepegawaianFormBundle($user);
     }
 }

@@ -62,6 +62,10 @@
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Waktu</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $waktuLabel !== '—' ? $waktuLabel . ' WIB' : '—' }}</dd>
 
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?: '—' }}</dd>
+
+
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Gerbang Kota</dt>
                         <dd class="text-[13px] text-slate-800 font-semibold m-0">{{ $data->gerbangkota ?: '—' }}</dd>
 
@@ -89,8 +93,6 @@
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Keterangan CB</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-wrap">{{ $data->ketcb ?: '—' }}</dd>
 
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
-                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?: '—' }}</dd>
 
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">ID Record</dt>
                         <dd class="text-[13px] text-slate-600 font-mono m-0">#{{ $rowId }}</dd>

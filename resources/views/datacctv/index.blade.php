@@ -46,13 +46,13 @@
 @endif
 
 <form action="{{ route('datacctv.index') }}" method="GET" id="datacctvFilterForm" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
+    @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
     <div class="pmf-row">
-        @include('_partials.compact_filters.search', ['placeholder' => 'Cari owner, lokasi, IP, brand...'])
         @include('_partials.compact_filters.territory')
-        @include('_partials.compact_filters.select', ['name' => 'owner', 'placeholder' => 'Owner', 'options' => $owners ?? []])
-        @include('_partials.compact_filters.select', ['name' => 'brand', 'placeholder' => 'Brand', 'options' => $brands ?? []])
-        @include('_partials.compact_filters.select', ['name' => 'fungsicctv', 'placeholder' => 'Fungsi CCTV', 'options' => $fungsiList ?? []])
-        @include('_partials.compact_filters.date_range', ['prefix' => 'datacctv'])
+        @include('_partials.compact_filters.select', ['name' => 'lokasi', 'placeholder' => 'Pilih Lokasi..', 'options' => $lokasiList ?? []])
+        @include('_partials.compact_filters.select', ['name' => 'fungsicctv', 'placeholder' => 'Fungsi CCTV..', 'options' => $fungsiList ?? []])
+        @include('_partials.compact_filters.select', ['name' => 'owner', 'placeholder' => 'Select Owner CCTV...', 'options' => $owners ?? []])
+        @include('_partials.compact_filters.search', ['placeholder' => 'Cari...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('datacctv.index'),
             'active' => $hasFilters,
@@ -82,16 +82,27 @@
             <table class="w-full text-left min-w-[1080px]">
                 <thead>
                     <tr class="bg-slate-50/50">
+                        @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
+                        @if($isOp)
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Fungsi CCTV</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Koordinat (lat,long)</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">IP Addres</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Brand</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Owner</th>
+                        @else
 @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
 @endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi / Owner</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">IP Address</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Fungsi CCTV</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Koordinat</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">IP Addr</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Brand</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">GPS</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Owner</th>
+                        @endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -103,14 +114,46 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
+                            @if($isOp)
+                                <td class="px-3 py-2.5">
+                                    @if($recordId)
+                                        <a href="{{ route('datacctv.show', $recordId) }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">
+                                            {{ \Str::limit($row->lokasi ?: 'Detail CCTV', 28) }}
+                                        </a>
+                                    @else
+                                        <span class="text-[11px] text-slate-700">{{ \Str::limit($row->lokasi ?: '—', 28) }}</span>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $row->fungsicctv ?? '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-center">
+                                    @if(!empty($row->koordinat))
+                                        <a href="https://www.google.com/maps/search/?api=1&query={{ $row->koordinat }}" target="_blank" rel="noopener noreferrer"
+                                           class="inline-flex items-center justify-center w-8 h-8 text-green-600 hover:bg-green-50 rounded-lg transition-colors text-decoration-none mx-auto"
+                                           title="{{ $row->koordinat }}">
+                                            <span class="material-symbols-outlined text-[18px]">location_on</span>
+                                        </a>
+                                    @else
+                                        <span class="text-slate-300">—</span>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <code class="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">{{ $row->ipaddres ?? '—' }}</code>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $row->brand ?? '—' }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $row->owner ?? '—' }}</td>
+                            @else
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($row->usm_daerah ?? '—') }}</span>
                             </td>
+@endif
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $row->usm_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $row->usm_wilayah))) : '—' }}</span>
                             </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">
-                                {{ $row->tanggal ? \Carbon\Carbon::parse($row->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}
+                            <td class="px-3 py-2.5">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $row->fungsicctv ?? '—' }}</span>
                             </td>
                             <td class="px-3 py-2.5">
                                 @if($recordId)
@@ -120,17 +163,7 @@
                                 @else
                                     <span class="text-[11px] text-slate-700">{{ \Str::limit($row->lokasi ?: '—', 28) }}</span>
                                 @endif
-                                @if($row->owner)
-                                    <span class="inline-flex items-center mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">{{ $row->owner }}</span>
-                                @endif
-                                @if($row->fungsicctv)
-                                    <span class="inline-flex items-center mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $row->fungsicctv }}</span>
-                                @endif
                             </td>
-                            <td class="px-3 py-2.5">
-                                <code class="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">{{ $row->ipaddres ?? '—' }}</code>
-                            </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $row->brand ?? '—' }}</td>
                             <td class="px-3 py-2.5 text-center">
                                 @if(!empty($row->koordinat))
                                     <a href="https://www.google.com/maps/search/?api=1&query={{ $row->koordinat }}" target="_blank" rel="noopener noreferrer"
@@ -142,6 +175,12 @@
                                     <span class="text-slate-300">—</span>
                                 @endif
                             </td>
+                            <td class="px-3 py-2.5">
+                                <code class="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">{{ $row->ipaddres ?? '—' }}</code>
+                            </td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $row->brand ?? '—' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $row->owner ?? '—' }}</td>
+                            @endif
                             <td class="px-3 py-2.5 text-right">
                                 @if($recordId)
                                     <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">

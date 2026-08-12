@@ -62,6 +62,12 @@ class JalanGangguanController extends BaseController
 
         }
 
+        if ($request->filled('kerawanan')) {
+
+            $query->where('data_gangguan.kerawanan', $request->kerawanan);
+
+        }
+
         if ($request->filled('levelgangguan')) {
 
             $query->where('data_gangguan.levelgangguan', $request->levelgangguan);
@@ -83,29 +89,42 @@ class JalanGangguanController extends BaseController
 
 
     public function index(Request $request)
-
     {
+        $tab = $request->get('tab', 'dacol_trouble_spot');
+
+        if (str_starts_with($tab, 'dacol_')) {
+            $table = $tab === 'dacol_trouble_spot' ? 'sm_dacol_black_trouble_spot' : 'sm_dacol_wilayah_rawan';
+            $dacolRows = \App\Support\SmDacolData::paginated($table, $request, 20);
+            return view('jalan_gangguan.index', array_merge([
+                'pageTitle' => 'Data Gangguan Jalan',
+                'tab' => $tab,
+                'data' => collect(), // dummy
+                'jenisJalanList' => [],
+                'levelGangguanList' => [],
+                'faktorList' => [],
+                'kerawananList' => [],
+                
+                'active' => $table,
+                'meta' => config("smd_tables.dacol.{$table}", []),
+                'rows' => $dacolRows,
+                'displayColumns' => \App\Support\SmDacolData::displayColumns($table),
+                'availableSources' => \App\Support\SmDacolData::availableSources($table),
+                'filterUrl' => route('jalan_gangguan.index'),
+                'filterHiddenInputs' => '<input type="hidden" name="tab" value="'.$tab.'">',
+                'filterResetUrl' => route('jalan_gangguan.index', ['tab' => $tab]),
+            ], TerritoryIndexFilters::viewBundle($request)));
+        }
 
         $query = DB::table('data_gangguan')
-
             ->leftJoin('usm', 'data_gangguan.piket', '=', 'usm.id_usm')
-
             ->select(
-
                 'data_gangguan.*',
-
                 'usm.nama as usm_nama',
-
                 'usm.daerah as usm_daerah',
-
                 'usm.wilayah as usm_wilayah'
-
             );
 
-
-
         HierarchicalHelper::applyTerritoryScopeForTable($query, 'data_gangguan');
-
         $this->applyIndexFilters($query, $request);
 
 
@@ -160,20 +179,19 @@ class JalanGangguanController extends BaseController
 
 
 
+        $kerawananList = DB::table('data_gangguan')->whereNotNull('kerawanan')->where('kerawanan', '!=', '')->distinct()->orderBy('kerawanan')->pluck('kerawanan');
+
+
+
         return view('jalan_gangguan.index', array_merge([
-
             'pageTitle' => 'Data Gangguan Jalan',
-
+            'tab' => $tab,
             'data' => $data,
-
             'jenisJalanList' => $jenisJalanList,
-
             'levelGangguanList' => $levelGangguanList,
-
             'faktorList' => $faktorList,
-
+            'kerawananList' => $kerawananList,
         ], TerritoryIndexFilters::viewBundle($request)));
-
     }
 
     public function export(Request $request, string $format = 'excel')

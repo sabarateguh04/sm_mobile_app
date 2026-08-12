@@ -164,14 +164,14 @@ final class RoleMutationPolicy
     $isInteraksi = $table === 'layanan_masyarakat' || isset($row->id_interaksi);
 
     if ($isInteraksi) {
-      if (property_exists($row, 'id_usm') && $row->id_usm !== '' && $row->id_usm !== null && (int) $row->id_usm > 0) {
+      if (isset($row->id_usm) && $row->id_usm !== '' && $row->id_usm !== null && (int) $row->id_usm > 0) {
         return (int) $row->id_usm;
       }
 
       return null;
     }
 
-    if (property_exists($row, 'piket') && $row->piket !== '' && $row->piket !== null) {
+    if (isset($row->piket) && $row->piket !== '' && $row->piket !== null) {
       $piket = trim((string) $row->piket);
       if ($piket !== '') {
         if (is_numeric($piket) && (int) $piket > 0) {
@@ -191,7 +191,7 @@ final class RoleMutationPolicy
       }
     }
 
-    if (property_exists($row, 'id_usm') && $row->id_usm !== '' && $row->id_usm !== null && (int) $row->id_usm > 0) {
+    if (isset($row->id_usm) && $row->id_usm !== '' && $row->id_usm !== null && (int) $row->id_usm > 0) {
       return (int) $row->id_usm;
     }
 
@@ -231,7 +231,7 @@ final class RoleMutationPolicy
             return $table;
         }
 
-        if (property_exists($row, 'id_interaksi')) {
+        if (isset($row->id_interaksi)) {
             return 'layanan_masyarakat';
         }
 
@@ -355,7 +355,7 @@ final class RoleMutationPolicy
       return true;
     }
 
-    if (! property_exists($row, 'piket')) {
+    if (! isset($row->piket)) {
       return false;
     }
 

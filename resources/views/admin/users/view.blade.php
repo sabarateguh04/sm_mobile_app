@@ -55,10 +55,10 @@
                                         @endif
                                     </td>
                                 </tr>
-                                <tr><th>Induk organisasi</th><td>{{ $user->induk_pemerintahan ?: '—' }}</td></tr>
-                                <tr><th>Organisasi pusat / daerah</th><td>{{ $user->pemerintahan_daerah ?: '—' }}</td></tr>
+                                <tr><th>Instansi</th><td>{{ $user->induk_pemerintahan ?: '—' }}</td></tr>
+                                <tr><th>Organisasi</th><td>{{ $user->pemerintahan_daerah ?: '—' }}</td></tr>
                                 @if(!empty($user->organisasi_daerah))
-                                    <tr><th>Sub organisasi daerah</th><td>{{ $user->organisasi_daerah }}</td></tr>
+                                    <tr><th>Sub organisasi</th><td>{{ $user->organisasi_daerah }}</td></tr>
                                 @endif
                                 <tr><th>Unit kerja</th><td>{{ $user->unit_kerja ?: '—' }}</td></tr>
                                 <tr><th>Username</th><td>{{ $user->username }}</td></tr>
@@ -82,9 +82,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
-@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())<th>Polda</th>
-@endif
+                                    @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                        <th>Polda</th>
+                                    @endif
                                     <td>
                                         {{ $user->daerah ?: '—' }}
                                         @if($user->daerah && ! $user->daerah_in_master)

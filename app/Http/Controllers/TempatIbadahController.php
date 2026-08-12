@@ -39,6 +39,10 @@ class TempatIbadahController extends BaseController
             });
         }
 
+        if ($request->filled('kategori')) {
+            $query->where('t.kattempat', $request->kategori);
+        }
+
         $data = $query->orderByDesc('t.tanggal')->paginate($request->get('per_page', 20))->withQueryString();
 
         return view('tempatibadah.index', array_merge([
@@ -78,6 +82,10 @@ class TempatIbadahController extends BaseController
                   ->orWhere('t.kattempat', 'like', "%{$s}%")
                   ->orWhere('t.lokasi', 'like', "%{$s}%");
             });
+        }
+
+        if ($request->filled('kategori')) {
+            $query->where('t.kattempat', $request->kategori);
         }
 
         return $query->orderByDesc('t.tanggal');

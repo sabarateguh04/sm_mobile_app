@@ -35,6 +35,12 @@ class PetugasTrackingController extends Controller
                 $table->timestamps();
             });
         }
+
+        if (Schema::hasTable('petugas_tracking') && !Schema::hasColumn('petugas_tracking', 'fcm_token')) {
+            Schema::table('petugas_tracking', function (Blueprint $table) {
+                $table->string('fcm_token')->nullable()->after('status');
+            });
+        }
     }
 
     /**
@@ -54,6 +60,7 @@ class PetugasTrackingController extends Controller
             ?? Usm::where('email', $username)->first();
 
         if (!$user || !UsmPasswordVerifier::verify($user, $password)) {
+            \Illuminate\Support\Facades\Log::error('Login failed for user: ' . $username);
             return response()->json([
                 'status' => 'error',
                 'message' => 'Username atau password salah.'
@@ -118,8 +125,18 @@ class PetugasTrackingController extends Controller
 
         return response()->json([
             'userId' => (int) $user->id_usm,
+            'username' => $user->username,
+            'email' => $user->email,
             'nama' => $user->nama,
+            'notelp' => $user->notelp,
             'url_image' => $url_image,
+            'nrp_nip_nik' => $user->nrp_nip_nik,
+            'induk_pemerintahan' => $user->induk_pemerintahan,
+            'pemerintahan_daerah' => $user->pemerintahan_daerah,
+            'organisasi_daerah' => $user->organisasi_daerah,
+            'unit_kerja' => $user->unit_kerja,
+            'daerah' => $user->daerah,
+            'wilayah' => $user->wilayah,
             'lat' => $tracking ? (float) $tracking->lat : null,
             'lng' => $tracking ? (float) $tracking->lng : null,
             'status' => $tracking ? strtoupper($tracking->status) : 'OFFLINE',
@@ -169,6 +186,19 @@ class PetugasTrackingController extends Controller
                 'updated_at' => now(),
             ]
         );
+
+        if (Schema::hasTable('tbl_location_log_mobile')) {
+            DB::table('tbl_location_log_mobile')->insert([
+                'user_id' => $userId,
+                'lat' => $lat,
+                'lng' => $lng,
+                'ctddate' => $ctddate,
+                'ctdtime' => $ctdtime,
+                'datetime' => $ctddate . ' ' . $ctdtime,
+                'status' => $status,
+                'created_at' => now(),
+            ]);
+        }
 
         return response()->json([
             'ket' => 'data berhasil di update'
@@ -225,8 +255,48 @@ class PetugasTrackingController extends Controller
             ]
         );
 
+        if (Schema::hasTable('tbl_location_log_mobile')) {
+            DB::table('tbl_location_log_mobile')->insert([
+                'user_id' => $userId,
+                'lat' => $lat,
+                'lng' => $lng,
+                'ctddate' => $ctddate,
+                'ctdtime' => $ctdtime,
+                'datetime' => $last_updated,
+                'status' => $status,
+                'created_at' => now(),
+            ]);
+        }
+
         return response()->json([
             'ket' => 'data berhasil di update'
+        ]);
+    }
+
+    /**
+     * POST /api/save-fcm-token
+     */
+    public function saveFcmToken(Request $request)
+    {
+        $request->validate([
+            'userId' => 'required|integer',
+            'fcmToken' => 'required|string',
+        ]);
+
+        $userId = $request->input('userId');
+        $fcmToken = $request->input('fcmToken');
+
+        DB::table('petugas_tracking')->updateOrInsert(
+            ['user_id' => $userId],
+            [
+                'fcm_token' => $fcmToken,
+                'updated_at' => now(),
+            ]
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'FCM Token berhasil disimpan'
         ]);
     }
 }

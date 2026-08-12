@@ -36,11 +36,18 @@
 @endif
 
 <form action="{{ route('arusmudik.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
+    @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
     <div class="pmf-row">
-        @include('_partials.compact_filters.search', ['placeholder' => 'Cari data arus mudik...'])
+        @if($isOp)
+            @include('_partials.compact_filters.search', ['placeholder' => 'Pencarian...'])
+        @else
+            @include('_partials.compact_filters.search', ['placeholder' => 'Cari data arus mudik...'])
+            @include('_partials.compact_filters.territory')
+            @include('_partials.compact_filters.date_range', ['prefix' => 'arusmudik'])
+        @endif
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('arusmudik.index'),
-            'active' => request('search'),
+            'active' => request()->hasAny(['search', 'daerah', 'wilayah', 'tanggal_dari', 'tanggal_sampai']),
         ])
     </div>
 </form>
@@ -57,29 +64,64 @@
             <table class="w-full text-left min-w-[780px]">
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Profile Posko</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket / Nama</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Status Arus</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Dibuat</th>
+                    @if($isOp)
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Profile Posko</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket / Nama</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Status Arus</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Dibuat</th>
+                    @else
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+@endif
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Profile Posko</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket / Nama</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Status Arus</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Dibuat</th>
+                    @endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                 </tr></thead>
                 <tbody class="divide-y divide-slate-100">
                     @foreach($data as $item)
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->id_profileposko ?? '-' }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ isset($item->tanggal) ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
-                            <td class="px-3 py-2.5">
-                                <div class="text-[11px] font-medium text-slate-700">{{ $item->usm_nama ?? '-' }}</div>
-                                @if($item->piket)<div class="text-[10px] text-slate-400">{{ $item->piket }}</div>@endif
-                            </td>
-                            <td class="px-3 py-2.5">
-                                @if(!empty($item->statarus))
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->statarus }}</span>
-                                @else <span class="text-slate-400">-</span>@endif
-                            </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ isset($item->created_at) ? \Carbon\Carbon::parse($item->created_at)->locale('id')->translatedFormat('d F Y H:i') : '-' }}</td>
+                            @if($isOp)
+                                <td class="px-3 py-2.5 text-[11px] text-slate-700 font-semibold">{{ isset($item->tanggal) ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->id_profileposko ?? '-' }}</td>
+                                <td class="px-3 py-2.5">
+                                    <div class="text-[11px] font-medium text-slate-700">{{ $item->usm_nama ?? '-' }}</div>
+                                    @if($item->piket)<div class="text-[10px] text-slate-400">{{ $item->piket }}</div>@endif
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    @if(!empty($item->statarus))
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->statarus }}</span>
+                                    @else <span class="text-slate-400">-</span>@endif
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ isset($item->created_at) ? \Carbon\Carbon::parse($item->created_at)->locale('id')->translatedFormat('d F Y H:i') : '-' }}</td>
+                            @else
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ isset($item->tanggal) ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '—') }}</span>
+                                </td>
+@endif
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah))) : '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->id_profileposko ?? '-' }}</td>
+                                <td class="px-3 py-2.5">
+                                    <div class="text-[11px] font-medium text-slate-700">{{ $item->usm_nama ?? '-' }}</div>
+                                    @if($item->piket)<div class="text-[10px] text-slate-400">{{ $item->piket }}</div>@endif
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    @if(!empty($item->statarus))
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->statarus }}</span>
+                                    @else <span class="text-slate-400">-</span>@endif
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ isset($item->created_at) ? \Carbon\Carbon::parse($item->created_at)->locale('id')->translatedFormat('d F Y H:i') : '-' }}</td>
+                            @endif
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('arusmudik.show', $item->id_arusmudik) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none"><span class="material-symbols-outlined text-[18px]">visibility</span></a>

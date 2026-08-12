@@ -21,17 +21,36 @@
             <form action="{{ route('master.kl-unit-kerja.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Sub Org (induk) <span class="text-error">*</span></label>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Instansi <span class="text-error">*</span></label>
+                    <select id="instansi_id" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-primary focus:bg-white focus:ring-0 outline-none text-[13px] font-bold">
+                        <option value="">— Pilih Instansi —</option>
+                        @foreach($instansis as $inst)
+                            <option value="{{ $inst->id }}">{{ $inst->nama_unit }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Organisasi <span class="text-error">*</span></label>
+                    <select id="org_id" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-primary focus:bg-white focus:ring-0 outline-none text-[13px] font-bold">
+                        <option value="">— Pilih Organisasi —</option>
+                        @foreach($orgs as $org)
+                            <option value="{{ $org->id_org }}" data-instansi="{{ $org->instansi_id }}">{{ $org->nameorg }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Sub Organisasi (induk) <span class="text-error">*</span></label>
                     <input type="hidden" id="parent-id-value" name="parent_id" value="{{ old('parent_id', $preselectedParent ?? '') }}" required>
                     <div class="relative">
                     <input type="text" id="parent-id-select"
                            class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-primary focus:bg-white focus:ring-0 outline-none text-[12px] font-semibold uppercase @error('parent_id') border-error @enderror"
-                           placeholder="Ketik dan pilih Sub Org / Polda..."
+                           placeholder="Ketik dan pilih Sub Organisasi..."
                            autocomplete="off">
                     <div id="parent-id-options"
                          class="absolute left-0 right-0 z-20 mt-1 rounded-xl border border-slate-200 bg-white shadow-lg max-h-56 overflow-auto hidden"></div>
                     </div>
-                    <p id="parent-id-search-note" class="text-[10px] text-slate-400 mt-1 mb-0">Ketik nama sub org lalu pilih dari daftar.</p>
+                    <p id="parent-id-search-note" class="text-[10px] text-slate-400 mt-1 mb-0">Ketik nama sub organisasi lalu pilih dari daftar.</p>
                     @error('parent_id') <p class="text-[11px] text-error mt-1 mb-0">{{ $message }}</p> @enderror
                 </div>
                 <div>
@@ -58,11 +77,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const hiddenInput = document.getElementById('parent-id-value');
     const dropdown = document.getElementById('parent-id-options');
     const note = document.getElementById('parent-id-search-note');
+
+    const instansiSelect = document.getElementById('instansi_id');
+    const orgSelect = document.getElementById('org_id');
+
     if (!displayInput || !hiddenInput || !dropdown) return;
 
     const options = [
         @foreach($resorts as $r)
-        { id: "{{ $r->id }}", text: "{{ strtoupper($r->resort_nama) }} — {{ strtoupper($r->daerah_nama) }}" },
+        { id: "{{ $r->id }}", text: "{{ strtoupper($r->resort_nama) }}", instansi: "{{ $r->instansi_id }}", org: "{{ $r->org_id }}" },
         @endforeach
     ];
     const textToId = new Map(options.map(function (item) { return [item.text.toLowerCase(), item.id]; }));
@@ -75,7 +98,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const renderOptions = function (keyword) {
         const kw = (keyword || '').toLowerCase().trim();
+        
+        // Filter by selected Instansi and Organisasi
+        const selInstansi = instansiSelect ? instansiSelect.value : '';
+        const selOrg = orgSelect ? orgSelect.value : '';
+
         const filtered = options.filter(function (item) {
+            if (selInstansi && item.instansi !== selInstansi) return false;
+            if (selOrg && item.org !== selOrg) return false;
             return kw === '' || item.text.toLowerCase().includes(kw);
         }).slice(0, 100);
 
@@ -134,10 +164,35 @@ document.addEventListener('DOMContentLoaded', function () {
             syncValue();
             if (!hiddenInput.value) {
                 e.preventDefault();
-                note.textContent = 'Pilih salah satu sub org dari daftar yang tersedia.';
+                note.textContent = 'Pilih salah satu sub organisasi dari daftar yang tersedia.';
                 displayInput.focus();
             }
         });
+    }
+
+    if (instansiSelect && orgSelect) {
+        const filterOrgs = () => {
+            const selectedInstansi = instansiSelect.value;
+            let hasVisible = false;
+            Array.from(orgSelect.options).forEach(opt => {
+                if (opt.value === '') return;
+                if (opt.dataset.instansi === selectedInstansi) {
+                    opt.style.display = '';
+                    hasVisible = true;
+                } else {
+                    opt.style.display = 'none';
+                    if (orgSelect.value === opt.value) orgSelect.value = '';
+                }
+            });
+            renderOptions(displayInput.value);
+            syncValue();
+        };
+        instansiSelect.addEventListener('change', filterOrgs);
+        orgSelect.addEventListener('change', () => {
+            renderOptions(displayInput.value);
+            syncValue();
+        });
+        filterOrgs();
     }
 });
 </script>

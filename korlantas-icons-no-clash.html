@@ -1,0 +1,464 @@
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  
+  .container { padding: 24px; background: #ffffff; }
+  
+  .category { margin-bottom: 40px; }
+  .category-title {
+    font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 20px;
+    padding-bottom: 12px; border-bottom: 2px solid #e5e7eb;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  
+  .icon-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+    gap: 16px; 
+  }
+  
+  .icon-card {
+    background: #f9fafb; 
+    border: 1px solid #e5e7eb; 
+    border-radius: 12px;
+    padding: 20px; 
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  
+  .icon-card:hover {
+    border-color: #d1d5db; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
+  }
+  
+  .icon-wrapper {
+    width: 76px; 
+    height: 76px; 
+    margin: 0 auto 14px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+  }
+  
+  .icon-wrapper svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .icon-name { 
+    font-size: 13px; 
+    font-weight: 600; 
+    color: #111827; 
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  
+  .icon-code { 
+    font-size: 10px; 
+    color: #6b7280; 
+    background: #f3f4f6; 
+    padding: 4px 8px; 
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  
+  .icon-animation {
+    font-size: 10px; 
+    color: #fff; 
+    font-weight: 700; 
+    margin-top: 6px;
+    padding: 4px 10px; 
+    border-radius: 4px; 
+    display: inline-block;
+  }
+  
+  .anim-blink { 
+    animation: blink 1.2s infinite;
+  }
+  
+  .anim-shake { 
+    animation: shake 0.5s infinite;
+  }
+  
+  .anim-bounce { 
+    animation: bounce-icon 0.8s infinite;
+  }
+  
+  @keyframes blink {
+    0%, 49%, 100% { opacity: 1; }
+    50%, 99% { opacity: 0.4; }
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+  }
+  
+  @keyframes bounce-icon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+</style>
+
+<div class="container">
+  <!-- TRANSPORT HUB -->
+  <div class="category">
+    <div class="category-title">🚌 Transportasi (Transport Hub)</div>
+    <div class="icon-grid">
+      <!-- Terminal Bus -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s1"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <rect x="20" y="32" width="60" height="32" rx="6" fill="#FF8C00" stroke="#E67E00" stroke-width="2" filter="url(#s1)"/>
+            <rect x="26" y="38" width="11" height="10" rx="1" fill="#FFF" opacity="0.9"/>
+            <rect x="41" y="38" width="11" height="10" rx="1" fill="#FFF" opacity="0.9"/>
+            <rect x="56" y="38" width="11" height="10" rx="1" fill="#FFF" opacity="0.9"/>
+            <circle cx="28" cy="70" r="6" fill="#2D1810" stroke="#1A0F0A" stroke-width="1.5"/>
+            <circle cx="72" cy="70" r="6" fill="#2D1810" stroke="#1A0F0A" stroke-width="1.5"/>
+            <rect x="36" y="66" width="28" height="3" fill="#E67E00"/>
+          </svg>
+        </div>
+        <div class="icon-name">Terminal Bus</div>
+        <div class="icon-code">transport-hub</div>
+      </div>
+      
+      <!-- Stasiun Kereta -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s2"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <rect x="16" y="28" width="18" height="36" rx="3" fill="#E67E00" stroke="#D46A00" stroke-width="2" filter="url(#s2)"/>
+            <rect x="41" y="28" width="18" height="36" rx="3" fill="#FF8C00" stroke="#D46A00" stroke-width="2"/>
+            <rect x="66" y="28" width="18" height="36" rx="3" fill="#E67E00" stroke="#D46A00" stroke-width="2"/>
+            <line x1="15" y1="68" x2="85" y2="68" stroke="#D46A00" stroke-width="2.5"/>
+            <circle cx="24" cy="76" r="4" fill="#2D1810"/>
+            <circle cx="76" cy="76" r="4" fill="#2D1810"/>
+          </svg>
+        </div>
+        <div class="icon-name">Stasiun Kereta</div>
+        <div class="icon-code">train-station</div>
+      </div>
+      
+      <!-- Bandar Udara -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s3"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <path d="M50 26 L62 42 L50 48 L38 42 Z" fill="#FF8C00" stroke="#E67E00" stroke-width="2" filter="url(#s3)"/>
+            <rect x="44" y="48" width="12" height="22" fill="#E67E00" stroke="#D46A00" stroke-width="1.5"/>
+            <line x1="22" y1="50" x2="78" y2="50" stroke="#FF8C00" stroke-width="3" opacity="0.9"/>
+            <circle cx="30" cy="50" r="2" fill="#FFF" opacity="0.8"/>
+            <circle cx="50" cy="50" r="2" fill="#FFF" opacity="0.8"/>
+            <circle cx="70" cy="50" r="2" fill="#FFF" opacity="0.8"/>
+          </svg>
+        </div>
+        <div class="icon-name">Bandar Udara</div>
+        <div class="icon-code">airport</div>
+      </div>
+      
+      <!-- Pelabuhan -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s4"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <polygon points="50,28 68,48 32,48" fill="#FF8C00" stroke="#E67E00" stroke-width="2" filter="url(#s4)"/>
+            <rect x="22" y="48" width="56" height="16" fill="#E67E00" stroke="#D46A00" stroke-width="1.5"/>
+            <line x1="20" y1="64" x2="80" y2="64" stroke="#0EA5E9" stroke-width="2.5"/>
+            <path d="M25 66 Q25 72 35 76 Q50 80 65 76 Q75 72 75 66" fill="#0EA5E9" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="icon-name">Pelabuhan</div>
+        <div class="icon-code">port</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PUBLIC FACILITIES -->
+  <div class="category">
+    <div class="category-title">🏥 Fasilitas Umum (Public Facilities)</div>
+    <div class="icon-grid">
+      <!-- Posko -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s5"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <polygon points="50,24 64,34 64,70 36,70 36,34" fill="#10B981" stroke="#059669" stroke-width="2" filter="url(#s5)"/>
+            <rect x="28" y="38" width="12" height="14" fill="#FFF" opacity="0.85"/>
+            <rect x="44" y="38" width="12" height="14" fill="#FFF" opacity="0.85"/>
+            <rect x="60" y="38" width="8" height="14" fill="#FFF" opacity="0.85"/>
+            <path d="M50 24 L58 34 L42 34 Z" fill="#059669" stroke="#047857" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="icon-name">Posko / Pos</div>
+        <div class="icon-code">service-post</div>
+      </div>
+      
+      <!-- Objek Wisata -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s6"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <path d="M30 62 Q50 38 70 62 L70 72 Q50 78 30 72 Z" fill="#10B981" stroke="#059669" stroke-width="2" filter="url(#s6)"/>
+            <circle cx="42" cy="50" r="4" fill="#FFF" opacity="0.9"/>
+            <circle cx="58" cy="50" r="4" fill="#FFF" opacity="0.9"/>
+            <polygon points="50,28 58,40 42,40" fill="#FBBF24" stroke="#F59E0B" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="icon-name">Objek Wisata</div>
+        <div class="icon-code">tourism</div>
+      </div>
+      
+      <!-- Tempat Ibadah -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s7"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <polygon points="50,22 70,50 62,50 62,72 38,72 38,50 30,50" fill="#10B981" stroke="#059669" stroke-width="2" filter="url(#s7)"/>
+            <line x1="46" y1="52" x2="46" y2="72" stroke="#FFF" stroke-width="2" opacity="0.85"/>
+            <line x1="54" y1="52" x2="54" y2="72" stroke="#FFF" stroke-width="2" opacity="0.85"/>
+            <rect x="42" y="58" width="16" height="7" fill="#FFF" opacity="0.85"/>
+          </svg>
+        </div>
+        <div class="icon-name">Tempat Ibadah</div>
+        <div class="icon-code">worship</div>
+      </div>
+      
+      <!-- Rumah Sakit -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s8"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <rect x="26" y="32" width="48" height="44" rx="4" fill="#10B981" stroke="#059669" stroke-width="2" filter="url(#s8)"/>
+            <rect x="44" y="42" width="3" height="18" fill="#FFF" opacity="0.95"/>
+            <rect x="36" y="50" width="18" height="3" fill="#FFF" opacity="0.95"/>
+            <circle cx="50" cy="28" r="5" fill="#059669" stroke="#FFF" stroke-width="1.5" opacity="0.9"/>
+          </svg>
+        </div>
+        <div class="icon-name">Faskes / Rumah Sakit</div>
+        <div class="icon-code">hospital</div>
+      </div>
+      
+      <!-- CCTV Live -->
+      <div class="icon-card">
+        <div class="icon-wrapper anim-blink">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s9"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <rect x="26" y="30" width="48" height="32" rx="4" fill="#10B981" stroke="#059669" stroke-width="2" filter="url(#s9)"/>
+            <circle cx="50" cy="46" r="10" fill="#FFF" opacity="0.85"/>
+            <circle cx="50" cy="46" r="6" fill="#059669" stroke="#047857" stroke-width="1"/>
+            <rect x="32" y="68" width="10" height="12" fill="#10B981" stroke="#059669" stroke-width="1"/>
+            <rect x="58" y="68" width="10" height="12" fill="#10B981" stroke="#059669" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="icon-name">CCTV Live</div>
+        <div class="icon-code">cctv</div>
+        <div class="icon-animation" style="background:#059669;">⚡ BLINK</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPERATIONS -->
+  <div class="category">
+    <div class="category-title">👮 Operasi & Pemantauan (Operations)</div>
+    <div class="icon-grid">
+      <!-- Turjagwali -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s10"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <circle cx="50" cy="38" r="11" fill="#7C3AED" stroke="#6D28D9" stroke-width="2" filter="url(#s10)"/>
+            <rect x="43" y="52" width="14" height="20" rx="2" fill="#7C3AED" stroke="#6D28D9" stroke-width="1.5"/>
+            <line x1="36" y1="60" x2="26" y2="70" stroke="#7C3AED" stroke-width="3"/>
+            <line x1="64" y1="60" x2="74" y2="70" stroke="#7C3AED" stroke-width="3"/>
+            <circle cx="50" cy="38" r="5" fill="#FFF" opacity="0.8"/>
+          </svg>
+        </div>
+        <div class="icon-name">Turjagwali</div>
+        <div class="icon-code">traffic-officer</div>
+      </div>
+      
+      <!-- Audit Arus -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s11"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <line x1="28" y1="68" x2="72" y2="68" stroke="#7C3AED" stroke-width="2.5" filter="url(#s11)"/>
+            <polyline points="32,62 42,42 54,54 68,32" fill="none" stroke="#7C3AED" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="32" cy="62" r="3" fill="#7C3AED"/>
+            <circle cx="42" cy="42" r="3" fill="#7C3AED"/>
+            <circle cx="68" cy="32" r="3" fill="#7C3AED"/>
+          </svg>
+        </div>
+        <div class="icon-name">Audit Arus</div>
+        <div class="icon-code">flow-analysis</div>
+      </div>
+      
+      <!-- PNP Angkutan -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s12"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <rect x="18" y="40" width="64" height="26" rx="4" fill="#7C3AED" stroke="#6D28D9" stroke-width="2" filter="url(#s12)"/>
+            <rect x="26" y="46" width="10" height="10" fill="#FFF" opacity="0.8"/>
+            <rect x="42" y="46" width="10" height="10" fill="#FFF" opacity="0.8"/>
+            <rect x="58" y="46" width="10" height="10" fill="#FFF" opacity="0.8"/>
+            <circle cx="28" cy="70" r="5" fill="#6D28D9"/>
+            <circle cx="72" cy="70" r="5" fill="#6D28D9"/>
+          </svg>
+        </div>
+        <div class="icon-name">PNP Angkutan</div>
+        <div class="icon-code">police-van</div>
+      </div>
+      
+      <!-- Tugas Opsdal -->
+      <div class="icon-card">
+        <div class="icon-wrapper anim-blink">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s13"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <circle cx="50" cy="50" r="16" fill="none" stroke="#7C3AED" stroke-width="2.5" filter="url(#s13)"/>
+            <circle cx="50" cy="50" r="10" fill="none" stroke="#7C3AED" stroke-width="1.5" opacity="0.7"/>
+            <circle cx="50" cy="32" r="3" fill="#7C3AED"/>
+            <circle cx="68" cy="50" r="3" fill="#7C3AED"/>
+            <circle cx="50" cy="68" r="3" fill="#7C3AED"/>
+            <circle cx="32" cy="50" r="3" fill="#7C3AED"/>
+          </svg>
+        </div>
+        <div class="icon-name">Tugas Opsdal / CAD</div>
+        <div class="icon-code">operations</div>
+        <div class="icon-animation" style="background:#7C3AED;">⚡ BLINK</div>
+      </div>
+      
+      <!-- Petugas Online -->
+      <div class="icon-card">
+        <div class="icon-wrapper anim-bounce">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s14"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <circle cx="50" cy="36" r="10" fill="#7C3AED" stroke="#6D28D9" stroke-width="2" filter="url(#s14)"/>
+            <path d="M36 52 Q36 60 50 65 Q64 60 64 52" fill="#7C3AED" stroke="#6D28D9" stroke-width="1.5"/>
+            <path d="M40 54 Q40 60 50 64 Q60 60 60 54" fill="#FFF" opacity="0.8"/>
+            <circle cx="50" cy="36" r="4" fill="#FFF" opacity="0.85"/>
+            <circle cx="72" cy="26" r="7" fill="#10B981" stroke="#059669" stroke-width="1.5" filter="url(#s14)"/>
+          </svg>
+        </div>
+        <div class="icon-name">Petugas Operator Online</div>
+        <div class="icon-code">operator-gps</div>
+        <div class="icon-animation" style="background:#7C3AED;">🎯 BOUNCE</div>
+      </div>
+      
+      <!-- Layanan Data -->
+      <div class="icon-card">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s15"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <circle cx="36" cy="42" r="8" fill="#7C3AED" stroke="#6D28D9" stroke-width="1.5" filter="url(#s15)"/>
+            <circle cx="50" cy="36" r="8" fill="#7C3AED" stroke="#6D28D9" stroke-width="1.5"/>
+            <circle cx="64" cy="42" r="8" fill="#7C3AED" stroke="#6D28D9" stroke-width="1.5"/>
+            <circle cx="42" cy="60" r="8" fill="#7C3AED" stroke="#6D28D9" stroke-width="1.5"/>
+            <circle cx="58" cy="60" r="8" fill="#7C3AED" stroke="#6D28D9" stroke-width="1.5"/>
+            <line x1="36" y1="50" x2="50" y2="44" stroke="#FFF" stroke-width="1.5" opacity="0.7"/>
+            <line x1="64" y1="50" x2="50" y2="44" stroke="#FFF" stroke-width="1.5" opacity="0.7"/>
+            <line x1="50" y1="44" x2="42" y2="52" stroke="#FFF" stroke-width="1.5" opacity="0.7"/>
+            <line x1="50" y1="44" x2="58" y2="52" stroke="#FFF" stroke-width="1.5" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="icon-name">Layanan Data</div>
+        <div class="icon-code">data-service</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCIDENTS -->
+  <div class="category">
+    <div class="category-title">🚨 Kejadian & Gangguan (Incidents)</div>
+    <div class="icon-grid">
+      <!-- Gangguan Jalan -->
+      <div class="icon-card">
+        <div class="icon-wrapper anim-shake">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s16"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <polygon points="50,26 72,70 28,70" fill="#EF4444" stroke="#DC2626" stroke-width="2" filter="url(#s16)"/>
+            <polygon points="50,34 68,66 32,66" fill="#FCA5A5" opacity="0.6"/>
+            <text x="50" y="63" font-size="28" text-anchor="middle" fill="#FFF" font-weight="bold" opacity="0.9">!</text>
+          </svg>
+        </div>
+        <div class="icon-name">Gangguan Jalan</div>
+        <div class="icon-code">road-hazard</div>
+        <div class="icon-animation" style="background:#EF4444;">🌊 SHAKE</div>
+      </div>
+      
+      <!-- Contingency -->
+      <div class="icon-card">
+        <div class="icon-wrapper anim-blink">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s17"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <rect x="24" y="28" width="52" height="48" rx="4" fill="#EF4444" stroke="#DC2626" stroke-width="2" filter="url(#s17)"/>
+            <circle cx="50" cy="40" r="8" fill="#FFF" opacity="0.9"/>
+            <rect x="42" y="56" width="4" height="14" fill="#FFF" opacity="0.9"/>
+            <rect x="54" y="56" width="4" height="14" fill="#FFF" opacity="0.9"/>
+            <path d="M32 62 L50 74 L68 62" fill="#FFF" opacity="0.9"/>
+          </svg>
+        </div>
+        <div class="icon-name">Contingency / Darurat</div>
+        <div class="icon-code">emergency</div>
+        <div class="icon-animation" style="background:#EF4444;">⚡ BLINK</div>
+      </div>
+      
+      <!-- Traffic Stuck -->
+      <div class="icon-card">
+        <div class="icon-wrapper anim-shake">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s18"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <rect x="18" y="38" width="64" height="32" rx="4" fill="#EF4444" stroke="#DC2626" stroke-width="2" filter="url(#s18)"/>
+            <path d="M36 50 L50 35 L64 50" fill="#FCA5A5" opacity="0.8"/>
+            <line x1="50" y1="35" x2="50" y2="54" stroke="#FFF" stroke-width="2.5" opacity="0.85"/>
+            <circle cx="28" cy="68" r="5" fill="#DC2626"/>
+            <circle cx="72" cy="68" r="5" fill="#DC2626"/>
+          </svg>
+        </div>
+        <div class="icon-name">Traffic Stuck / Kemacetan</div>
+        <div class="icon-code">traffic-jam</div>
+        <div class="icon-animation" style="background:#EF4444;">🌊 SHAKE</div>
+      </div>
+    </div>
+  </div>
+</div>

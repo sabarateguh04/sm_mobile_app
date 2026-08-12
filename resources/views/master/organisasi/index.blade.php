@@ -79,6 +79,7 @@
                 <thead>
                     <tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-14">#</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-48">Instansi</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama Organisasi</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center w-28">Sub</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right w-36">Aksi</th>
@@ -92,10 +93,10 @@
                                 {{ $loop->iteration + ($org->currentPage() - 1) * $org->perPage() }}
                             </td>
                             <td class="px-3 py-2.5">
+                                <p class="text-[11px] text-slate-600 m-0 uppercase">{{ $o->instansi_id ? ($instansiMap[$o->instansi_id] ?? '-') : '-' }}</p>
+                            </td>
+                            <td class="px-3 py-2.5">
                                 <p class="text-[13px] font-bold text-slate-800 m-0 uppercase tracking-wide">{{ strtoupper($o->nameorg) }}</p>
-                                @if(!empty($o->singkatan))
-                                    <p class="text-[10px] text-slate-400 m-0 mt-0.5 uppercase">{{ strtoupper($o->singkatan) }}</p>
-                                @endif
                             </td>
                             <td class="px-3 py-2.5 text-center">
                                 <a href="{{ route('master.pusat.sub', $o->id_org) }}"

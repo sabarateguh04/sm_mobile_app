@@ -115,6 +115,13 @@ class ProfileController extends Controller
 
         $klForm = $this->profileUsesKlDaerahMaster($user);
 
+        if (\App\Helpers\MenuHelper::isExecutiveKabKotaUser($user)) {
+            $request->merge([
+                'daerah' => $user->daerah ?? '',
+                'wilayah' => $user->wilayah ?? '',
+            ]);
+        }
+
         if (! $request->filled('daerah')) {
             $request->merge(['daerah' => '', 'wilayah' => '']);
         }

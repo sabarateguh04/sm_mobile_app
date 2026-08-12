@@ -20,32 +20,28 @@ class MasterKlResortController extends Controller
             abort(404);
         }
 
-        $daerahs = Schema::hasTable('master_kl_daerah')
-            ? DB::table('master_kl_daerah')->orderBy('nama')->get(['id', 'nama'])
-            : collect();
+
+
+        $instansis = DB::table('master_pemerintahan_instansi')->orderBy('nama_unit')->pluck('nama_unit', 'id');
+        $orgs = DB::table('org')->orderBy('nameorg')->pluck('nameorg', 'id_org');
 
         $q = DB::table('master_kl_resort as r')
-            ->join('master_kl_daerah as d', 'd.id', '=', 'r.parent_id')
-            ->select('r.id', 'r.nama', 'r.parent_id', 'd.nama as daerah_nama')
-            ->orderBy('d.nama')
+            ->select('r.id', 'r.nama', 'r.instansi_id', 'r.org_id')
             ->orderBy('r.nama');
 
         if ($request->filled('search')) {
             $s = $request->search;
             $q->where(function ($qq) use ($s) {
-                $qq->where('r.nama', 'like', "%{$s}%")
-                    ->orWhere('d.nama', 'like', "%{$s}%");
+                $qq->where('r.nama', 'like', "%{$s}%");
             });
         }
 
-        if ($request->filled('parent_id')) {
-            $q->where('r.parent_id', $request->parent_id);
-        }
+
 
         $perPage = max(1, (int) $request->get('per_page', 10));
         $rows = $q->paginate($perPage)->withQueryString();
 
-        return view('master.kl_resort.index', compact('rows', 'daerahs'));
+        return view('master.kl_resort.index', compact('rows', 'instansis', 'orgs'));
     }
 
     public function create(Request $request)
@@ -53,10 +49,10 @@ class MasterKlResortController extends Controller
         if (! Schema::hasTable('master_kl_resort')) {
             abort(404);
         }
-        $daerahs = DB::table('master_kl_daerah')->orderBy('nama')->get();
-        $preselectedParent = $request->query('parent_id');
+        $instansis = DB::table('master_pemerintahan_instansi')->orderBy('nama_unit')->get();
+        $orgs = DB::table('org')->orderBy('nameorg')->get();
 
-        return view('master.kl_resort.create', compact('daerahs', 'preselectedParent'));
+        return view('master.kl_resort.create', compact('instansis', 'orgs'));
     }
 
     public function store(Request $request)
@@ -67,20 +63,21 @@ class MasterKlResortController extends Controller
 
         $validated = $request->validate([
             'nama' => ['required', 'string', 'max:255'],
-            'parent_id' => ['required', 'integer', 'exists:master_kl_daerah,id'],
+            'instansi_id' => ['required', 'integer'],
+            'org_id' => ['required', 'integer'],
         ]);
 
         DB::table('master_kl_resort')->insert([
             'nama' => $this->normalizeName($validated['nama']),
-            'parent_id' => $validated['parent_id'],
+            'parent_id' => null,
+            'instansi_id' => $validated['instansi_id'],
+            'org_id' => $validated['org_id'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         $redirect = route('master.kl-resort.index');
-        if ($request->filled('parent_id')) {
-            $redirect .= '?'.http_build_query(['parent_id' => $request->parent_id]);
-        }
+
 
         return redirect()->to($redirect)->with('success', 'Data sub organisasi berhasil ditambahkan.');
     }
@@ -96,9 +93,10 @@ class MasterKlResortController extends Controller
             abort(404);
         }
 
-        $daerahs = DB::table('master_kl_daerah')->orderBy('nama')->get();
+        $instansis = DB::table('master_pemerintahan_instansi')->orderBy('nama_unit')->get();
+        $orgs = DB::table('org')->orderBy('nameorg')->get();
 
-        return view('master.kl_resort.edit', compact('row', 'daerahs'));
+        return view('master.kl_resort.edit', compact('row', 'instansis', 'orgs'));
     }
 
     public function update(Request $request, string $id)
@@ -113,16 +111,18 @@ class MasterKlResortController extends Controller
 
         $validated = $request->validate([
             'nama' => ['required', 'string', 'max:255'],
-            'parent_id' => ['required', 'integer', 'exists:master_kl_daerah,id'],
+            'instansi_id' => ['required', 'integer'],
+            'org_id' => ['required', 'integer'],
         ]);
 
         DB::table('master_kl_resort')->where('id', $id)->update([
             'nama' => $this->normalizeName($validated['nama']),
-            'parent_id' => $validated['parent_id'],
+            'instansi_id' => $validated['instansi_id'],
+            'org_id' => $validated['org_id'],
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('master.kl-resort.index', ['parent_id' => $validated['parent_id']])
+        return redirect()->route('master.kl-resort.index')
             ->with('success', 'Data sub organisasi berhasil diperbarui.');
     }
 

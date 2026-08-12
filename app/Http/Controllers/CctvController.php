@@ -139,7 +139,7 @@ class CctvController extends LegacySboOperasionalController
     {
         return $query
             ->leftJoin('usm', $this->tableName.'.piket', '=', 'usm.id_usm')
-            ->select($this->tableName.'.*', 'usm.nama as petugas_nama');
+            ->select($this->tableName.'.*', 'usm.nama as petugas_nama', 'usm.daerah', 'usm.wilayah');
     }
 
     public function index(Request $request)
@@ -490,7 +490,7 @@ class CctvController extends LegacySboOperasionalController
     {
         $query = DB::table($this->tableName.' as t')
             ->leftJoin('usm', 'usm.id_usm', '=', 't.piket')
-            ->select('t.*', 'usm.nama as petugas_nama');
+            ->select('t.*', 'usm.nama as petugas_nama', 'usm.daerah', 'usm.wilayah');
 
         HierarchicalHelper::applyTerritoryScopeForTable($query, $this->tableName, 't');
 

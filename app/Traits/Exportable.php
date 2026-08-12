@@ -26,8 +26,20 @@ trait Exportable
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time', '300');
 
+        // Determine if data is a single record / individual
+        $isSingle = false;
+        if (is_array($data) || $data instanceof \Countable || $data instanceof \Illuminate\Support\Collection) {
+            if (count($data) === 1) {
+                $isSingle = true;
+            }
+        } elseif (is_object($data) && !($data instanceof \Illuminate\Support\Collection)) {
+            $isSingle = true;
+        }
+
+        $finalOrientation = $isSingle ? 'portrait' : $orientation;
+
         $pdf = Pdf::loadView($view, compact('data', 'title'))
-            ->setPaper($paperSize, $orientation)
+            ->setPaper($paperSize, $finalOrientation)
             ->setOption('isRemoteEnabled', true);
         
         return $pdf->download("{$filename}.pdf");

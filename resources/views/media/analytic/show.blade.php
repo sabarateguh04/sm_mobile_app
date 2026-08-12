@@ -6,7 +6,8 @@
 @php
     $s = strtolower($data->sentimen ?? '');
     $sc = $s === 'positif' ? 'text-green-600 bg-green-50 border-green-200' : ($s === 'negatif' ? 'text-red-600 bg-red-50 border-red-200' : 'text-slate-500 bg-slate-100 border-slate-200');
-    $canMutate = ($canMutateRecord ?? false) && !($sboViewOnly ?? false);
+    $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user());
+    $canMutate = !($sboViewOnly ?? false) && ($isOp || ($canMutateRecord ?? false));
 @endphp
 <div class="w-full max-w-3xl mx-auto space-y-3">
     <div class="flex items-center gap-2 flex-wrap">
@@ -29,8 +30,19 @@
         </div>
         <div class="p-3 sm:p-4">
             <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ strtoupper($data->daerah ?: '—') }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ !empty($data->wilayah) ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah))) : '—' }}</dd>
+                
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? ($data->piket ?: '—') }}</dd>
                 
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Vol. Percakapan</dt>
                 <dd class="text-[14px] font-bold text-primary m-0">{{ number_format((int) ($data->vol_percakapan ?? 0), 0, ',', '.') }}</dd>

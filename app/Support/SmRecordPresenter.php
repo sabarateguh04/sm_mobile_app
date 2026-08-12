@@ -39,13 +39,23 @@ final class SmRecordPresenter
         return array_values(array_filter($cols, static fn ($c) => ! in_array($c, self::HIDDEN_COLUMNS, true)));
     }
 
-    public static function find(string $connection, string $table, int|string $id): ?object
+    public static function find(string $connection, string $table, int|string $id, string $pk = 'pk_ids'): ?object
     {
         if (! Schema::connection($connection)->hasTable($table)) {
             return null;
         }
 
-        return DB::connection($connection)->table($table)->where('pk_ids', $id)->first();
+        if (! Schema::connection($connection)->hasColumn($table, $pk)) {
+            if (Schema::connection($connection)->hasColumn($table, 'pk_ids')) {
+                $pk = 'pk_ids';
+            } elseif (Schema::connection($connection)->hasColumn($table, 'rowid')) {
+                $pk = 'rowid';
+            } else {
+                $pk = 'id';
+            }
+        }
+
+        return DB::connection($connection)->table($table)->where($pk, $id)->first();
     }
 
     public static function label(string $column): string

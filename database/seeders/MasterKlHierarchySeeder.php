@@ -15,52 +15,39 @@ use Illuminate\Support\Facades\Schema;
  */
 class MasterKlHierarchySeeder extends Seeder
 {
-    /**
-     * @var array<string, array<string, array<string, list<string>>>>
-     *     induk => [organisasi pusat => [organisasi daerah => [unit kerja, ...]]]
-     */
     protected array $hierarkiContoh = [
-        'Polri' => [
-            'Korlantas' => [
-                'PJR Induk Bitung' => [
-                    'Unit 1 PJR Induk Bitung',
-                ],
-            ],
-            'Polda Metro Jaya' => [
-                'Ditlantas Metro Jaya' => [
-                    'Subdit Gakkum',
-                    'Subdit LLAJR',
-                ],
-                'Polrestro Bekasi' => [
-                    'Satlantas Polrestro Bekasi',
-                ],
-            ],
-            'Polda Jawa Barat' => [
-                'Polres Cimahi' => [
-                    'Satlantas Polres Cimahi',
-                ],
-            ],
-            'Polda Jabar' => [
-                'Ditlantas Polda Jabar' => [
+        'POLRI' => [
+            'KORLANTAS' => [
+                'Kakorlantas' => [],
+                'Wakakorlantas' => [],
+                'Bagren' => [],
+                'Bagbinopsnal' => [],
+                'Bag SDM' => [],
+                'Bag Keuangan' => [],
+                'Ditregident' => [],
+                'Ditgakkum' => [],
+                'Ditkamsel' => [],
+                'Ditwal dan PJR' => [],
+                'NTMC Polri' => [],
+                'Ditlantas Polda' => [
+                    'Dirlantas',
+                    'Bagbinops',
                     'Subdit Regident',
+                    'Subdit Gakkum',
+                    'Subdit Kamsel',
+                    'Subdit Gakkum/PJR'
                 ],
-                'Pimpinan' => [],
-            ],
-            'Polda NTB' => [
-                'Polres Lombok' => ['Satlantas Polres Lombok'],
-                'Polres Lombok Tengah' => ['Satlantas Polres Lombok Tengah'],
-                'Polres Lombok Barat' => ['Satlantas Polres Lombok Barat'],
-                'Polres Mataram' => ['Satlantas Polres Mataram'],
-            ],
-            'Polda Bali' => [
-                'Polres Denpasar' => ['Satlantas Polres Denpasar'],
-                'Polres Badung' => ['Satlantas Polres Badung'],
-            ],
-            'Polda Jawa Timur' => [
-                'Polres Surabaya Kota' => ['Satlantas Polres Surabaya Kota'],
-                'Polres Malang Kota' => ['Satlantas Polres Malang Kota'],
-            ],
+                'Satlantas Polres/Polresta/Polrestabes' => [
+                    'Kasat Lantas',
+                    'Unit Regident',
+                    'Unit Gakkum',
+                    'Unit Turjawali',
+                    'Unit Kamsel',
+                    'SPKT/SIM/Samsat (sesuai organisasi)'
+                ]
+            ]
         ],
+
         'Kemendagri' => [
             'Pemprov Jawa Barat' => [
                 'Pemkab Cimahi' => [

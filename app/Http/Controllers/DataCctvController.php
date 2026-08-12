@@ -67,6 +67,7 @@ class DataCctvController extends BaseController
                 'owners' => collect(),
                 'brands' => collect(),
                 'fungsiList' => collect(),
+                'lokasiList' => collect(),
                 'sboViewOnly' => \App\Support\RoleMutationPolicy::deniesAllMutations(Auth::user()),
             ]);
         }
@@ -104,6 +105,7 @@ class DataCctvController extends BaseController
             'owners' => $this->ownerOptions(),
             'brands' => $this->brandOptions(),
             'fungsiList' => $this->fungsiOptions(),
+            'lokasiList' => $this->lokasiOptions(),
             'sboViewOnly' => \App\Support\RoleMutationPolicy::deniesAllMutations(Auth::user()),
         ], TerritoryIndexFilters::viewBundle($request)));
     }
@@ -314,6 +316,27 @@ class DataCctvController extends BaseController
         return $defaults->merge($fromDb)->unique()->values();
     }
 
+    /**
+     * @return \Illuminate\Support\Collection<int, string>
+     */
+    private function lokasiOptions()
+    {
+        $table = self::readTableForUser();
+        if (! Schema::hasTable($table) && ! Schema::hasView($table)) {
+            return collect();
+        }
+
+        $query = DB::table($table)
+            ->whereNotNull('lokasi')
+            ->where('lokasi', '!=', '');
+
+        if ($table === 'wil_datacctv' || $table === 'nas_datacctv') {
+            HierarchicalHelper::applyTerritoryScopeForTable($query, $table);
+        }
+
+        return $query->distinct()->orderBy('lokasi')->pluck('lokasi');
+    }
+
     private function validateInput(Request $request, bool $isUpdate = false): array
     {
         // SBO-REQ: Make latitude and longitude optional, even when uploading foto_fisik.
@@ -424,6 +447,10 @@ class DataCctvController extends BaseController
 
         if ($request->filled('owner')) {
             $query->where($prefix.'.owner', $request->owner);
+        }
+
+        if ($request->filled('lokasi')) {
+            $query->where($prefix.'.lokasi', $request->lokasi);
         }
 
         if ($request->filled('brand')) {

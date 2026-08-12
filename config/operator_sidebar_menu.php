@@ -39,6 +39,7 @@ return [
                 ['path' => 'turjagwali', 'query' => ['sm_lv' => 'opsdal'], 'label' => 'Kodal Turjagwali', 'icon' => 'fas fa-map-marker-alt', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
                 ['path' => 'contigency', 'query' => ['sb_grp' => 'opsdal'], 'label' => 'Kodal Contigency', 'icon' => 'fas fa-ambulance', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
                 ['path' => 'trafficstuck', 'query' => ['sb_grp' => 'opsdal'], 'label' => 'Kodal Perlambatan', 'icon' => 'fas fa-gauge', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
+                ['path' => 'opsdal/cad', 'index_route' => 'opsdal.cad.index', 'label' => 'Kodal CAD Dispatch', 'icon' => 'fas fa-headset', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
             ],
         ],
         [

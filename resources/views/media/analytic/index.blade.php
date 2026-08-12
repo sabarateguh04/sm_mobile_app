@@ -4,8 +4,9 @@
 
 @section('content')
 @php
-    $preserveQuery = array_filter(request()->only(['search','tanggal_dari','tanggal_sampai','potensi']), fn($v) => $v !== '' && $v !== null);
-    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','potensi','search']);
+    $preserveQuery = array_filter(request()->only(['search','tanggal_dari','tanggal_sampai','daerah','wilayah','potensi']), fn($v) => $v !== '' && $v !== null);
+    $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','potensi','search']);
+    $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user());
 @endphp
 <div class="max-w-[1400px] mx-auto w-full space-y-4">
 
@@ -34,6 +35,7 @@
 
 <form action="{{ route('media.analytic.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     <div class="pmf-row">
+        @include('_partials.compact_filters.territory')
         @include('_partials.compact_filters.date_range', ['prefix' => 'media-analytic'])
         @include('_partials.compact_filters.select', ['name' => 'potensi', 'placeholder' => 'Potensi', 'options' => $potensiOptions ?? []])
         @include('_partials.compact_filters.search', ['placeholder' => 'Cari issue, topic, potensi...'])
@@ -59,11 +61,23 @@
             <table class="w-full text-left min-w-[700px]">
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Issue / Topic</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Vol. Percakapan</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Sentimen</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Potensi</th>
+                    @if($isOp)
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Rightissue</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Volpercakapan</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Sentimen</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Potensi</th>
+                    @else
+                        @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+                        @endif
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Rightissue</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Volpercakapan</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Sentimen</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Potensi</th>
+                    @endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                 </tr></thead>
                 <tbody class="divide-y divide-slate-100">
@@ -71,24 +85,49 @@
                         @php
                             $s = strtolower($item->sentimen ?? '');
                             $sc = $s === 'positif' ? 'text-green-600 bg-green-50 border-green-200' : ($s === 'negatif' ? 'text-red-600 bg-red-50 border-red-200' : 'text-slate-500 bg-slate-100 border-slate-200');
-                            $canMutate = !($sboViewOnly ?? false) && \App\Support\RoleMutationPolicy::canMutateOperationalRow(auth()->user(), $item, $tableName ?? 'mediaanalytic');
+                            $canMutate = !($sboViewOnly ?? false) && ($isOp || \App\Support\RoleMutationPolicy::canMutateOperationalRow(auth()->user(), $item, $tableName ?? 'mediaanalytic'));
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
-                            <td class="px-3 py-2.5">
-                                <a href="{{ route('media.analytic.show', $item->id_mediaanalytic) }}"
-                                   class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->issue_topic ?: 'Detail', 36) }}</a>
-                            </td>
-                            <td class="px-3 py-2.5 text-[12px] font-bold text-slate-800 text-right">{{ number_format((int)($item->vol_percakapan ?? 0), 0, ',', '.') }}</td>
-                            <td class="px-3 py-2.5">
-                                @if($item->sentimen)
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $sc }}">{{ $item->sentimen }}</span>
-                                @else
-                                    <span class="text-slate-400">—</span>
+                            @if($isOp)
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('media.analytic.show', $item->id_mediaanalytic) }}"
+                                       class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->issue_topic ?: 'Detail', 36) }}</a>
+                                </td>
+                                <td class="px-3 py-2.5 text-[12px] font-bold text-slate-800 text-right">{{ number_format((int)($item->vol_percakapan ?? 0), 0, ',', '.') }}</td>
+                                <td class="px-3 py-2.5">
+                                    @if($item->sentimen)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $sc }}">{{ $item->sentimen }}</span>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($item->potensi ?: '—', 28) }}</td>
+                            @else
+                                @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '—') }}</span>
+                                    </td>
                                 @endif
-                            </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($item->potensi ?: '—', 28) }}</td>
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah))) : '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('media.analytic.show', $item->id_mediaanalytic) }}"
+                                       class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->issue_topic ?: 'Detail', 36) }}</a>
+                                </td>
+                                <td class="px-3 py-2.5 text-[12px] font-bold text-slate-800 text-right">{{ number_format((int)($item->vol_percakapan ?? 0), 0, ',', '.') }}</td>
+                                <td class="px-3 py-2.5">
+                                    @if($item->sentimen)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $sc }}">{{ $item->sentimen }}</span>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($item->potensi ?: '—', 28) }}</td>
+                            @endif
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('media.analytic.show', $item->id_mediaanalytic) }}"

@@ -6,6 +6,7 @@
 @php
     $preserveQuery = array_filter(request()->only(['search','tanggal_dari','tanggal_sampai','daerah','wilayah','kategori_konten']), fn($v) => $v !== '' && $v !== null);
     $hasFilters = request()->hasAny(['tanggal_dari','tanggal_sampai','daerah','wilayah','kategori_konten','search']);
+    $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user());
 @endphp
 <div class="max-w-[1400px] mx-auto w-full space-y-4">
 
@@ -67,12 +68,25 @@
             <table class="w-full text-left min-w-[900px]">
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Wilayah</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Kategori</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tema</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Media</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Metode</th>
+                    @if($isOp)
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Kategori</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tema</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Media</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Linksmedia</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Metode</th>
+                    @else
+                        @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+                        @endif
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Kategori</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tema</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Media</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Linksmedia</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Metode</th>
+                    @endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                 </tr></thead>
                 <tbody class="divide-y divide-slate-100">
@@ -82,26 +96,59 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                            <td class="px-3 py-2.5">
-@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
-                                <span class="text-[10px] font-bold block" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '—') }}</span>
-@endif
-                                <span class="text-[9px] text-slate-400 uppercase">{{ $item->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah))) : '' }}</span>
-                            </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
-                            <td class="px-3 py-2.5">
-                                @if($item->kategori_konten)
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->kategori_konten }}</span>
-                                @else
-                                    <span class="text-slate-400">—</span>
+                            @if($isOp)
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                <td class="px-3 py-2.5">
+                                    @if($item->kategori_konten)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->kategori_konten }}</span>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('media.manage.show', $item->id_mediapublishing) }}"
+                                       class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->tema ?: 'Detail', 32) }}</a>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->media_publishing ?: '—' }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">
+                                    @if($item->links)
+                                        <a href="{{ str_starts_with($item->links, 'http') ? $item->links : 'http://'.$item->links }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline" title="{{ $item->links }}">{{ \Str::limit($item->links, 20) }}</a>
+                                    @else
+                                        —
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->metode ?: '—' }}</td>
+                            @else
+                                @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '—') }}</span>
+                                    </td>
                                 @endif
-                            </td>
-                            <td class="px-3 py-2.5">
-                                <a href="{{ route('media.manage.show', $item->id_mediapublishing) }}"
-                                   class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->tema ?: 'Detail', 32) }}</a>
-                            </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->media_publishing ?: '—' }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->metode ?: '—' }}</td>
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah))) : '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                <td class="px-3 py-2.5">
+                                    @if($item->kategori_konten)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->kategori_konten }}</span>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('media.manage.show', $item->id_mediapublishing) }}"
+                                       class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->tema ?: 'Detail', 32) }}</a>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->media_publishing ?: '—' }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">
+                                    @if($item->links)
+                                        <a href="{{ str_starts_with($item->links, 'http') ? $item->links : 'http://'.$item->links }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline" title="{{ $item->links }}">{{ \Str::limit($item->links, 20) }}</a>
+                                    @else
+                                        —
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->metode ?: '—' }}</td>
+                            @endif
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('media.manage.show', $item->id_mediapublishing) }}"

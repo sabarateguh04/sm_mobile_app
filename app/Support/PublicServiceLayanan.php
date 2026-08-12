@@ -102,6 +102,9 @@ class PublicServiceLayanan
 
     public static function reportPageTitle(string $operationalTitle): string
     {
+        if ($operationalTitle === 'Layanan Masyarakat (Interaksi)' || $operationalTitle === 'Layanan Masyarakat') {
+            return 'Report Layanan Masyarakat';
+        }
         return 'Report '.$operationalTitle;
     }
 

@@ -37,6 +37,7 @@ final class PermissionModuleRegistry
             || str_contains($p, 'contigen')
             || str_contains($p, 'turjag')
             || str_contains($p, 'gangguan')
+            || str_contains($p, 'opsdal')
             || str_contains($p, 'data_gangguan')) {
             return ['lalin', 'Lalu Lintas & Arus'];
         }

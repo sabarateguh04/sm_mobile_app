@@ -49,8 +49,8 @@ class TerritoryLevelForUsm
             return self::NASIONAL;
         }
 
-        // Polda (2) and Executive2 (6) are ALWAYS Provinsi level
-        if (in_array($matrixId, [2, 6], true)) {
+        // Polda (2), Executive2 (6), and Ditlantas (8) are ALWAYS Provinsi level
+        if (in_array($matrixId, [2, 6, 8], true)) {
             return self::PROVINSI;
         }
 

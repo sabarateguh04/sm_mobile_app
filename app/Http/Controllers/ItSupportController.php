@@ -44,6 +44,13 @@ class ItSupportController extends BaseController
             $query->where('i.statusticket', $request->status);
         }
 
+        if ($request->filled('tanggal_dari')) {
+            $query->whereDate('i.tanggal', '>=', $request->tanggal_dari);
+        }
+        if ($request->filled('tanggal_sampai')) {
+            $query->whereDate('i.tanggal', '<=', $request->tanggal_sampai);
+        }
+
         $data = $query->orderByDesc('i.tanggal')->paginate($request->get('per_page', 20))->withQueryString();
 
         $statuses = DB::table('itsupport')->select('statusticket')->distinct()->whereNotNull('statusticket')->pluck('statusticket');
@@ -58,6 +65,23 @@ class ItSupportController extends BaseController
 
     public function export(Request $request, string $format = 'excel')
     {
+        if (strtolower($format) === 'pdf' && $request->filled('id')) {
+            $data = DB::table('itsupport as i')
+                ->leftJoin('usm', 'usm.id_usm', '=', 'i.piket')
+                ->select('i.*', 'usm.nama as petugas_nama', 'usm.wilayah as petugas_wilayah', 'usm.daerah as petugas_daerah')
+                ->where('i.id_itsupport', $request->id)
+                ->first();
+
+            if ($data) {
+                $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('itsupport.pdf', compact('data'))
+                    ->setPaper('a4', 'portrait')
+                    ->setOption('isRemoteEnabled', true);
+                
+                $filename = 'itsupport_' . $data->id_itsupport . '_' . date('Y-m-d') . '.pdf';
+                return $pdf->download($filename);
+            }
+        }
+
         return $this->exportIndexQuery(
             $request,
             $format,
@@ -91,6 +115,13 @@ class ItSupportController extends BaseController
 
         if ($request->filled('status')) {
             $query->where('i.statusticket', $request->status);
+        }
+
+        if ($request->filled('tanggal_dari')) {
+            $query->whereDate('i.tanggal', '>=', $request->tanggal_dari);
+        }
+        if ($request->filled('tanggal_sampai')) {
+            $query->whereDate('i.tanggal', '<=', $request->tanggal_sampai);
         }
 
         return $query->orderByDesc('i.tanggal');

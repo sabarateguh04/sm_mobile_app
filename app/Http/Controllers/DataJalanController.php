@@ -87,7 +87,30 @@ class DataJalanController extends BaseController
 
     public function index(Request $request)
     {
-        $tab = $request->get('tab', 'rinci');
+        $tab = $request->get('tab', 'dacol_prasjal');
+
+        if ($tab === 'dacol_prasjal') {
+            $table = 'sm_dacol_prasjal';
+            $dacolRows = \App\Support\SmDacolData::paginated($table, $request, 20);
+            return view('data_jalan.index', array_merge([
+                'pageTitle' => $this->reportPageTitle(),
+                'tab' => $tab,
+                'data' => collect(), // dummy
+                'tabulasi' => collect(),
+                'jenisJalanList' => collect(),
+                'prasjalList' => [],
+                'sboViewOnly' => true,
+                
+                'active' => $table,
+                'meta' => config("smd_tables.dacol.{$table}", []),
+                'rows' => $dacolRows,
+                'displayColumns' => \App\Support\SmDacolData::displayColumns($table),
+                'availableSources' => \App\Support\SmDacolData::availableSources($table),
+                'filterUrl' => route('t_datajalan.index'),
+                'filterHiddenInputs' => '<input type="hidden" name="tab" value="'.$tab.'">',
+                'filterResetUrl' => route('t_datajalan.index', ['tab' => $tab]),
+            ], TerritoryIndexFilters::viewBundle($request)));
+        }
 
         $query = $this->baseQuery();
         HierarchicalHelper::applyTerritoryScopeForTable($query, 't_datajalan');
@@ -132,9 +155,9 @@ class DataJalanController extends BaseController
 
         return view('data_jalan.index', array_merge([
             'pageTitle' => $this->reportPageTitle(),
+            'tab' => $tab,
             'data' => $data,
             'tabulasi' => $tabulasi,
-            'tab' => $tab,
             'jenisJalanList' => $jenisJalanList,
             'prasjalList' => $this->prasjalOptionsForFilter(),
         ], TerritoryIndexFilters::viewBundle($request)));

@@ -124,6 +124,42 @@ class TrafficsController extends OperasionalController
 
     public function show(string|int $id)
     {
+        if (request()->query('source') === 'satupeta') {
+            $dataRaw = DB::connection('satupeta')->table('smd_tbl_data_traffic_counting')->where('pk_ids', $id)->first();
+            if (! $dataRaw) {
+                abort(404, 'Data tidak ditemukan di satupeta');
+            }
+            $data = new \stdClass();
+            $data->id_trafficdalkot = $dataRaw->pk_ids;
+            $data->tanggal = $dataRaw->tanggal;
+            $data->waktu = $dataRaw->jam;
+            $data->gerbangkota = $dataRaw->category;
+            $data->araharus = $dataRaw->status_cctv;
+            $data->jenisjalan = $dataRaw->keterangan;
+            $data->namajalan = $dataRaw->nama_cctv;
+            $data->r2 = (int)$dataRaw->motor;
+            $data->r4 = (int)$dataRaw->minibus;
+            $data->r6 = (int)($dataRaw->bus + $dataRaw->truck);
+            $data->r6_plus = 0;
+            $data->jumlah = (int)$dataRaw->total;
+            $data->fotosit = null;
+            $data->piket = null; 
+            $data->usm_nama = $dataRaw->source_server;
+            $data->daerah_nama = $dataRaw->polda;
+            $data->wilayah_nama = $dataRaw->polres;
+            $data->koordinat = null;
+            $data->ketcb = '-';
+            
+            return view($this->viewFolder.'.show', [
+                'pageTitle' => 'Detail Report Traffic Analytic',
+                'data' => $data,
+                'tableName' => 'smd_tbl_data_traffic_counting',
+                'primaryKey' => 'pk_ids',
+                'backUrl' => route('report.traffic-analytic.index'),
+                'canMutate' => false,
+            ]);
+        }
+
         $data = DB::table($this->tableName)
             ->leftJoin('usm', 'trafficdalkot.piket', '=', 'usm.id_usm')
             ->select(
@@ -153,8 +189,33 @@ class TrafficsController extends OperasionalController
 
     public function create()
     {
+        $request = request();
+        $data = null;
+        if ($request->filled('source_id')) {
+            $dataRaw = DB::connection('satupeta')->table('smd_tbl_data_traffic_counting')
+                ->where('pk_ids', $request->source_id)->first();
+            if ($dataRaw) {
+                $data = new \stdClass();
+                $data->tanggal = $dataRaw->tanggal;
+                $data->waktu = $dataRaw->jam;
+                $data->gerbangkota = $dataRaw->category;
+                $data->araharus = $dataRaw->status_cctv;
+                $data->jenisjalan = $dataRaw->keterangan;
+                $data->namajalan = $dataRaw->nama_cctv;
+                $data->r2 = (int)$dataRaw->motor;
+                $data->r4 = (int)$dataRaw->minibus;
+                $data->r6 = (int)($dataRaw->bus + (int)$dataRaw->truck);
+                $data->r6_plus = 0;
+                $data->jumlah = (int)$dataRaw->total;
+                $data->fotosit = null;
+                $data->koordinat = null;
+                $data->ketcb = '';
+            }
+        }
+
         return view($this->viewFolder.'.create', [
             'pageTitle' => 'Tambah '.$this->getPageTitle(),
+            'data' => $data,
             'jenisJalanList' => $this->jenisJalanOptions(),
             'gerbangKotaList' => $this->gerbangKotaOptions(),
             'arahArusList' => $this->arahArusOptions(),

@@ -33,6 +33,7 @@ use App\Http\Controllers\CctvController;
 use App\Http\Controllers\ItSupportController;
 use App\Http\Controllers\DataPerangkatController;
 use App\Http\Controllers\DataCctvController;
+use App\Http\Controllers\OpsdalCadController;
 use App\Http\Controllers\Master\WilayahController as MasterWilayahController;
 use App\Http\Controllers\Master\DaerahController as MasterDaerahController;
 use App\Http\Controllers\Master\OrganisasiController as MasterOrganisasiController;
@@ -86,6 +87,40 @@ Route::middleware('guest')->group(function () {
 // Peta Monitoring (dari index.html - Leaflet) - Public before login
 Route::get('/map', [MapController::class, 'index'])->name('map.index');
 Route::post('/map/update-koordinat', [MapController::class, 'updateKoordinat'])->name('map.update-koordinat')->middleware('auth');
+Route::get('/map/petugas', [MapController::class, 'getPetugasMarkers'])->name('map.petugas');
+Route::get('/map/debug', [MapController::class, 'debugOperatorMap'])->name('map.debug');
+
+Route::get('/health', [\App\Http\Controllers\Api\CadApiController::class, 'health']);
+
+Route::get('/api-docs', function () {
+    $markdown = file_get_contents(base_path('API_FLUTTER_DOCS.md'));
+    return view('docs.api', compact('markdown'));
+});
+
+Route::get('/api/swagger', function () {
+    return response()->file(public_path('swagger.json'), [
+        'Content-Type' => 'application/json'
+    ]);
+});
+
+Route::get('/api/swagger/ui', function () {
+    return view('docs.swagger');
+});
+
+Route::get('/download-apk', function () {
+    // Membaca file sm_dispatch v2.apk
+    $path = base_path('sm_mobile_app-master/sm_mobile_app-master/build/app/outputs/flutter-apk/sm_dispatch v2.apk');
+    
+    // Fallback jika ternyata pakai app-release.apk
+    if (!file_exists($path)) {
+        $path = base_path('sm_mobile_app-master/sm_mobile_app-master/build/app/outputs/flutter-apk/app-release.apk');
+    }
+
+    if (file_exists($path)) {
+        return response()->download($path, 'SmartBackoffice-Mobile.apk');
+    }
+    abort(404, 'APK File not found');
+})->name('download.apk');
 
 Route::get('/debug-db-structure', function () {
     $health = \App\Support\DatabaseConnections::healthCheck();
@@ -144,6 +179,9 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
         Route::get('master/{table}/{id}', [SmDataController::class, 'masterShow'])->name('master.show');
         Route::get('transaksi', [SmDataController::class, 'transaksiIndex'])->name('transaksi.index');
         Route::get('transaksi/{table}/{id}', [SmDataController::class, 'transaksiShow'])->name('transaksi.show');
+        Route::get('dacol', [SmDataController::class, 'dacolIndex'])->name('dacol.index');
+        Route::get('dacol/{table}/{id}', [SmDataController::class, 'dacolShow'])->name('dacol.show');
+
     });
 
     // Profil akun sendiri (organisasi / sub org — setiap user)
@@ -271,6 +309,50 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
         return "Berhasil mengimpor! <br>Polda yang diperbarui: {$poldaCount} <br>Polres yang diperbarui: {$polresCount}";
     });
 
+    Route::get('/update-metro-jaya', function() {
+        $log = [];
+        if (\Illuminate\Support\Facades\Schema::hasTable('master_provinsi')) {
+            $updated = \Illuminate\Support\Facades\DB::table('master_provinsi')->where('nama', 'LIKE', '%DKI JAKARTA%')->update(['nama' => 'METRO JAYA']);
+            $log[] = "master_provinsi: updated {$updated} rows";
+        }
+        if (\Illuminate\Support\Facades\Schema::hasTable('daerah')) {
+            $updated = \Illuminate\Support\Facades\DB::table('daerah')->where('namadaerah', 'LIKE', '%DKI JAKARTA%')->update(['namadaerah' => 'METRO JAYA']);
+            $log[] = "daerah: updated {$updated} rows";
+        }
+        if (\Illuminate\Support\Facades\Schema::hasTable('master_kl_daerah')) {
+            $updated = \Illuminate\Support\Facades\DB::table('master_kl_daerah')->where('nama', 'LIKE', '%DKI JAKARTA%')->update(['nama' => 'METRO JAYA']);
+            $log[] = "master_kl_daerah: updated {$updated} rows";
+        }
+        if (\Illuminate\Support\Facades\Schema::hasTable('master_territori')) {
+            $updated = \Illuminate\Support\Facades\DB::table('master_territori')->where('nama', 'LIKE', '%DKI JAKARTA%')->update(['nama' => 'METRO JAYA']);
+            $log[] = "master_territori: updated {$updated} rows";
+        }
+        
+        // Perbarui data usm yang sudah pakai DKI JAKARTA
+        $updatedUsm = \Illuminate\Support\Facades\DB::table('usm')->where('daerah', 'LIKE', '%DKI JAKARTA%')->update(['daerah' => 'METRO JAYA']);
+        $log[] = "usm: updated {$updatedUsm} rows";
+        
+        // Bersihkan cache jika ada
+        try {
+            \Illuminate\Support\Facades\Artisan::call('cache:clear');
+            $log[] = "Cache berhasil dibersihkan.";
+        } catch (\Exception $e) {
+            // Abaikan jika gagal
+        }
+        
+        return implode("<br>", $log);
+    });
+
+    Route::get('/dump-daerah', function() {
+        $bundle = \App\Support\UsmMasterReferensi::registrationWilayahDaerahMasterBundle();
+        $list = collect($bundle['daerahList'])->pluck('namadaerah')->all();
+        return response()->json([
+            'pakaiMasterKl' => $bundle['wilayahPakaiMasterKlDaerah'] ?? false,
+            'pakaiMasterTerritori' => $bundle['wilayahPakaiMasterTerritori'] ?? false,
+            'daerah' => $list
+        ]);
+    });
+
     // ============================================
     // AUTOCOMPLETE API (JSON endpoints)
     // ============================================
@@ -303,6 +385,9 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
         $results = $query->distinct()->orderBy('t_datajalan.namajalan')->limit(20)->pluck('t_datajalan.namajalan');
         return response()->json($results);
     })->name('api.autocomplete.jalan');
+
+    Route::get('api/fetch-analytic', [\App\Http\Controllers\TrafficstuckController::class, 'fetchAnalyticData'])
+        ->name('api.fetch-analytic');
 
     Route::get('api/autocomplete/petugas', function (\Illuminate\Http\Request $request) {
         $user = Auth::user();
@@ -343,19 +428,6 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
         $userWilayah = $user->wilayah ?? '';
         $userLevel = \App\Support\TerritoryLevelForUsm::resolve($user);
 
-        $applyUserTerritoryScope = static function ($query) use ($userDaerah, $userWilayah) {
-            // Aturan level: wilayah terisi => user wilayah; jika kosong lalu daerah terisi => user daerah; selain itu nasional.
-            if (! empty($userWilayah)) {
-                return $query->where('wilayah', $userWilayah);
-            }
-
-            if (! empty($userDaerah)) {
-                return $query->where('daerah', $userDaerah);
-            }
-
-            return $query;
-        };
-
         // 1. Cek layanan masyarakat (Public Service)
         $layananQ = \Illuminate\Support\Facades\DB::table('layanan_masyarakat')
             ->select('id_interaksi as id', 'tanggal', 'kategori as type', 'tema', 'keterangan', 'created_at')
@@ -374,7 +446,7 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
                   ->orWhere('tema', 'like', '%Bencana%')
                   ->orWhere('kategori', 'like', '%Aduan%');
             });
-        $applyUserTerritoryScope($layananQ);
+        \App\Helpers\HierarchicalHelper::applyTerritoryScopeForTable($layananQ, 'layanan_masyarakat');
         
         if ($lastLayananId > 0) {
             $layananQ->where('id_interaksi', '>', $lastLayananId);
@@ -407,12 +479,7 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
                   ->orWhere("$cctvTable.$peristiwaCol", 'like', '%Perlambatan%');
             });
 
-        $cctvQ->leftJoin('usm', $cctvTable.'.piket', '=', 'usm.id_usm');
-        if (! empty($userWilayah)) {
-            $cctvQ->where('usm.wilayah', $userWilayah);
-        } elseif (! empty($userDaerah)) {
-            $cctvQ->where('usm.daerah', $userDaerah);
-        }
+        \App\Helpers\HierarchicalHelper::applyTerritoryScopeForTable($cctvQ, $cctvTable);
 
         if ($lastCctvId > 0) {
             $cctvQ->where($cctvTable.'.'.$cctvPk, '>', $lastCctvId);
@@ -433,12 +500,7 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
         $lastTurjagwaliId = (int) $request->get('last_turjagwali_id', 0);
         $turQ = \Illuminate\Support\Facades\DB::table('turjagwali')
             ->select('turjagwali.id_turjagwali as id', 'turjagwali.tanggal', 'turjagwali.katgiat as type', 'turjagwali.ketcb as keterangan', 'turjagwali.created_at');
-        $turQ->leftJoin('usm', 'turjagwali.piket', '=', 'usm.id_usm');
-        if (! empty($userWilayah)) {
-            $turQ->where('usm.wilayah', $userWilayah);
-        } elseif (! empty($userDaerah)) {
-            $turQ->where('usm.daerah', $userDaerah);
-        }
+        \App\Helpers\HierarchicalHelper::applyTerritoryScopeForTable($turQ, 'turjagwali');
         
         if ($lastTurjagwaliId > 0) {
             $turQ->where('turjagwali.id_turjagwali', '>', $lastTurjagwaliId);
@@ -459,12 +521,7 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
         $lastContigencyId = (int) $request->get('last_contigency_id', 0);
         $conQ = \Illuminate\Support\Facades\DB::table('contigency')
             ->select('contigency.id_contigency as id', 'contigency.tanggal', 'contigency.jeniscontigency as type', 'contigency.ketcb as keterangan', 'contigency.created_at', 'contigency.source_module');
-        $conQ->leftJoin('usm', 'contigency.piket', '=', 'usm.id_usm');
-        if (! empty($userWilayah)) {
-            $conQ->where('usm.wilayah', $userWilayah);
-        } elseif (! empty($userDaerah)) {
-            $conQ->where('usm.daerah', $userDaerah);
-        }
+        \App\Helpers\HierarchicalHelper::applyTerritoryScopeForTable($conQ, 'contigency');
         
         if (\Illuminate\Support\Facades\Schema::hasColumn('contigency', 'sb_grp')) {
             $conQ->where(function($q) {
@@ -498,12 +555,7 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
         $lastTrafficstuckId = (int) $request->get('last_trafficstuck_id', 0);
         $tsQ = \Illuminate\Support\Facades\DB::table('trafficstuck')
             ->select('trafficstuck.id_trafficstuck as id', 'trafficstuck.tanggal', 'trafficstuck.faktor as type', 'trafficstuck.ketcb as keterangan', 'trafficstuck.created_at', 'trafficstuck.source_module');
-        $tsQ->leftJoin('usm', 'trafficstuck.piket', '=', 'usm.id_usm');
-        if (! empty($userWilayah)) {
-            $tsQ->where('usm.wilayah', $userWilayah);
-        } elseif (! empty($userDaerah)) {
-            $tsQ->where('usm.daerah', $userDaerah);
-        }
+        \App\Helpers\HierarchicalHelper::applyTerritoryScopeForTable($tsQ, 'trafficstuck');
         
         if (\Illuminate\Support\Facades\Schema::hasColumn('trafficstuck', 'sb_grp')) {
             $tsQ->where(function($q) {
@@ -533,7 +585,48 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
             ];
         });
 
-        $items = $layanan->merge($cctv)->merge($turjagwali)->merge($contigency)->merge($trafficstuck)->sortByDesc('time')->values();
+        // 6. Cek Update Status Tugas CAD
+        $lastCadLogId = (int) $request->get('last_cad_log_id', 0);
+        $cadQ = \Illuminate\Support\Facades\DB::table('tbl_cad_assignment_log as log')
+            ->join('tbl_cad_task as task', 'log.task_id', '=', 'task.id')
+            ->join('usm as officer', 'log.user_id', '=', 'officer.id_usm')
+            ->select('log.id', 'log.status', 'log.created_at', 'task.title', 'officer.nama as officer_name', 'task.id as task_id')
+            ->whereIn('log.status', ['MENUJU', 'TIBA', 'SELESAI']);
+
+        // Apply territory scope based on creator of the task or officer
+        if (!\App\Helpers\HierarchicalHelper::viewerBypassesTerritoryScope()) {
+            $cadQ->where(function($q) use ($userDaerah, $userWilayah) {
+                if (!empty($userDaerah) && !empty($userWilayah)) {
+                    $q->where('officer.daerah', $userDaerah)
+                      ->where('officer.wilayah', $userWilayah);
+                } elseif (!empty($userDaerah)) {
+                    $q->where('officer.daerah', $userDaerah);
+                } elseif (!empty($userWilayah)) {
+                    $q->where('officer.wilayah', $userWilayah);
+                } else {
+                    $q->whereRaw('1 = 0');
+                }
+            });
+        }
+
+        if ($lastCadLogId > 0) {
+            $cadQ->where('log.id', '>', $lastCadLogId);
+        } else {
+            $cadQ->whereDate('log.created_at', '>=', Carbon::today()->toDateString());
+        }
+
+        $cadLogs = $cadQ->get()->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'source' => 'cad_log',
+                'label' => 'CAD: Status ' . $item->status,
+                'desc' => "Tugas '{$item->title}' ditandai {$item->status} oleh {$item->officer_name}",
+                'url' => route('opsdal.cad.show', $item->task_id),
+                'time' => $item->created_at,
+            ];
+        });
+
+        $items = $layanan->merge($cctv)->merge($turjagwali)->merge($contigency)->merge($trafficstuck)->merge($cadLogs)->sortByDesc('time')->values();
         
         return response()->json([
             'items' => $items,
@@ -542,6 +635,7 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
             'max_turjagwali_id' => $turjagwali->max('id') ?? $lastTurjagwaliId,
             'max_contigency_id' => $contigency->max('id') ?? $lastContigencyId,
             'max_trafficstuck_id' => $trafficstuck->max('id') ?? $lastTrafficstuckId,
+            'max_cad_log_id' => $cadLogs->max('id') ?? $lastCadLogId,
             'has_new' => $items->count() > 0,
             'user_level' => $userLevel,
             'scope' => [
@@ -578,6 +672,26 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
     Route::resource('trafficstuck', TrafficstuckController::class);
     Route::post('trafficstuck/{trafficstuck}/confirm', [TrafficstuckController::class, 'confirmOpsdal'])->name('trafficstuck.confirm');
     Route::post('trafficstuck/{trafficstuck}/reject', [TrafficstuckController::class, 'rejectOpsdal'])->name('trafficstuck.reject');
+    
+    // ============================================
+    // OPSDAL CAD DISPATCH ROUTES
+    // ============================================
+    Route::redirect('opsdal_cad', '/opsdal/cad', 301);
+    Route::redirect('opsdal-cad', '/opsdal/cad', 301);
+    Route::prefix('opsdal')->name('opsdal.')->group(function () {
+        Route::get('cad', [OpsdalCadController::class, 'index'])->name('cad.index');
+        Route::post('cad', [OpsdalCadController::class, 'store'])->name('cad.store');
+        Route::post('cad/test-fcm', [OpsdalCadController::class, 'testFcm'])->name('cad.test-fcm');
+        Route::get('cad/{id}', [OpsdalCadController::class, 'show'])
+            ->name('cad.show')
+            ->whereNumber('id');
+        Route::post('cad/{id}/assign', [OpsdalCadController::class, 'assign'])
+            ->name('cad.assign')
+            ->whereNumber('id');
+        Route::post('cad/{id}/close', [OpsdalCadController::class, 'close'])
+            ->name('cad.close')
+            ->whereNumber('id');
+    });
     
     // ============================================
     // OPS KEPOLISIAN ROUTES (Level Operasional)
@@ -704,6 +818,7 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
             Route::resource('pusat', MasterOrganisasiController::class)->parameters(['pusat' => 'id'])->except(['index', 'show']);
             Route::resource('daerah', MasterDaerahController::class)->parameters(['daerah' => 'id'])->except(['index', 'show']);
             Route::resource('resort', MasterWilayahController::class)->parameters(['resort' => 'id'])->except(['index', 'show']);
+            Route::resource('pemerintahan-instansi', MasterPemerintahanInstansiController::class)->parameters(['pemerintahan-instansi' => 'id'])->except(['index', 'show']);
             
             Route::post('referensi', [MasterReferensiController::class, 'store'])->name('referensi.store');
             Route::put('referensi/{id}', [MasterReferensiController::class, 'update'])->name('referensi.update');
@@ -721,6 +836,9 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
 
         Route::get('pemerintahan-wilayah', [MasterPemerintahanWilayahController::class, 'index'])->name('pemerintahan-wilayah.index');
         Route::get('pemerintahan-instansi', [MasterPemerintahanInstansiController::class, 'index'])->name('pemerintahan-instansi.index');
+        Route::get('pemerintahan-instansi/api/organisasi', [MasterPemerintahanInstansiController::class, 'apiOrganisasiByInstansi'])->name('pemerintahan-instansi.api.organisasi');
+        Route::get('pemerintahan-instansi/api/sub-org', [MasterPemerintahanInstansiController::class, 'apiSubOrgByOrganisasi'])->name('pemerintahan-instansi.api.sub-org');
+        Route::get('pemerintahan-instansi/api/unit-kerja', [MasterPemerintahanInstansiController::class, 'apiUnitKerjaBySubOrg'])->name('pemerintahan-instansi.api.unit-kerja');
         Route::get('unit-kerja', [MasterKlUnitKerjaController::class, 'index'])->name('unit-kerja.index');
     });
 
@@ -749,4 +867,32 @@ Route::middleware(['auth', 'usm.active', 'role.mutation'])->group(function () {
         
     });
     
+});
+
+Route::get('clear-cache-temp', function() {
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    \Illuminate\Support\Facades\Artisan::call('config:clear');
+    return "All Cache Cleared Successfully!";
+});
+
+Route::get('debug-export', function() {
+    $id = request('id', 22);
+    $query = \DB::table('turjagwali')
+        ->leftJoin('usm', 'turjagwali.piket', '=', 'usm.id_usm')
+        ->select(
+            'turjagwali.*',
+            'usm.nama as usm_nama',
+            \DB::raw('usm.daerah as daerah_nama'),
+            \DB::raw('usm.wilayah as wilayah_nama')
+        );
+    if ($id) {
+        $query->where('turjagwali.id_turjagwali', $id);
+    }
+    $data = $query->get();
+    return response()->json([
+        'count' => $data->count(),
+        'is_single_countable' => (is_array($data) || $data instanceof \Countable || $data instanceof \Illuminate\Support\Collection) && count($data) === 1,
+        'data' => $data
+    ]);
 });

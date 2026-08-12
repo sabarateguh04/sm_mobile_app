@@ -69,6 +69,15 @@
             <div class="flex flex-col gap-4">
                 <div>
                     <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                        <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $data->daerah_nama ? strtoupper($data->daerah_nama) : '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah_nama ? strtoupper($data->wilayah_nama) : '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $tanggalFmt }}</dd>
+                        
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '—' }}</dd>
                         

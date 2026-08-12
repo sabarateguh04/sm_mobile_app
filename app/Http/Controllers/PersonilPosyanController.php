@@ -25,7 +25,7 @@ use Illuminate\Validation\ValidationException;
 class PersonilPosyanController extends LegacySboOperasionalController
 {
     /** @var list<int> Role legacy DB sebelum migrasi 7 tier → diperlakukan sebagai admin. */
-    private const LEGACY_ADMIN_USER_ROLE_IDS = [5, 8, 9, 16];
+    private const LEGACY_ADMIN_USER_ROLE_IDS = [8, 9, 16];
 
     protected ?string $listingTerritoryHint = null;
 
@@ -93,6 +93,8 @@ class PersonilPosyanController extends LegacySboOperasionalController
             $table.'.wilayah',
             $table.'.notelp',
             'roles.role_name',
+            'petugas_tracking.status as online_status',
+            'petugas_tracking.last_updated as online_last_updated'
         ];
 
         foreach (['nrp_nip_nik', 'induk_pemerintahan', 'pemerintahan_daerah', 'organisasi_daerah', 'unit_kerja', 'kategori_user'] as $col) {
@@ -103,6 +105,7 @@ class PersonilPosyanController extends LegacySboOperasionalController
 
         return DB::table($table)
             ->leftJoin('roles', $table.'.user_role_id', '=', 'roles.role_id')
+            ->leftJoin('petugas_tracking', $table.'.id_usm', '=', 'petugas_tracking.user_id')
             ->whereIn($table.'.user_role_id', $this->operatorRoleIds())
             ->select($select);
     }
@@ -122,11 +125,61 @@ class PersonilPosyanController extends LegacySboOperasionalController
             return false;
         }
 
-        if (MenuHelper::matrixRoleIdForUser($actor) === 2) {
+        if (MenuHelper::isExecutiveForLayout($actor) || MenuHelper::isExecutiveKabKotaUser($actor) || MenuHelper::isExecutiveProvinsiUser($actor) || MenuHelper::isExecutiveNationalUser($actor)) {
+            return false;
+        }
+
+        $roleLabel = strtolower($actor->role_label ?? '');
+        if (str_contains($roleLabel, 'executive') || str_contains($roleLabel, 'eksekutif')) {
+            return false;
+        }
+
+        $matrixId = MenuHelper::matrixRoleIdForUser($actor);
+        if (in_array($matrixId, [5, 6, 7], true)) {
+            return false;
+        }
+
+        if ($matrixId === 2 || $matrixId === 3 || $matrixId === 8) {
             return true;
         }
 
         return in_array((int) ($actor->user_role_id ?? 0), self::LEGACY_ADMIN_USER_ROLE_IDS, true);
+    }
+
+    /**
+     * Tentukan prefix untuk teks sub-judul daftar operator berdasarkan role pengguna.
+     * Executive (level 3/2/1) & Operator tidak mendapatkan prefix "Administrator —".
+     */
+    protected function getListingHintPrefix(Usm $actor): string
+    {
+        $matrixId = MenuHelper::matrixRoleIdForUser($actor);
+
+        if (in_array($matrixId, [4, 5, 6, 7], true)) {
+            return '';
+        }
+
+        if (in_array($matrixId, [1, 2, 3, 8], true)) {
+            return 'Administrator — ';
+        }
+
+        $roleLabel = strtolower($actor->role_label ?? '');
+        $roleName = $actor->role ? strtolower($actor->role->role_name) : '';
+        if (
+            str_contains($roleLabel, 'executive') || str_contains($roleLabel, 'eksekutif') ||
+            str_contains($roleName, 'executive') || str_contains($roleName, 'eksekutif') ||
+            str_contains($roleLabel, 'operator') || str_contains($roleName, 'operator')
+        ) {
+            return '';
+        }
+
+        if (
+            str_contains($roleLabel, 'admin') || str_contains($roleName, 'admin') ||
+            str_contains($roleLabel, 'super') || str_contains($roleName, 'super')
+        ) {
+            return 'Administrator — ';
+        }
+
+        return $this->actorIsAdminTier($actor) ? 'Administrator — ' : '';
     }
 
     protected function actorIsOperatorTier(?Usm $actor): bool
@@ -243,7 +296,9 @@ class PersonilPosyanController extends LegacySboOperasionalController
             return;
         }
 
-        if ($wilayah !== '') {
+        $level = \App\Support\TerritoryLevelForUsm::resolve($actor);
+
+        if ($wilayah !== '' && $level === \App\Support\TerritoryLevelForUsm::KAB_KOTA) {
             $this->applyColumnEqualsNormalized($query, $table.'.daerah', $daerah);
             $this->applyColumnEqualsNormalized($query, $table.'.wilayah', $wilayah);
 
@@ -329,15 +384,16 @@ class PersonilPosyanController extends LegacySboOperasionalController
             $query->where(function ($kep) use ($table, $actor) {
                 KepegawaianListingScope::applyScopeLegacyTigaTingkat($kep, $table, $actor, true);
             });
-            $this->listingTerritoryHint = ($this->actorIsAdminTier($actor) ? 'Administrator — ' : '')
+            $this->listingTerritoryHint = $this->getListingHintPrefix($actor)
                 .KepegawaianListingScope::buildHint($actor, true);
 
             return;
         }
 
-        $this->listingTerritoryHint = $this->actorIsAdminTier($actor)
-            ? 'Administrator — menampilkan seluruh operator.'
-            : null;
+        $prefix = $this->getListingHintPrefix($actor);
+        $this->listingTerritoryHint = $prefix
+            ? $prefix.'menampilkan seluruh operator.'
+            : 'Menampilkan seluruh operator.';
     }
 
     protected function setPersonilBoListingHint(Usm $actor, bool $hasKepegawaian): void
@@ -345,19 +401,20 @@ class PersonilPosyanController extends LegacySboOperasionalController
         $daerah = trim((string) ($actor->daerah ?? ''));
         $wilayah = trim((string) ($actor->wilayah ?? ''));
 
-        $provinsiHint = $wilayah !== ''
+        $level = \App\Support\TerritoryLevelForUsm::resolve($actor);
+        $provinsiHint = ($wilayah !== '' && $level === \App\Support\TerritoryLevelForUsm::KAB_KOTA)
             ? 'Menampilkan operator di kab/kota '.$wilayah.' (provinsi '.$daerah.')'
             : 'Menampilkan operator di daerah provinsi: '.$daerah;
 
         if ($hasKepegawaian) {
-            $prefix = $this->actorIsAdminTier($actor) ? 'Administrator — ' : '';
+            $prefix = $this->getListingHintPrefix($actor);
             $this->listingTerritoryHint = $prefix.$provinsiHint.' · '
                 .KepegawaianListingScope::buildHint($actor, false);
 
             return;
         }
 
-        $this->listingTerritoryHint = ($this->actorIsAdminTier($actor) ? 'Administrator — ' : '').$provinsiHint.'.';
+        $this->listingTerritoryHint = $this->getListingHintPrefix($actor).$provinsiHint.'.';
     }
 
     /**
@@ -662,17 +719,42 @@ class PersonilPosyanController extends LegacySboOperasionalController
             $request->get('ordertype', $this->defaultOrderType)
         );
 
-        $statusCounts = (clone $query)
+        $trackingQuery = DB::table($table)
+            ->leftJoin('petugas_tracking', $table.'.id_usm', '=', 'petugas_tracking.user_id');
+
+        $this->applyPersonilBoTerritoryScope($trackingQuery, $table);
+        \App\Support\TerritoryIndexFilters::applyColumnFilters($trackingQuery, $request, $table);
+        $this->applyPersonilBoRequestFilters($trackingQuery, $table, $request);
+
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $searchFields = array_values(array_filter(
+                $this->searchFields,
+                fn (string $field): bool => Schema::hasColumn($table, $field)
+            ));
+            $trackingQuery->where(function ($q) use ($s, $table, $searchFields) {
+                foreach ($searchFields as $field) {
+                    $q->orWhere($table.'.'.$field, 'like', "%{$s}%");
+                }
+            });
+        }
+
+        $trackingStats = (clone $trackingQuery)
             ->reorder()
-            ->select(DB::raw('LOWER('.$table.'.account_status) as status, COUNT(*) as aggregate'))
-            ->groupByRaw('LOWER('.$table.'.account_status)')
-            ->pluck('aggregate', 'status');
+            ->select(DB::raw('COALESCE(petugas_tracking.status, \'OFFLINE\') as online_status, COUNT(*) as aggregate'))
+            ->groupByRaw('COALESCE(petugas_tracking.status, \'OFFLINE\')')
+            ->pluck('aggregate', 'online_status');
+
+        $totalPersonil = (int) $trackingStats->sum();
+        $onlineCount = (int) ($trackingStats['ONLINE'] ?? 0) + (int) ($trackingStats['online'] ?? 0);
+        $bertugasCount = (int) ($trackingStats['BERTUGAS'] ?? 0) + (int) ($trackingStats['bertugas'] ?? 0);
+        $offlineCount = $totalPersonil - $onlineCount - $bertugasCount;
 
         $personilStats = [
-            'total' => (int) $statusCounts->sum(),
-            'active' => (int) ($statusCounts['active'] ?? 0),
-            'pending' => (int) ($statusCounts['pending'] ?? 0),
-            'blocked' => (int) ($statusCounts['blocked'] ?? 0),
+            'total' => $totalPersonil,
+            'online' => $onlineCount,
+            'bertugas' => $bertugasCount,
+            'offline' => $offlineCount,
         ];
 
         $data = $query->paginate($request->get('per_page', $this->perPage));
@@ -1038,8 +1120,7 @@ class PersonilPosyanController extends LegacySboOperasionalController
     protected function formSharedData(?Usm $row = null): array
     {
         $actor = Auth::user();
-        $canPickTerritory = HierarchicalHelper::viewerBypassesTerritoryScope()
-            || (! $actor || (empty($actor->daerah) && empty($actor->wilayah)));
+        $canPickTerritory = true; // Diaktifkan agar operator bisa edit wilayah dan daerah
         $actorUsm = $actor instanceof Usm ? $actor : null;
         $isCreate = $row === null;
         $kepegawaianFieldLocks = $this->kepegawaianFieldLocks($actorUsm, $isCreate);
@@ -1099,8 +1180,7 @@ class PersonilPosyanController extends LegacySboOperasionalController
     protected function validateOperatorPayload(Request $request, ?int $ignoreId = null): array
     {
         $actor = Auth::user();
-        $canPickTerritory = HierarchicalHelper::viewerBypassesTerritoryScope()
-            || (! $actor || (empty($actor->daerah) && empty($actor->wilayah)));
+        $canPickTerritory = true; // Diaktifkan agar operator bisa edit wilayah dan daerah
 
         $rules = [
             'username' => [

@@ -5,10 +5,10 @@
 @section('content')
 @php
     $isOperatorViewer = $sboOperatorOwnership ?? \App\Support\RoleMutationPolicy::isOperatorRole(auth()->user());
-    $stats = $personilStats ?? ['total' => $data->total(), 'active' => 0, 'pending' => 0, 'blocked' => 0];
-    $activePct = $stats['total'] > 0 ? round(($stats['active'] / $stats['total']) * 100) : 0;
+    $stats = $personilStats ?? ['total' => $data->total(), 'online' => 0, 'bertugas' => 0, 'offline' => 0];
     $subtitle = $listingTerritoryHint
-        ?? (!empty($actorIndukOrganisasi) ? 'Induk organisasi: '.$actorIndukOrganisasi : 'Operator per Polda / Polres — Smart Management');
+        ?? (!empty($actorIndukOrganisasi) ? 'Instansi: '.$actorIndukOrganisasi : 'Operator per Polda / Polres — Smart Management');
+    $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user());
 @endphp
 
 <div class="max-w-[1400px] mx-auto w-full space-y-4">
@@ -19,7 +19,7 @@
         <h2 class="text-[22px] font-headline-lg font-extrabold text-on-surface tracking-tight leading-tight m-0">{{ $pageTitle }}</h2>
         <p class="text-[11px] text-slate-400 mt-0.5 m-0">{{ $subtitle }}</p>
     </div>
-    @if(!\App\Support\RoleMutationPolicy::isOperatorRole(auth()->user()))
+    @if(!\App\Support\RoleMutationPolicy::isOperatorRole(auth()->user()) && !\App\Support\RoleMutationPolicy::deniesCreate(auth()->user()))
     <a href="{{ route('personil.manager.create') }}" class="flex items-center justify-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-xl font-bold text-label-md shadow-lg shadow-primary/25 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all text-decoration-none shrink-0">
         <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">person_add</span>
         <span>Tambah Operator</span>
@@ -31,10 +31,10 @@
 <!-- Stats -->
 <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
     @foreach([
-        ['icon'=>'groups',        'bg'=>'bg-primary/10',  'color'=>'text-primary',   'label'=>'Total',    'val'=>$stats['total'],   'num_class'=>'text-on-surface'],
-        ['icon'=>'verified_user', 'bg'=>'bg-secondary/10','color'=>'text-secondary', 'label'=>'Aktif',    'val'=>$stats['active'],  'num_class'=>'text-on-surface'],
-        ['icon'=>'hourglass_top', 'bg'=>'bg-amber-100',   'color'=>'text-amber-600', 'label'=>'Pending',  'val'=>$stats['pending'], 'num_class'=>'text-on-surface'],
-        ['icon'=>'block',         'bg'=>'bg-rose-100',    'color'=>'text-rose-600',  'label'=>'Diblokir', 'val'=>$stats['blocked'], 'num_class'=>$stats['blocked']>0?'text-rose-600':'text-on-surface'],
+        ['icon'=>'groups',        'bg'=>'bg-primary/10',    'color'=>'text-primary',   'label'=>'Total Personil', 'val'=>$stats['total'] ?? 0, 'num_class'=>'text-on-surface'],
+        ['icon'=>'wifi',          'bg'=>'bg-emerald-100',   'color'=>'text-emerald-600','label'=>'Petugas Online', 'val'=>$stats['online'] ?? 0, 'num_class'=>'text-emerald-600'],
+        ['icon'=>'assignment',    'bg'=>'bg-rose-100',      'color'=>'text-rose-600',  'label'=>'Petugas Bertugas','val'=>$stats['bertugas'] ?? 0, 'num_class'=>'text-rose-600'],
+        ['icon'=>'wifi_off',      'bg'=>'bg-slate-100',     'color'=>'text-slate-600', 'label'=>'Petugas Offline', 'val'=>$stats['offline'] ?? 0, 'num_class'=>'text-slate-600'],
     ] as $s)
     <div class="stat-card bg-white rounded-xl border border-slate-200/60 shadow-sm px-4 py-3 flex items-center gap-3">
         <div class="w-8 h-8 {{ $s['bg'] }} {{ $s['color'] }} rounded-lg flex items-center justify-center shrink-0">
@@ -88,6 +88,13 @@
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-14">Foto</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Status (Mobile)</th>
+                        @if(!$isOp)
+                            @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+                            @endif
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                        @endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Kategori</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Organisasi</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Sub Org</th>
@@ -116,6 +123,37 @@
                                     <p class="text-[10px] text-slate-400 m-0 truncate"><code class="bg-slate-100 px-1 rounded">{{ $item->username }}</code></p>
                                 @endif
                             </td>
+                            <td class="px-3 py-2.5 shrink-0">
+                                @if(($item->online_status ?? '') === 'BERTUGAS')
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200/60 shadow-sm animate-pulse">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                        BERTUGAS
+                                    </span>
+                                @elseif(($item->online_status ?? '') === 'ONLINE')
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60 shadow-sm">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                        ONLINE
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 border border-slate-200/60">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                        OFFLINE
+                                    </span>
+                                @endif
+                                @if(!empty($item->online_last_updated))
+                                    <div class="text-[9px] text-slate-400 mt-1 leading-none">GPS: {{ \Carbon\Carbon::parse($item->online_last_updated)->diffForHumans() }}</div>
+                                @endif
+                            </td>
+                            @if(!$isOp)
+                                @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '—') }}</span>
+                                    </td>
+                                @endif
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah))) : '—' }}</span>
+                                </td>
+                            @endif
                             <td class="px-3 py-2.5">
                                 @if(($item->kategori_user ?? '') === 'organik')
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60">Organik</span>
@@ -181,11 +219,11 @@
             </div>
             <p class="text-label-md text-slate-500 font-medium max-w-md mx-auto">
                 @if(!empty($listingTerritoryBlocked))
-                    Daftar personil tidak dapat ditampilkan. Lengkapi induk organisasi atau Polda wilayah kerja di profil organisasi Anda.
+                    Daftar personil tidak dapat ditampilkan. Lengkapi instansi atau Polda wilayah kerja di profil organisasi Anda.
                 @else
                     Belum ada operator
                     @if(!empty($actorIndukOrganisasi))
-                        di induk organisasi <strong class="text-slate-700">{{ $actorIndukOrganisasi }}</strong>
+                        di instansi <strong class="text-slate-700">{{ $actorIndukOrganisasi }}</strong>
                     @elseif(($userLevel ?? null) === 'kab_kota')
                         di Polres kerja Anda.
                     @elseif(($userLevel ?? null) === 'provinsi')

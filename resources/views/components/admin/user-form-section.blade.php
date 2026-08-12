@@ -131,6 +131,10 @@
             padding: 0.1rem 0.4rem;
             border-color: #e2e8f0 !important;
             border-radius: 0.375rem !important;
+            background-color: #ffffff !important;
+        }
+        .user-form-page .select2-container--bootstrap-5.select2-container--disabled .select2-selection {
+            background-color: #f8fafc !important;
         }
         .user-form-page .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
             line-height: 26px;

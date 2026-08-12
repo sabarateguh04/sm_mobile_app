@@ -39,15 +39,64 @@ class LayananDataController extends OperasionalController
 
     protected $defaultOrderType = 'desc';
 
+    protected $hasUsmJoin = false;
+
     protected function applyFilters($query, Request $request)
     {
-        $query->select('layanan_data.*');
+        $hasIdUsm = \Illuminate\Support\Facades\Schema::hasColumn('layanan_data', 'id_usm');
+        $hasPiket = \Illuminate\Support\Facades\Schema::hasColumn('layanan_data', 'piket');
+
+        if ($hasIdUsm) {
+            $query->select('layanan_data.*', 'usm.nama as nama_petugas');
+            $query->leftJoin('usm', 'layanan_data.id_usm', '=', 'usm.id_usm');
+            $this->hasUsmJoin = true;
+        } elseif ($hasPiket) {
+            $query->select('layanan_data.*', 'usm.nama as nama_petugas');
+            $query->leftJoin('usm', 'layanan_data.piket', '=', 'usm.id_usm');
+            $this->hasUsmJoin = true;
+        } else {
+            $query->select('layanan_data.*', DB::raw("NULL as nama_petugas"));
+        }
 
         return $query;
     }
 
     public function index(Request $request)
     {
+        $tab = $request->get('tab', 'dacol_integrasi_data');
+
+        if (in_array($tab, ['dacol_integrasi_data', 'dacol_penduduk', 'dacol_pengemudi'])) {
+            $table = match ($tab) {
+                'dacol_penduduk' => 'sm_dacol_penduduk',
+                'dacol_pengemudi' => 'sm_dacol_pengemudi',
+                default => 'sm_dacol_integrasi_data',
+            };
+            
+            $dacolRows = \App\Support\SmDacolData::paginated($table, $request, 20);
+            return view($this->viewFolder.'.index', [
+                'pageTitle' => PublicServiceLayanan::isReportMode($request) ? PublicServiceLayanan::reportPageTitle($this->getPageTitle()) : $this->getPageTitle(),
+                'tab' => $tab,
+                'data' => collect(), // dummy
+                'kategoriList' => collect(),
+                'readOnly' => PublicServiceLayanan::isReportMode($request),
+                'tableName' => $this->tableName,
+                'primaryKey' => $this->primaryKey,
+                'sboViewOnly' => true,
+                'daerahList' => collect(),
+                'wilayahList' => collect(),
+                'userLevel' => HierarchicalHelper::getUserLevel(),
+                
+                'active' => $table,
+                'meta' => config("smd_tables.dacol.{$table}", []),
+                'rows' => $dacolRows,
+                'displayColumns' => \App\Support\SmDacolData::displayColumns($table),
+                'availableSources' => \App\Support\SmDacolData::availableSources($table),
+                'filterUrl' => route('layanan.data.index'),
+                'filterHiddenInputs' => '<input type="hidden" name="tab" value="'.$tab.'">',
+                'filterResetUrl' => route('layanan.data.index', ['tab' => $tab]),
+            ]);
+        }
+
         $query = DB::table($this->tableName);
         $query = $this->applyFilters($query, $request);
         HierarchicalHelper::applyTerritoryScopeForTable($query, $this->tableName);
@@ -57,6 +106,9 @@ class LayananDataController extends OperasionalController
             $query->where(function ($q) use ($s) {
                 foreach ($this->searchFields as $field) {
                     $q->orWhere('layanan_data.'.$field, 'like', "%{$s}%");
+                }
+                if ($this->hasUsmJoin) {
+                    $q->orWhere('usm.nama', 'like', "%{$s}%");
                 }
             });
         }
@@ -76,6 +128,9 @@ class LayananDataController extends OperasionalController
 
         if (PublicServiceLayanan::isReportMode($request)) {
             $this->applyDirectDaerahWilayahFilters($query, $request);
+            if ($this->hasUsmJoin) {
+                \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
+            }
         }
 
         $query->orderBy('layanan_data.'.$request->get('orderby', $this->defaultOrderBy), $request->get('ordertype', $this->defaultOrderType));
@@ -87,6 +142,7 @@ class LayananDataController extends OperasionalController
 
         return view($this->viewFolder.'.index', [
             'pageTitle' => $readOnly ? PublicServiceLayanan::reportPageTitle($this->getPageTitle()) : $this->getPageTitle(),
+            'tab' => $tab,
             'data' => $data,
             'kategoriList' => $kategoriList,
             'readOnly' => $readOnly,
@@ -240,6 +296,18 @@ class LayananDataController extends OperasionalController
         $data['wilayah']    = $user->wilayah ?? null;
         $data['created_at'] = now();
         $data['updated_at'] = now();
+
+        if (\Illuminate\Support\Facades\Schema::hasColumn($this->tableName, 'id_usm')) {
+            $actorId = RoleMutationPolicy::resolveActorUserId($user);
+            if ($actorId > 0) {
+                $data['id_usm'] = $actorId;
+            }
+        } elseif (\Illuminate\Support\Facades\Schema::hasColumn($this->tableName, 'piket')) {
+            $actorId = RoleMutationPolicy::resolveActorUserId($user);
+            if ($actorId > 0) {
+                $data['piket'] = $actorId;
+            }
+        }
 
         return $data;
     }

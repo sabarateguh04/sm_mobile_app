@@ -131,3 +131,95 @@ GET /api/turjagwali?operator_id=5&limit=15&page=1
     }
 }
 ```
+
+---
+
+## 3. Modul CAD (Computer Aided Dispatch)
+
+API ini digunakan untuk manajemen tugas (dispatch) yang dikirimkan dari Web Backoffice ke aplikasi Mobile (Flutter).
+
+### A. Daftar Tugas Saya
+- **URL:** `/api/cad/my-task`
+- **Method:** `GET`
+- **Query Params:** `userId` (ID USM Petugas)
+
+**Response (200 OK):**
+```json
+{
+    "tasks": [
+        {
+            "id": 1,
+            "title": "Kecelakaan Lalu Lintas",
+            "address": "Jl. Sudirman No. 1",
+            "latitude": -6.200000,
+            "longitude": 106.816666,
+            "priority": "HIGH",
+            "status": "NEW",
+            "assignment_status": "ASSIGNED"
+        }
+    ]
+}
+```
+
+### B. Terima Tugas
+- **URL:** `/api/cad/terima-task`
+- **Method:** `POST`
+- **Body Request:**
+```json
+{
+    "taskId": 1,
+    "userId": 5
+}
+```
+*Mengubah status assignment menjadi `DITERIMA`.*
+
+### C. Menuju TKP
+- **URL:** `/api/cad/menuju`
+- **Method:** `POST`
+- **Body Request:** `{ "taskId": 1, "userId": 5 }`
+*Mengubah status assignment menjadi `MENUJU`.*
+
+### D. Tiba di TKP
+- **URL:** `/api/cad/tiba`
+- **Method:** `POST`
+- **Body Request:** `{ "taskId": 1, "userId": 5 }`
+*Mengubah status assignment menjadi `TIBA`.*
+
+### E. Selesai Tugas
+- **URL:** `/api/cad/selesai`
+- **Method:** `POST`
+- **Body Request:**
+```json
+{
+    "taskId": 1,
+    "userId": 5,
+    "keterangan": "Situasi sudah terkendali",
+    "photos": ["url_foto1.jpg", "url_foto2.jpg"]
+}
+```
+*Mengubah status tugas selesai. Form-Data juga dapat digunakan jika mengunggah file langsung.*
+
+---
+
+## 4. Tracking Lokasi (Live GPS)
+
+Digunakan untuk mengirimkan posisi GPS terbaru dari Flutter ke server agar terlihat di Peta Web Dashboard.
+
+- **URL:** `/api/update-location`
+- **Method:** `POST`
+- **Body Request:**
+```json
+{
+    "userId": 5,
+    "lat": -6.200000,
+    "lng": 106.816666
+}
+```
+
+**Response (200 OK):**
+```json
+{
+    "status": "success",
+    "message": "Location updated"
+}
+```

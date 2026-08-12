@@ -30,6 +30,7 @@ return [
         5 => 'view',
         6 => 'view',
         7 => 'view',
+        8 => 'territory',
     ],
 
     /**
@@ -44,7 +45,7 @@ return [
     'operator_read_only_in_territory' => true,
 
     /** Role matrix ID admin (2, 3) & oprator (4): wajib provinsi di profil; kab/kota opsional. */
-    'territorial_staff_roles' => [2, 3, 4],
+    'territorial_staff_roles' => [2, 3, 4, 8],
 
     /**
      * Executive (Smart Management): User Management scoped teritori (@see UserController).
@@ -86,74 +87,76 @@ return [
         'home' => 'all',
 
         /* Patrol & monitoring */
-        'map'  => [1, 2, 3, 4, 5, 6, 7],
-        'patrolicctv' => [1, 2, 3, 4, 5, 6, 7],
-        'cctv-live' => [1, 2, 3, 4, 5, 6, 7],
+        'map'  => [1, 2, 3, 4, 5, 6, 7, 8],
+        'patrolicctv' => [1, 2, 3, 4, 5, 6, 7, 8],
+        'cctv-live' => [1, 2, 3, 4, 5, 6, 7, 8],
         /** Data CCTV inventaris TIK (operator: view wil_datacctv) */
-        'data-cctv' => [1, 2, 3, 4, 5, 6, 7],
+        'data-cctv' => [1, 2, 3, 4, 5, 6, 7, 8],
         /** Alias URL legacy /datacctv (sama halaman, tanpa redirect) */
-        'datacctv' => [1, 2, 3, 4, 5, 6, 7],
-        'dataperangkat' => [1, 2, 3, 4, 5, 6, 7],
+        'datacctv' => [1, 2, 3, 4, 5, 6, 7, 8],
+        'dataperangkat' => [1, 2, 3, 4, 5, 6, 7, 8],
         /** @deprecated Alias URL /cctv (redirect 301) */
-        'cctv' => [1, 2, 3, 4, 5, 6, 7],
+        'cctv' => [1, 2, 3, 4, 5, 6, 7, 8],
 
-        /* Personil — operator & Executive 3 (view-only): Kuat Personil BO */
-        'personil/manager' => [1, 2, 3, 4, 5],
-        'admin/users' => [1, 2, 3, 5, 6, 7],
+        /* Personil — operator & Executive (view-only): Kuat Personil BO */
+        'personil/manager' => [1, 2, 3, 4, 5, 6, 7, 8],
+        'admin/users' => [1, 2, 3, 8],
 
         /* Giat rutin & Quick Respons + Opsdal (turjagwali memakai query sm_lv → filter teritori pada menu path) */
-        'turjagwali'   => [1, 2, 3, 4, 5, 6, 7],
-        'contigency'   => [1, 2, 3, 4, 5, 6, 7],
-        'trafficstuck' => [1, 2, 3, 4, 5, 6, 7],
-        'report/traffic-analytic' => [1, 2, 3, 4, 5, 6, 7],
-        'traffics' => [1, 2, 3, 4, 5, 6, 7],
+        'turjagwali'   => [1, 2, 3, 4, 5, 6, 7, 8],
+        'contigency'   => [1, 2, 3, 4, 5, 6, 7, 8],
+        'trafficstuck' => [1, 2, 3, 4, 5, 6, 7, 8],
+        'opsdal/cad'   => [1, 2, 3, 4, 5, 6, 7, 8],
+        'report/traffic-analytic' => [1, 2, 3, 4, 5, 6, 7, 8],
+        'traffics' => [1, 2, 3, 4, 5, 6, 7, 8],
         /** Alias path legacy (page_name DB: trafficdalkot) */
-        'trafficdalkot' => [1, 2, 3, 4, 5, 6, 7],
+        'trafficdalkot' => [1, 2, 3, 4, 5, 6, 7, 8],
 
         /* Data */
-        'layanan/data'   => [4, 5, 6, 7],
-        't_datajalan'    => [1, 2, 3, 4, 5, 6, 7],
-        'jalan_gangguan' => [1, 2, 3, 4, 5, 6, 7],
+        'layanan/data'   => [2, 3, 4, 5, 6, 7, 8],
+        't_datajalan'    => [1, 2, 3, 4, 5, 6, 7, 8],
+        'jalan_gangguan' => [1, 2, 3, 4, 5, 6, 7, 8],
 
         /* TIK — oprator: header IT Asset Management (Data Perangkat, CCTV, Trouble Report) */
-        'itsupport'      => [1, 2, 3, 4, 5, 6, 7],
-        'master/referensi' => [1, 2, 3, 4],
-        'sm/master' => [1, 2, 3, 4, 5, 6, 7],
-        'sm/transaksi' => [1, 2, 3, 4, 5, 6, 7],
+        'itsupport'      => [1, 2, 3, 4, 5, 6, 7, 8],
+        'master/referensi' => [1, 2, 3, 4, 8],
+        'sm/master'     => [1, 2, 3, 4, 5, 6, 7, 8],
+        'sm/transaksi'  => [1, 2, 3, 4, 5, 6, 7, 8],
+        'sm/dacol'      => [1, 2, 3, 4, 5, 6, 7, 8],
 
         /* Config — setara baris ✓ (SA): hanya matrix superadmin mengubah Roles/permissions */
         'roles'             => [1],
         'role_permissions' => [1],
 
         /* ------- Modul legacy / tautan langsung di luar sidebar matriks gambar ------- */
-        'layanan/public-service' => [5, 6, 7],
-        'layanan/masyarakat'     => [2, 3, 4, 5, 6, 7],
-        'media/manage'           => [1, 2, 3, 4, 5, 6, 7],
-        'media/analytic'         => [4, 5, 6, 7],
+        'layanan/public-service' => [5, 6, 7, 8],
+        'layanan/masyarakat'     => [2, 3, 4, 5, 6, 7, 8],
+        'media/manage'           => [1, 2, 3, 4, 5, 6, 7, 8],
+        'media/analytic'         => [4, 5, 6, 7, 8],
 
-        'arusmudik'       => [1, 2, 3, 5, 6, 7],
-        'wil/arusmudik'   => [1, 2, 3, 5, 6, 7],
-        'da/arusmudik'    => [1, 2, 3, 5, 6, 7],
-        'nas/arusmudik'   => [1, 2, 3, 5, 6, 7],
+        'arusmudik'       => [1, 2, 3, 5, 6, 7, 8],
+        'wil/arusmudik'   => [1, 2, 3, 5, 6, 7, 8],
+        'da/arusmudik'    => [1, 2, 3, 5, 6, 7, 8],
+        'nas/arusmudik'   => [1, 2, 3, 5, 6, 7, 8],
 
-        'auditarus'   => [1, 2, 3, 5, 6, 7],
-        'profilposko' => [1, 2, 3, 5, 6, 7],
-        'ops_wanjol'  => [1, 2, 3, 5, 6, 7],
+        'auditarus'   => [1, 2, 3, 5, 6, 7, 8],
+        'profilposko' => [1, 2, 3, 5, 6, 7, 8],
+        'ops_wanjol'  => [1, 2, 3, 5, 6, 7, 8],
 
-        'terminal'       => [1, 2, 3, 4, 5, 6, 7],
-        'pnpangkutan'    => [1, 2, 3, 4, 5, 6, 7],
-        'objekwisata'    => [1, 2, 3, 4, 5, 6, 7],
-        'kunjunganwisata'=> [1, 2, 3, 4, 5, 6, 7],
-        'tempatibadah'   => [1, 2, 3, 4, 5, 6, 7],
-        'faskes'         => [1, 2, 3, 4, 5, 6, 7],
+        'terminal'       => [1, 2, 3, 4, 5, 6, 7, 8],
+        'pnpangkutan'    => [1, 2, 3, 4, 5, 6, 7, 8],
+        'objekwisata'    => [1, 2, 3, 4, 5, 6, 7, 8],
+        'kunjunganwisata'=> [1, 2, 3, 4, 5, 6, 7, 8],
+        'tempatibadah'   => [1, 2, 3, 4, 5, 6, 7, 8],
+        'faskes'         => [1, 2, 3, 4, 5, 6, 7, 8],
 
-        'master/pusat'       => [1, 2, 3],
-        'master/daerah'      => [1, 2, 3],
-        'master/resort'      => [1, 2, 3],
+        'master/pusat'       => [1, 2, 3, 8],
+        'master/daerah'      => [1, 2, 3, 8],
+        'master/resort'      => [1, 2, 3, 8],
         'master/kl-pusat'    => [1],
         'master/kl-daerah'   => [1],
         'master/kl-resort'   => [1],
-        'master/kab-kota'    => [1, 2, 3],
+        'master/kab-kota'    => [1, 2, 3, 8],
         'master/unit-kerja'  => [1],
     ],
 
@@ -165,5 +168,6 @@ return [
         5 => 'Executive3 - Executive kab/kota (setara operator/Polres), sidebar & data sama operator, hanya lihat.',
         6 => 'Executive2 - Executive provinsi/Polda (setara AdminPolda), hanya melihat data sesuai polda/provinsi kerja.',
         7 => 'Executive1 - Executive pusat, hanya melihat data sesuai cakupan nasional.',
+        8 => 'Ditlantas - Ditlantas Polda/Provinsi, setara AdminPolda, CRUD data lingkup Polda/provinsi kerja.',
     ],
 ];

@@ -44,11 +44,14 @@ class ArusmudikController extends OperasionalController
      */
     protected function applyFilters($query, Request $request)
     {
-        // Join dengan usm untuk nama piket
+        // Join dengan usm untuk nama piket dan profilposko untuk wilayah
         $query->leftJoin('usm', 'arusmudik.piket', '=', 'usm.id_usm')
+              ->leftJoin('profilposko', 'arusmudik.id_profileposko', '=', 'profilposko.id_profilposko')
               ->select(
                   'arusmudik.*',
-                  'usm.nama as usm_nama'
+                  'usm.nama as usm_nama',
+                  'profilposko.daerah',
+                  'profilposko.wilayah'
               );
         
         return $query;

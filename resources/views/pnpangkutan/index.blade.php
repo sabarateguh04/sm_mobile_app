@@ -29,14 +29,14 @@
 @endif
 
 <form action="{{ route('pnpangkutan.index') }}" method="GET" id="pnpangkutanFilterForm" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
+    @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
     <div class="pmf-row">
-        @include('_partials.compact_filters.search', ['placeholder' => 'Cari terminal, koresponden...'])
         @include('_partials.compact_filters.territory')
-        @include('_partials.compact_filters.date_range', ['prefix' => 'pnpangkutan'])
-        @include('_partials.compact_filters.select', ['name' => 'jenisterminal', 'placeholder' => 'Jenis Terminal', 'options' => $jenisTerminalList ?? [], 'autoSubmit' => false])
+        @include('_partials.compact_filters.select', ['name' => 'jenisterminal', 'placeholder' => 'Jenis Terminal...', 'options' => collect($jenisTerminalList ?? [])->mapWithKeys(fn($v) => [$v => $v])->all(), 'autoSubmit' => false])
+        @include('_partials.compact_filters.search', ['placeholder' => 'Pencarian...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('pnpangkutan.index'),
-            'active' => $hasFilters,
+            'active' => request()->hasAny(['search', 'jenisterminal']),
         ])
     </div>
 </form>
@@ -67,17 +67,26 @@
             <table class="w-full text-left min-w-[1100px]">
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
-@endif
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Terminal</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Kedat. PNP</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Keber. PNP</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Kedat. Angk.</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Keber. Angk.</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket</th>
+                    @if($isOp)
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Terminal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Kedat. PNP</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Keber. PNP</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Kedat. Angk.</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Keber. Angk.</th>
+                    @else
+                        @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+                        @endif
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jenis Terminal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama terminal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">PnP-IN</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">PnP-OUT</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Angk-IN</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Angk-OUT</th>
+                    @endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                 </tr></thead>
                 <tbody class="divide-y divide-slate-100">
@@ -88,35 +97,61 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
-                            <td class="px-3 py-2.5">
-                                <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
-                            </td>
-@endif
-                            <td class="px-3 py-2.5">
-                                <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span>
-                            </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
-                            <td class="px-3 py-2.5">
-                                <a href="{{ route('pnpangkutan.show', $rowId) }}"
-                                   class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ \Str::limit($item->namaterminal ?: 'Detail', 28) }}</a>
-                                @if($item->jenisterminal)
-                                    <span class="inline-flex items-center mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->jenisterminal }}</span>
+                            @if($isOp)
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('pnpangkutan.show', $rowId) }}"
+                                       class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ \Str::limit($item->namaterminal ?: 'Detail', 28) }}</a>
+                                    @if($item->jenisterminal)
+                                        <span class="inline-flex items-center mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->jenisterminal }}</span>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5 text-center">
+                                    <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700">{{ number_format($item->kedatanganpnp ?? 0, 0, ',', '.') }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-center">
+                                    <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700">{{ number_format($item->keberangkatanpnp ?? 0, 0, ',', '.') }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-center">
+                                    <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-blue-700">{{ number_format($item->kedatanganangk ?? 0, 0, ',', '.') }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-center">
+                                    <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700">{{ number_format($item->keberangkatanangk ?? 0, 0, ',', '.') }}</span>
+                                </td>
+                            @else
+                                @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
+                                    </td>
                                 @endif
-                            </td>
-                            <td class="px-3 py-2.5 text-center">
-                                <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700">{{ number_format($item->kedatanganpnp ?? 0, 0, ',', '.') }}</span>
-                            </td>
-                            <td class="px-3 py-2.5 text-center">
-                                <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700">{{ number_format($item->keberangkatanpnp ?? 0, 0, ',', '.') }}</span>
-                            </td>
-                            <td class="px-3 py-2.5 text-center">
-                                <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-blue-700">{{ number_format($item->kedatanganangk ?? 0, 0, ',', '.') }}</span>
-                            </td>
-                            <td class="px-3 py-2.5 text-center">
-                                <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700">{{ number_format($item->keberangkatanangk ?? 0, 0, ',', '.') }}</span>
-                            </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->usm_nama ?? '—' }}</td>
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                <td class="px-3 py-2.5">
+                                    @if($item->jenisterminal)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $item->jenisterminal }}</span>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('pnpangkutan.show', $rowId) }}"
+                                       class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ \Str::limit($item->namaterminal ?: 'Detail', 28) }}</a>
+                                </td>
+                                <td class="px-3 py-2.5 text-center">
+                                    <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700">{{ number_format($item->kedatanganpnp ?? 0, 0, ',', '.') }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-center">
+                                    <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700">{{ number_format($item->keberangkatanpnp ?? 0, 0, ',', '.') }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-center">
+                                    <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-blue-700">{{ number_format($item->kedatanganangk ?? 0, 0, ',', '.') }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-center">
+                                    <span class="inline-flex min-w-[2rem] justify-center px-1.5 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700">{{ number_format($item->keberangkatanangk ?? 0, 0, ',', '.') }}</span>
+                                </td>
+                            @endif
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('pnpangkutan.show', $rowId) }}"

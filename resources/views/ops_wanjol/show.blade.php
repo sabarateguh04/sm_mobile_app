@@ -21,6 +21,15 @@
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0">{{ isset($data->tanggal) ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</dd>
                 
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                <dd class="m-0">@if(!empty($data->daerah))<span class="text-[13px] font-bold" style="color:#D8A808;">{{ strtoupper($data->daerah) }}</span>@else<span class="text-[13px] text-slate-800 font-medium">-</span>@endif</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                <dd class="m-0">@if(!empty($data->wilayah))<span class="text-[13px] text-slate-800 font-medium">{{ strtoupper($data->wilayah) }}</span>@else<span class="text-[13px] text-slate-800 font-medium">-</span>@endif</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
+                
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Posko</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->posko_nama ?? '-' }}</dd>
                 
@@ -33,14 +42,6 @@
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Uraian Peristiwa</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-wrap">{!! nl2br(e($data->uraian ?? '-')) !!}</dd>
                 
-                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
-                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
-                
-                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
-                <dd class="m-0">@if(!empty($data->daerah))<span class="text-[13px] font-bold" style="color:#D8A808;">{{ strtoupper($data->daerah) }}</span>@else<span class="text-[13px] text-slate-800 font-medium">-</span>@endif</dd>
-                
-                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
-                <dd class="m-0">@if(!empty($data->wilayah))<span class="text-[13px] text-slate-800 font-medium">{{ strtoupper($data->wilayah) }}</span>@else<span class="text-[13px] text-slate-800 font-medium">-</span>@endif</dd>
             </dl>
             <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 flex-wrap gap-2">
                 <a href="{{ route('ops_wanjol.index') }}" class="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-label-md transition-all text-decoration-none">

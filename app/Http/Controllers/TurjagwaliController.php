@@ -121,7 +121,35 @@ class TurjagwaliController extends OperasionalController
     public function index(Request $request)
     {
         $smLv = $this->turjagwaliSidebarQuery($request);
-        $tab = $request->get('tab', 'rinci');
+        $tab = $request->get('tab', 'dacol_rengiat');
+
+        if ($tab === 'dacol_rengiat') {
+            $table = 'sm_dacol_rengiat';
+            $dacolRows = \App\Support\SmDacolData::paginated($table, $request, 20);
+            return view($this->viewFolder.'.index', array_merge([
+                'pageTitle' => 'Report Kodal Turjagwali',
+                'tab' => $tab,
+                'data' => collect(), // dummy
+                'tabulasi' => collect(),
+                'giatList' => collect(),
+                'peristiwaList' => collect(),
+                'faktorList' => collect(),
+                'smLv' => $smLv,
+                'tableName' => $this->tableName,
+                'primaryKey' => $this->primaryKey,
+                'sboViewOnly' => true,
+                'hideAddButton' => true,
+                
+                'active' => $table,
+                'meta' => config("smd_tables.dacol.{$table}", []),
+                'rows' => $dacolRows,
+                'displayColumns' => \App\Support\SmDacolData::displayColumns($table),
+                'availableSources' => \App\Support\SmDacolData::availableSources($table),
+                'filterUrl' => route('turjagwali.index', $smLv),
+                'filterHiddenInputs' => '<input type="hidden" name="tab" value="'.$tab.'">',
+                'filterResetUrl' => route('turjagwali.index', array_merge($smLv, ['tab' => $tab])),
+            ], TerritoryIndexFilters::viewBundle($request)));
+        }
 
         $query = DB::table($this->tableName);
         $query = $this->applyFilters($query, $request);
@@ -176,6 +204,7 @@ class TurjagwaliController extends OperasionalController
             'tableName' => $this->tableName,
             'primaryKey' => $this->primaryKey,
             'sboViewOnly' => RoleMutationPolicy::deniesAllMutations(Auth::user()),
+            'hideAddButton' => \App\Helpers\MenuHelper::isAdminTerritorialForLayout(Auth::user()),
         ], TerritoryIndexFilters::viewBundle($request)));
     }
 
@@ -221,6 +250,9 @@ class TurjagwaliController extends OperasionalController
     public function create()
     {
         RoleMutationPolicy::assertCanCreate(Auth::user());
+        if (\App\Helpers\MenuHelper::isAdminTerritorialForLayout(Auth::user())) {
+            abort(403, 'Role Admin Polda dan Polres tidak diperkenankan menambah data Turjagwali.');
+        }
 
         return view($this->viewFolder.'.create', [
             'pageTitle' => 'Tambah Kodal Turjagwali',
@@ -329,6 +361,9 @@ class TurjagwaliController extends OperasionalController
     public function store(Request $request)
     {
         RoleMutationPolicy::assertCanCreate(Auth::user());
+        if (\App\Helpers\MenuHelper::isAdminTerritorialForLayout(Auth::user())) {
+            abort(403, 'Role Admin Polda dan Polres tidak diperkenankan menambah data Turjagwali.');
+        }
 
         $rules = $this->getValidationRules('store');
         $rules['fotogiat_file'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192';

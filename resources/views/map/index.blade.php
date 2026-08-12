@@ -124,155 +124,189 @@
         margin-top: 4px;
     }
 
-    /* ── Premium Dark Glassmorphism Popup ── */
-    .leaflet-popup-content-wrapper {
-        background: rgba(8, 14, 30, 0.93) !important;
-        backdrop-filter: blur(20px) saturate(1.5) !important;
-        -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
-        border-radius: 16px !important;
-        box-shadow:
-            0 24px 64px rgba(0,0,0,0.75),
-            0 0 0 1px rgba(255,255,255,0.04) inset !important;
-        padding: 0 !important;
-        animation: popup-slide-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    }
-    @keyframes popup-slide-in {
-        from { opacity: 0; transform: scale(0.88) translateY(10px); }
-        to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .leaflet-popup-content {
-        margin: 0 !important;
-        color: #f1f5f9 !important;
-    }
-    .leaflet-popup-tip {
-        background: rgba(8, 14, 30, 0.93) !important;
-        box-shadow: none !important;
-    }
-    .leaflet-popup-close-button {
-        color: rgba(255,255,255,0.45) !important;
-        font-size: 16px !important;
-        top: 6px !important;
-        right: 8px !important;
-        width: 22px !important;
-        height: 22px !important;
-        line-height: 22px !important;
-        text-align: center !important;
-        border-radius: 50% !important;
-        padding: 0 !important;
-        transition: all 0.2s !important;
-        background: rgba(255,255,255,0.06) !important;
-    }
-    .leaflet-popup-close-button:hover {
-        color: #fff !important;
-        background: rgba(255,255,255,0.15) !important;
-    }
-    /* Premium popup inner wrapper — left connection line */
-    .popup-premium {
-        padding: 14px 16px 14px 24px;
-        font-size: 13px;
-        line-height: 1.55;
-        color: #e2e8f0;
-        position: relative;
-    }
-    
-    /* -- Leader Line / Garis dari popup ke marker -- */
-    .leaflet-popup-tip-container {
-        width: 40px !important;
-        height: 40px !important;
-        margin-left: -20px !important;
-        bottom: -40px !important;
-        overflow: visible !important;
-    }
-    .leaflet-popup-tip {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        width: 100% !important;
-        height: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        transform: none !important;
-    }
-    .leaflet-popup-tip::after {
-        content: '';
-        position: absolute;
+    /* ── Google Maps Style Side Panel ── */
+    .gm-side-panel {
+        position: fixed;
         top: 0;
-        left: 50%;
-        width: 2px;
-        height: 70px;
-        background: linear-gradient(to bottom, #38bdf8 0%, rgba(56,189,248,0.1) 100%);
-        box-shadow: 0 0 10px #38bdf8;
-        transform: rotate(-45deg);
-        transform-origin: top left;
-        pointer-events: none;
+        right: -420px;
+        width: 400px;
+        height: 100vh;
+        background: #ffffff;
+        z-index: 2000;
+        box-shadow: -8px 0 30px rgba(0,0,0,0.12);
+        transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        overflow-y: auto;
+        font-family: 'Google Sans', 'Roboto', 'Segoe UI', Arial, sans-serif;
+    }
+    @media (max-width: 600px) {
+        .gm-side-panel { width: 100%; right: -100%; }
+    }
+    .gm-side-panel.open {
+        right: 0;
+    }
+    .gm-side-panel-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.95);
+        border: none;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: #5f6368;
+        backdrop-filter: blur(8px);
+        transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+    .gm-side-panel-close:hover {
+        background: #f1f3f4;
+        color: #202124;
+        transform: scale(1.05);
     }
 
-    /* Vertical jalur koneksi (connection track) di dalam popup */
-    .popup-premium::before {
-        content: '';
-        position: absolute;
-        left: 8px;
-        top: 12px;
-        bottom: 12px;
-        width: 3px;
-        background:
-            radial-gradient(circle 8px at 1.5px 0%,   rgba(56,189,248,1)   0%, transparent 100%),
-            radial-gradient(circle 8px at 1.5px 100%, rgba(139,92,246,1)   0%, transparent 100%),
-            linear-gradient(to bottom,
-                rgba(56,189,248,0.95)  0%,
-                rgba(99,102,241,0.9)  50%,
-                rgba(139,92,246,0.95) 100%
-            );
-        border-radius: 2px;
-        box-shadow: 0 0 10px rgba(56,189,248,0.35), 0 0 22px rgba(99,102,241,0.15);
+    .gm-popup {
+        display: flex;
+        flex-direction: column;
     }
-    /* Node titik atas — pulsing cyan glow */
-    .popup-premium::after {
-        content: '';
-        position: absolute;
-        left: 3.5px;
-        top: 9px;
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: radial-gradient(circle, #bae6fd 0%, #38bdf8 55%, #0284c7 100%);
-        box-shadow: 0 0 8px rgba(56,189,248,1), 0 0 18px rgba(56,189,248,0.55);
-        animation: popup-node-pulse 2.4s ease-in-out infinite;
-        z-index: 5;
+    .gm-hero {
+        width: 100%;
+        height: 220px;
+        background-color: #f1f3f4;
+        background-size: cover;
+        background-position: center;
+        position: relative;
     }
-    @keyframes popup-node-pulse {
-        0%, 100% {
-            box-shadow: 0 0 6px rgba(56,189,248,0.9), 0 0 14px rgba(56,189,248,0.45);
-            transform: scale(1);
-        }
-        50% {
-            box-shadow: 0 0 12px rgba(56,189,248,1), 0 0 26px rgba(56,189,248,0.65);
-            transform: scale(1.18);
-        }
+    .gm-body {
+        padding: 24px;
     }
-    .popup-premium strong {
-        color: #f8fafc;
+    .gm-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #202124;
+        margin: 0 0 8px 0;
+        line-height: 1.25;
+        letter-spacing: -0.3px;
     }
-    .popup-premium a.btn {
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 5px !important;
-        border-radius: 8px !important;
-        font-weight: 700 !important;
-        font-size: 11px !important;
-        padding: 5px 10px !important;
+    .gm-subtitle {
+        font-size: 14px;
+        color: #5f6368;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .gm-badge {
+        font-weight: 600;
+        color: #188038;
+        background: #e6f4ea;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        letter-spacing: 0.2px;
+    }
+    .gm-badge.offline {
+        color: #d93025;
+        background: #fce8e6;
+    }
+    .gm-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-bottom: 24px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid #e8eaed;
+    }
+    .gm-action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
         text-decoration: none !important;
-        transition: filter 0.2s, transform 0.2s !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.35) !important;
+        color: #1a73e8 !important;
+        cursor: pointer;
+        flex: 1;
+        min-width: 60px;
+        transition: transform 0.15s;
     }
-    .popup-premium a.btn:hover {
-        filter: brightness(1.25) !important;
-        transform: translateY(-1px) !important;
+    .gm-action-btn:active {
+        transform: scale(0.96);
     }
-    .popup-premium img[style*="border-radius:4px"] {
-        border: 1px solid rgba(255,255,255,0.1);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    .gm-action-btn:hover .gm-icon-circle {
+        background: #e8f0fe;
+    }
+    .gm-icon-circle {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid #dadce0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        transition: background 0.2s, box-shadow 0.2s;
+    }
+    .gm-icon-circle.filled {
+        background: #1a73e8;
+        color: #fff;
+        border-color: #1a73e8;
+        box-shadow: 0 1px 3px rgba(26,115,232,0.4);
+    }
+    .gm-action-btn:hover .gm-icon-circle.filled {
+        background: #174ea6;
+        box-shadow: 0 2px 6px rgba(26,115,232,0.5);
+    }
+    .gm-btn-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #1a73e8;
+        text-align: center;
+    }
+    .gm-details {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .gm-detail-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        font-size: 15px;
+        color: #3c4043;
+        line-height: 1.5;
+    }
+    .gm-detail-row i {
+        font-size: 22px;
+        color: #1a73e8;
+        margin-top: 2px;
+        width: 24px;
+        text-align: center;
+    }
+    .gm-petugas-card {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background: #f8f9fa;
+        border: 1px solid #e8eaed;
+        border-radius: 12px;
+        margin-top: 8px;
+        transition: background 0.2s;
+    }
+    .gm-petugas-card:hover {
+        background: #f1f3f4;
+    }
+    .gm-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid #dadce0;
     }
 
     .map-legend {
@@ -827,6 +861,12 @@
 
     <div id="map"></div>
 
+    <div id="gmSidePanel" class="gm-side-panel">
+        <button class="gm-side-panel-close" onclick="closeGmSidePanel()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div id="gmSidePanelContent"></div>
+    </div>
     {{-- Toast konfirmasi simpan koordinat (dipakai saat Edit Mode aktif) --}}
     <div id="saveKoordToast">
         <div class="toast-title"><i class="fas fa-map-pin" style="margin-right:5px;"></i> Pindahkan Koordinat?</div>
@@ -864,7 +904,18 @@
                 hasUserCenter = true;
             @endif
 
-            var map = L.map('map', { zoomControl: false, preferCanvas: true }).setView(defaultCenter, defaultZoom);
+            var indonesiaBounds = L.latLngBounds(
+                L.latLng(-12.0, 94.0), // South West
+                L.latLng(7.0, 142.0)   // North East
+            );
+
+            var map = L.map('map', { 
+                zoomControl: false, 
+                preferCanvas: true,
+                maxBounds: indonesiaBounds,
+                maxBoundsViscosity: 1.0,
+                minZoom: 5
+            }).setView(defaultCenter, defaultZoom);
 
             var googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
                 maxZoom: 22, maxNativeZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'], attribution: 'Google'
@@ -1003,10 +1054,19 @@
                 'faskes':       '#14b8a6',
                 'layanan_data': '#84cc16'
             };
+            var seenMapMarkers = new Set();
 
             function addMarker(obj, iconClassOrFile, label, layerKey) {
                 var lat = obj.coordinates[0], lng = obj.coordinates[1];
                 if (!isValidCoordinate(lat, lng)) return null;
+
+                // Deduplikasi EKSTRIM: Hanya boleh ada 1 marker per koordinat per layer.
+                // Jika backend mengirim 2 baris data berbeda (beda ID) tapi koordinatnya sama persis, 
+                // marker kedua akan dibuang sehingga terhindar dari bug "keluar 2".
+                var markerId = lat + '_' + lng + '_' + layerKey;
+                if (seenMapMarkers.has(markerId)) return null;
+                seenMapMarkers.add(markerId);
+
                 var pinColor = _pinColorMap[layerKey] || '#EA4335';
                 
                 var isImageFile = iconClassOrFile.includes('.gif') || iconClassOrFile.includes('.png') || iconClassOrFile.includes('.svg');
@@ -1041,7 +1101,8 @@
                     })
                 });
 
-                var tipHtml;
+                var tipHtml = '<div class="gm-popup">';
+
                 if (layerKey === 'cctv') {
                     var idOnly = String(obj.id).replace('cctv_', '');
                     var startUrl = "/cctv-live/" + idOnly + "/start";
@@ -1049,76 +1110,128 @@
 
                     var statusLower = (obj.status || '').toLowerCase().trim();
                     var isOnline = ['aktif', 'online', 'hidup', 'normal', '1'].indexOf(statusLower) !== -1 || !obj.status;
+                    
                     var statusBadge = isOnline 
-                        ? '<span style="display:inline-flex; align-items:center; gap:4px; padding:2px 6px; border-radius:4px; background:rgba(16,185,129,0.2); color:#10b981; font-size:10px; font-weight:bold;"><span style="width:6px; height:6px; border-radius:50%; background:#10b981;"></span> Aktif</span>'
-                        : '<span style="display:inline-flex; align-items:center; gap:4px; padding:2px 6px; border-radius:4px; background:rgba(239,68,68,0.2); color:#ef4444; font-size:10px; font-weight:bold;"><span style="width:6px; height:6px; border-radius:50%; background:#ef4444;"></span> Mati</span>';
+                        ? '<span class="gm-badge">Aktif</span>'
+                        : '<span class="gm-badge offline">Mati</span>';
 
-                    tipHtml = 
-                        '<div class="popup-premium cctv-popup-container" data-id="' + idOnly + '" data-start-url="' + startUrl + '" data-stop-url="' + stopUrl + '" style="width:280px;">' +
-                            '<div style="font-weight:bold; font-size:13px; color:#fff; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; width:100%;">' +
-                                '<span style="display:flex; align-items:center; gap:6px;"><i class="fas fa-video" style="color:#ef4444;"></i> ' + escHtml(obj.name || 'CCTV Live') + '</span>' +
-                                statusBadge +
-                            '</div>' +
-                            '<div class="cctv-stream-wrapper" style="position:relative; width:100%; aspect-ratio:16/9; background:#000; border-radius:8px; overflow:hidden; border:1px solid #444; margin-bottom:8px; display:flex; align-items:center; justify-content:center;">' +
+                    tipHtml += 
+                        '<div class="cctv-popup-container" data-id="' + idOnly + '" data-start-url="' + startUrl + '" data-stop-url="' + stopUrl + '">' +
+                            '<div class="cctv-stream-wrapper gm-hero" style="background:#000; display:flex; align-items:center; justify-content:center;">' +
                                 '<iframe class="cctv-popup-iframe" style="width:100%; height:100%; border:none; display:none;" allow="autoplay; fullscreen"></iframe>' +
-                                '<div class="cctv-popup-placeholder" style="text-align:center; padding:10px;">' +
-                                    '<i class="fas fa-spinner fa-spin cctv-popup-spinner" style="font-size:24px; color:#ef4444; margin-bottom:6px;"></i>' +
-                                    '<div class="cctv-popup-status" style="font-size:11px; color:#aaa;">Menyiapkan stream…</div>' +
+                                '<div class="cctv-popup-placeholder" style="text-align:center;">' +
+                                    '<i class="fas fa-spinner fa-spin cctv-popup-spinner" style="font-size:24px; color:#fff; margin-bottom:6px;"></i>' +
+                                    '<div class="cctv-popup-status" style="font-size:12px; color:#ccc;">Menyiapkan stream…</div>' +
                                 '</div>' +
                             '</div>' +
-                            '<div style="display:flex; gap:6px; margin-top:8px;">' +
-                                '<a href="' + obj.stream_url + '" target="_blank" class="btn btn-sm" style="background:#ef4444; color:#fff; padding:4px 8px; font-size:11px; text-decoration:none; border-radius:4px; font-weight:bold; flex:1; text-align:center;"><i class="fas fa-expand"></i> Layar Penuh</a>' +
-                                '<a href="https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng + '" target="_blank" class="btn btn-sm" style="background:#2563eb; color:#fff; padding:4px 8px; font-size:11px; text-decoration:none; border-radius:4px; text-align:center; flex:1;"><i class="fas fa-directions"></i> Rute</a>' +
+                            '<div class="gm-body">' +
+                                '<h1 class="gm-title">' + escHtml(obj.name || 'CCTV Live') + '</h1>' +
+                                '<div class="gm-subtitle">' +
+                                    statusBadge +
+                                    '<span>&middot;</span>' +
+                                    '<span>CCTV / Video Analytics</span>' +
+                                '</div>' +
+                                '<div class="gm-actions">' +
+                                    '<a href="https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng + '" target="_blank" class="gm-action-btn">' +
+                                        '<div class="gm-icon-circle filled"><i class="fas fa-directions"></i></div>' +
+                                        '<div class="gm-btn-label">Rute</div>' +
+                                    '</a>' +
+                                    '<a href="' + obj.stream_url + '" target="_blank" class="gm-action-btn">' +
+                                        '<div class="gm-icon-circle"><i class="fas fa-expand"></i></div>' +
+                                        '<div class="gm-btn-label">Layar Penuh</div>' +
+                                    '</a>' +
+                                '</div>' +
+                                '<div class="gm-details">' +
+                                    '<div class="gm-detail-row">' +
+                                        '<i class="fas fa-map-marker-alt"></i>' +
+                                        '<span>' + escHtml(obj.lokasi || lat + ', ' + lng) + '</span>' +
+                                    '</div>' +
+                                '</div>' +
                             '</div>' +
                         '</div>';
                 } else {
-                    tipHtml = '<div class="popup-premium" style="min-width:160px;">';
-
                     if (obj.foto_giat) {
                         var fg = obj.foto_giat.startsWith('/') || obj.foto_giat.startsWith('http') ? obj.foto_giat : '/storage/' + obj.foto_giat;
-                        tipHtml += '<div style="margin-bottom:8px; text-align:center;"><img src="' + escHtml(fg) + '" style="max-width:100%; max-height:120px; border-radius:4px; object-fit:cover; border:1px solid #ccc; box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>';
+                        tipHtml += '<div class="gm-hero" style="background-image: url(\'' + escHtml(fg) + '\');"></div>';
                     }
 
+                    tipHtml += '<div class="gm-body">';
+                    
                     var title = obj.name || '';
                     var subtitle = obj.lokasi || '';
                     
-                    // Jika obj.name adalah alamat (seperti Jl. atau Jalan), tukar dengan obj.lokasi (nama tempat)
                     if (subtitle && (title.toLowerCase().startsWith('jl.') || title.toLowerCase().startsWith('jalan '))) {
                         var temp = title;
                         title = subtitle;
                         subtitle = temp;
                     }
 
-                    tipHtml += '<strong style="font-size:14px; color:#fff; display:block; margin-bottom:2px;">' + escHtml(title) + '</strong>';
-
-                    if (obj.jenis) tipHtml += '<span style="opacity:.9; font-size:11px; display:inline-block; margin-bottom:2px;">' + escHtml(obj.jenis) + '</span><br>';
-                    if (subtitle) tipHtml += '<span style="font-size:11px; opacity:.8;">' + escHtml(subtitle) + '</span><br>';
-                    if (obj.status) tipHtml += '<span style="font-size:11px;">Status: ' + escHtml(obj.status) + '</span><br>';
-
-                    if (obj.petugas) {
-                        tipHtml += '<div style="display:flex; align-items:center; margin-top:6px; padding-top:6px; border-top:1px solid #ccc;">';
-                        if (obj.fotoprof) {
-                            var fp = obj.fotoprof.startsWith('/') || obj.fotoprof.startsWith('http') ? obj.fotoprof : '/storage/' + obj.fotoprof;
-                            tipHtml += '<img src="' + escHtml(fp) + '" style="width:24px; height:24px; border-radius:50%; margin-right:6px; object-fit:cover;"> ';
-                        } else {
-                            tipHtml += '<i class="fas fa-user-circle" style="color:#555; font-size:24px; margin-right:6px;"></i> ';
-                        }
-                        tipHtml += '<strong>' + escHtml(obj.petugas) + '</strong></div>';
+                    tipHtml += '<h1 class="gm-title">' + escHtml(title) + '</h1>';
+                    
+                    var statusHtml = '';
+                    if (obj.status) {
+                        statusHtml = '<span class="gm-badge">' + escHtml(obj.status) + '</span><span>&middot;</span>';
                     }
+                    var jenisHtml = obj.jenis ? '<span>' + escHtml(obj.jenis) + '</span>' : '<span>Tujuan Lokasi</span>';
 
+                    tipHtml += '<div class="gm-subtitle">' + statusHtml + jenisHtml + '</div>';
+
+                    tipHtml += '<div class="gm-actions">';
+                    tipHtml += 
+                        '<a href="https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng + '" target="_blank" class="gm-action-btn">' +
+                            '<div class="gm-icon-circle filled"><i class="fas fa-directions"></i></div>' +
+                            '<div class="gm-btn-label">Rute</div>' +
+                        '</a>';
+                        
                     if (obj.stream_url) {
-                        tipHtml += '<div style="margin-top:8px; display:flex; gap:6px;">' +
-                                   '<a href="' + obj.stream_url + '" target="_blank" class="btn btn-sm" style="background:#ef4444; color:#fff; padding:4px 8px; font-size:11px; text-decoration:none; border-radius:4px; display:inline-block; font-weight:bold;"><i class="fas fa-video"></i> Tonton Live</a>' +
-                                   '<a href="https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng + '" target="_blank" class="btn btn-sm" style="background:#2563eb; color:#fff; padding:4px 8px; font-size:11px; text-decoration:none; border-radius:4px; display:inline-block;"><i class="fas fa-directions"></i> Rute</a>' +
-                                   '</div></div>';
-                    } else {
-                        tipHtml += '<div style="margin-top:8px;">' +
-                                   '<a href="https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng + '" target="_blank" class="btn btn-sm" style="background:#2563eb; color:#fff; padding:4px 8px; font-size:11px; text-decoration:none; border-radius:4px; display:inline-block;"><i class="fas fa-directions"></i> Buka Rute Peta</a>' +
+                        tipHtml += 
+                        '<a href="' + obj.stream_url + '" target="_blank" class="gm-action-btn">' +
+                            '<div class="gm-icon-circle"><i class="fas fa-video"></i></div>' +
+                            '<div class="gm-btn-label">Live Stream</div>' +
+                        '</a>';
+                    }
+                    
+                    tipHtml += '</div>'; // close actions
+
+                    tipHtml += '<div class="gm-details">';
+                    if (subtitle) {
+                        var parts = subtitle.split('|').map(function(s) { return s.trim(); }).filter(Boolean);
+                        if (parts.length > 1) {
+                            tipHtml += '<div class="gm-detail-row"><i class="fas fa-info-circle"></i><div style="display:flex;flex-direction:column;gap:6px;">';
+                            parts.forEach(function(p) {
+                                tipHtml += '<span>' + escHtml(p) + '</span>';
+                            });
+                            tipHtml += '</div></div>';
+                        } else {
+                            tipHtml += '<div class="gm-detail-row"><i class="fas fa-map-marker-alt"></i><span>' + escHtml(subtitle) + '</span></div>';
+                        }
+                    }
+                    
+                    if (obj.petugas) {
+                        var fp = '';
+                        if (obj.fotoprof) {
+                            fp = obj.fotoprof.startsWith('/') || obj.fotoprof.startsWith('http') ? obj.fotoprof : '/storage/' + obj.fotoprof;
+                        }
+                        tipHtml += '<div class="gm-petugas-card">';
+                        if (fp) {
+                            tipHtml += '<img src="' + escHtml(fp) + '" class="gm-avatar" style="margin:0;">';
+                        } else {
+                            tipHtml += '<i class="fas fa-user-circle" style="font-size:44px; color:#bdc1c6; margin:0; width:auto; line-height:1;"></i>';
+                        }
+                        tipHtml += '<div style="display:flex;flex-direction:column;gap:4px;">' +
+                                   '<span style="font-size:12px;font-weight:500;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;line-height:1;">Dilaporkan oleh</span>' +
+                                   '<span style="font-size:16px;font-weight:600;color:#202124;">' + escHtml(obj.petugas) + '</span>' + 
                                    '</div></div>';
                     }
+                    tipHtml += '</div>'; // close details
+                    tipHtml += '</div>'; // close gm-body
                 }
+                
+                tipHtml += '</div>'; // close gm-popup
 
-                marker.bindPopup(tipHtml, { minWidth: layerKey === 'cctv' ? 300 : 150 });
+                marker.on('click', function() {
+                    openGmSidePanel(tipHtml, obj);
+                });
 
                 var targetLayer = layers[layerKey] || layers['posko'];
                 targetLayer.addLayer(marker);
@@ -1302,21 +1415,31 @@
                     })
                 });
 
-                var tipHtml = '<div class="popup-premium" style="min-width:180px;">';
+                var tipHtml = '<div class="gm-popup"><div class="gm-body" style="text-align:center; padding:32px 24px;">';
                 if (photoUrl) {
-                    tipHtml += '<div style="text-align:center;margin-bottom:8px;"><img src="' + escHtml(photoUrl) + '" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid ' + statusColor + ';"></div>';
+                    tipHtml += '<img src="' + escHtml(photoUrl) + '" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid ' + statusColor + ';margin:0 auto 16px;display:block;box-shadow:0 4px 12px rgba(0,0,0,0.1);">';
                 }
-                tipHtml += '<strong>' + escHtml(obj.name || '') + '</strong><br>';
-                tipHtml += '<span style="display:inline-block;margin-top:4px;padding:2px 8px;border-radius:999px;background:' + statusColor + ';color:#fff;font-size:10px;font-weight:700;">' + statusLabel + '</span><br>';
+                tipHtml += '<h1 class="gm-title" style="margin-bottom:12px;font-size:26px;">' + escHtml(obj.name || '') + '</h1>';
+                tipHtml += '<div style="margin-bottom:24px;"><span class="gm-badge" style="background:' + statusColor + '22;color:' + statusColor + ';font-size:14px;padding:6px 16px;border-radius:20px;">' + statusLabel + '</span></div>';
+                
+                tipHtml += '<div class="gm-details" style="text-align:left;">';
                 if (obj.daerah || obj.wilayah) {
-                    tipHtml += '<span style="opacity:.85;font-size:11px;">' + escHtml([obj.wilayah, obj.daerah].filter(Boolean).join(' · ')) + '</span><br>';
+                    tipHtml += '<div class="gm-detail-row"><i class="fas fa-map-marked-alt"></i><span>' + escHtml([obj.wilayah, obj.daerah].filter(Boolean).join(' · ')) + '</span></div>';
                 }
-                if (obj.notelp) tipHtml += 'Telp: ' + escHtml(obj.notelp) + '<br>';
-                if (obj.task_title) tipHtml += '<div style="margin-top:6px;padding-top:6px;border-top:1px solid #ccc;font-size:11px;">Tugas: <strong>' + escHtml(obj.task_title) + '</strong></div>';
-                tipHtml += '<div style="margin-top:8px;"><a href="https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng + '" target="_blank" style="color:#2563eb;font-weight:600;text-decoration:none;font-size:11px;"><i class="fas fa-directions"></i> Rute</a></div>';
+                if (obj.notelp) tipHtml += '<div class="gm-detail-row"><i class="fas fa-phone"></i><span>' + escHtml(obj.notelp) + '</span></div>';
+                if (obj.task_title) tipHtml += '<div class="gm-detail-row"><i class="fas fa-tasks"></i><span>Tugas: <strong>' + escHtml(obj.task_title) + '</strong></span></div>';
                 tipHtml += '</div>';
 
-                marker.bindPopup(tipHtml, { minWidth: 180 });
+                tipHtml += '<div class="gm-actions" style="margin-top:24px;border-top:1px solid #e8eaed;padding-top:24px;border-bottom:none;">' +
+                           '<a href="https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng + '" target="_blank" class="gm-action-btn">' +
+                               '<div class="gm-icon-circle filled"><i class="fas fa-directions"></i></div>' +
+                               '<div class="gm-btn-label">Rute</div>' +
+                           '</a></div>';
+                tipHtml += '</div></div>';
+
+                marker.on('click', function() {
+                    openGmSidePanel(tipHtml, obj);
+                });
                 layers['petugas'].addLayer(marker);
 
                 // Garis menuju TKP jika sedang bertugas
@@ -1610,14 +1733,25 @@
                 map.fitBounds(allBounds, { padding: [40, 40], maxZoom: 17 });
             }
 
-            // Event handlers untuk memutar dan menghentikan live stream CCTV langsung di dalam popup peta
-            map.on('popupopen', function(e) {
-                var popup = e.popup;
-                var container = popup.getElement().querySelector('.cctv-popup-container');
+            // ─── Side Panel Handlers (Menggantikan Leaflet Popup) ───
+            var currentCctvState = null;
+            var currentCctvStopUrl = null;
+
+            window.openGmSidePanel = function(contentHtml, obj) {
+                var panel = document.getElementById('gmSidePanel');
+                var contentDiv = document.getElementById('gmSidePanelContent');
+                
+                // Hentikan stream yang sedang aktif (jika ada)
+                window.closeCctvStream();
+
+                contentDiv.innerHTML = contentHtml;
+                panel.classList.add('open');
+
+                // Jika marker ini memuat CCTV
+                var container = contentDiv.querySelector('.cctv-popup-container');
                 if (container) {
-                    var cameraId = container.getAttribute('data-id');
                     var startUrl = container.getAttribute('data-start-url');
-                    var stopUrl = container.getAttribute('data-stop-url');
+                    currentCctvStopUrl = container.getAttribute('data-stop-url');
                     
                     var iframe = container.querySelector('.cctv-popup-iframe');
                     var status = container.querySelector('.cctv-popup-status');
@@ -1625,7 +1759,7 @@
                     var csrfMeta = document.querySelector('meta[name="csrf-token"]');
                     var csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
 
-                    var state = { streamName: '' };
+                    currentCctvState = { streamName: '' };
                     
                     async function startStream() {
                         if (status) status.textContent = 'Menghubungkan ke kamera…';
@@ -1642,7 +1776,7 @@
                             if (!response.ok || !result.success || !result.viewer_url) {
                                 throw new Error(result.message || 'Gagal memulai stream.');
                             }
-                            state.streamName = result.stream_name || '';
+                            if (currentCctvState) currentCctvState.streamName = result.stream_name || '';
                             
                             if (iframe) {
                                 iframe.src = result.viewer_url;
@@ -1658,22 +1792,17 @@
                             if (spinner) spinner.style.display = 'none';
                         }
                     }
-                    
                     startStream();
-                    popup._cctvState = state;
-                    popup._cctvStopUrl = stopUrl;
                 }
-            });
+            };
 
-            map.on('popupclose', function(e) {
-                var popup = e.popup;
-                if (popup._cctvState && popup._cctvState.streamName) {
-                    var stopUrl = popup._cctvStopUrl;
-                    var streamName = popup._cctvState.streamName;
+            window.closeCctvStream = function() {
+                if (currentCctvState && currentCctvState.streamName && currentCctvStopUrl) {
+                    var streamName = currentCctvState.streamName;
                     var csrfMeta = document.querySelector('meta[name="csrf-token"]');
                     var csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
 
-                    fetch(stopUrl, {
+                    fetch(currentCctvStopUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1682,9 +1811,23 @@
                         },
                         body: JSON.stringify({ stream_name: streamName })
                     }).catch(function() {});
-                    popup._cctvState.streamName = '';
                 }
-            });
+                currentCctvState = null;
+                currentCctvStopUrl = null;
+            };
+
+            window.closeGmSidePanel = function() {
+                var panel = document.getElementById('gmSidePanel');
+                panel.classList.remove('open');
+                window.closeCctvStream();
+                
+                // Kosongkan isi panel setelah animasi selesai
+                setTimeout(function() {
+                    if (!panel.classList.contains('open')) {
+                        document.getElementById('gmSidePanelContent').innerHTML = '';
+                    }
+                }, 300);
+            };
 
             function applyTerritoryZoom(minZoom) {
                 if (map.getZoom() < minZoom) {

@@ -36,11 +36,11 @@
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tahun Ops</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tahunops ?? '-' }}</dd>
                 
-                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
-                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah ?? '-' }}</dd>
-                
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->daerah ?? '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah ?? '-' }}</dd>
                 
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>

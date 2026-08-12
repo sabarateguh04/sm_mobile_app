@@ -374,7 +374,10 @@
         }
         .select2-container--bootstrap-5 .select2-selection {
             min-height: 42px; border-radius: 0.75rem !important;
-            border-color: #e2e8f0 !important; background: #f8fafc !important;
+            border-color: #e2e8f0 !important; background: #ffffff !important;
+        }
+        .select2-container--bootstrap-5.select2-container--disabled .select2-selection {
+            background: #f8fafc !important;
         }
         .select2-container--bootstrap-5.select2-container--focus .select2-selection {
             border-color: #0041c8 !important; background: #fff !important; box-shadow: none !important;
@@ -389,12 +392,35 @@
     <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[45] hidden lg:hidden" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     @php
-        $headerDaerah = trim((string) (auth()->user()->daerah_nama ?? auth()->user()->daerah ?? ''));
-        $headerWilayah = trim((string) (auth()->user()->wilayah_nama ?? auth()->user()->wilayah ?? ''));
+        // Prioritaskan Kepegawaian & Organisasi (pemerintahan_daerah & organisasi_daerah) untuk semua user (Admin, Eksekutif, Operator)
+        $headerDaerah = trim((string) (auth()->user()->pemerintahan_daerah ?? ''));
+        $headerWilayah = trim((string) (auth()->user()->organisasi_daerah ?? ''));
+        
+        $isUsingPemerintahan = ($headerDaerah !== '');
+        $isUsingOrganisasi = ($headerWilayah !== '');
+
+        if ($headerDaerah === '') {
+            $headerDaerah = trim((string) (auth()->user()->daerah_nama ?? auth()->user()->daerah ?? ''));
+        }
+        if ($headerWilayah === '') {
+            $headerWilayah = trim((string) (auth()->user()->wilayah_nama ?? auth()->user()->wilayah ?? ''));
+        }
+
         $headerPolda = $headerDaerah !== '' ? strtoupper($headerDaerah) : '';
-        $headerPolres = $headerWilayah !== ''
-            ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $headerWilayah)))
-            : '';
+        
+        if ($headerWilayah !== '') {
+            if ($isUsingOrganisasi) {
+                $headerPolres = strtoupper($headerWilayah);
+            } else {
+                $headerPolres = strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $headerWilayah)));
+            }
+        } else {
+            $headerPolres = '';
+        }
+
+        $labelDaerah = $isUsingPemerintahan ? 'Organisasi:' : 'Polda:';
+        $labelWilayah = $isUsingOrganisasi ? 'Sub Organisasi:' : 'Polres:';
+
         $headerNama = trim((string) (auth()->user()->nama ?? '')) !== '' ? auth()->user()->nama : 'Admin Utama';
         $headerFoto = trim((string) (auth()->user()->fotoprof ?? ''));
         $headerAvatarUrl = $headerFoto !== ''
@@ -429,18 +455,23 @@
     <main class="lg:ml-56 min-h-screen transition-all duration-300 bg-[#f8fafc] flex flex-col" id="main-content">
         {{-- Fixed top bar: wilayah (atas) + menu cepat + profil --}}
         <div id="top-bar-wrapper">
-            @if($headerPolda !== '' || $headerPolres !== '')
+            @if($headerPolda !== '' || $headerPolres !== '' || (! ($isExec ?? false) && \App\Helpers\MenuHelper::matrixRoleIdForUser(auth()->user()) === 8))
             <div class="top-bar-content-indent py-2 border-b border-slate-100 flex items-center justify-start min-h-0">
                 <p class="text-[15px] lg:text-[18px] font-bold m-0 truncate whitespace-nowrap uppercase tracking-wide flex items-center gap-4 lg:gap-6">
                     @if($headerPolda !== '')
                         <span class="shrink-0">
-                            <span class="text-slate-500">Polda:</span>
+                            <span class="text-slate-500">{{ $labelDaerah }}</span>
                             <span class="text-[#D8A808]">{{ $headerPolda }}</span>
+                        </span>
+                    @endif
+                    @if(! ($isExec ?? false) && \App\Helpers\MenuHelper::matrixRoleIdForUser(auth()->user()) === 8)
+                        <span class="shrink-0">
+                            <span class="text-slate-500">Ditlantas</span>
                         </span>
                     @endif
                     @if($headerPolres !== '')
                         <span class="shrink-0">
-                            <span class="text-slate-500">Polres:</span>
+                            <span class="text-slate-500">{{ $labelWilayah }}</span>
                             <span class="text-[#D8A808]">{{ $headerPolres }}</span>
                         </span>
                     @endif
@@ -462,7 +493,14 @@
                 <div class="flex-1 min-w-0" aria-hidden="true"></div>
                 @endif
 
-                <div class="flex items-center shrink-0 gap-1">
+                <div class="flex items-center shrink-0 gap-2">
+                    <button type="button" onclick="toggleAIPanel()" class="flex items-center justify-center p-2 text-[#8b5cf6] hover:bg-[#8b5cf6]/10 transition-all rounded-xl border border-[#8b5cf6]/30 bg-[#8b5cf6]/5 mr-2" title="Alesha Assistant" aria-label="Buka AI">
+                        <span class="material-symbols-outlined text-[22px]">smart_toy</span>
+                    </button>
+                    <a href="{{ route('download.apk') }}" class="flex items-center justify-center p-2 text-primary hover:bg-primary-container/20 transition-all rounded-xl border border-primary/20 bg-primary/5 text-decoration-none mr-2" title="Download Aplikasi Mobile (APK)" aria-label="Download APK">
+                        <span class="material-symbols-outlined text-[20px] mr-1">android</span>
+                        <span class="text-[12px] font-bold">Download APK</span>
+                    </a>
                     <a href="{{ route('profile.show') }}" class="flex items-center gap-2 p-1 pl-2 pr-1 rounded-xl hover:bg-slate-100 transition-colors text-decoration-none" title="Profil">
                         <div class="text-right leading-tight min-w-0 max-w-[160px] sm:max-w-[220px] lg:max-w-[min(480px,48vw)]">
                             <p class="text-[11px] font-bold text-on-surface m-0 truncate">{{ $headerNama }}</p>
@@ -524,6 +562,7 @@
     <script src="{{ asset('js/sbo-date-input.js') }}"></script>
     <script src="{{ asset('js/sbo-compact-filters.js') }}"></script>
     <script src="{{ asset('js/sbo-gps-autofill.js') }}?v={{ time() }}" defer></script>
+    <script src="{{ asset('js/sbo-form-map.js') }}?v={{ time() }}" defer></script>
     <script src="{{ asset('js/sbo-autocomplete.js') }}?v={{ time() }}" defer></script>
     <script src="{{ asset('js/form-media-preview.js') }}" defer></script>
     <script src="{{ asset('js/foto-gps-watermark.js') }}?v={{ time() }}" defer></script>
@@ -540,6 +579,48 @@
             }
         });
     </script>
+    <!-- AI Assistant Panel (Modal) -->
+    <div id="ai-panel-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] hidden transition-opacity duration-300" onclick="toggleAIPanel()"></div>
+    <div id="ai-panel" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] md:w-[800px] h-[85vh] bg-white z-[70] shadow-2xl rounded-2xl flex flex-col border border-slate-200 overflow-hidden transition-all duration-300 scale-95 opacity-0 pointer-events-none">
+        <div class="p-3 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-indigo-50 to-purple-50">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-indigo-600">smart_toy</span>
+                <h3 class="m-0 font-bold text-[15px] text-indigo-900">Alesha</h3>
+            </div>
+            <button class="text-slate-400 hover:text-slate-700 transition-colors bg-transparent border-0 p-1 rounded-lg hover:bg-slate-200/50 flex items-center justify-center" onclick="toggleAIPanel()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="flex-1 min-h-0 bg-slate-50 relative">
+            <!-- Loading indicator -->
+            <div class="absolute inset-0 flex items-center justify-center z-0">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+            </div>
+            <iframe src="http://localhost:5173" class="w-full h-full border-0 relative z-10" title="Alesha"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function toggleAIPanel() {
+            const panel = document.getElementById('ai-panel');
+            const overlay = document.getElementById('ai-panel-overlay');
+            
+            if (panel.classList.contains('opacity-0')) {
+                // Show
+                panel.classList.remove('scale-95', 'opacity-0', 'pointer-events-none');
+                panel.classList.add('scale-100', 'opacity-100', 'pointer-events-auto');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                // Hide
+                panel.classList.add('scale-95', 'opacity-0', 'pointer-events-none');
+                panel.classList.remove('scale-100', 'opacity-100', 'pointer-events-auto');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+    </script>
+
     @stack('scripts')
 </body>
 </html>

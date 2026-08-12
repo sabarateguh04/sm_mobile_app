@@ -8,6 +8,19 @@
     .rp-shell {
         max-width: 100%;
     }
+    /* Highlight column of the selected role */
+    .rp-matrix thead th.rp-highlight-col {
+        background: #e0e7ff !important; /* light indigo */
+        border-bottom: 2px solid #6366f1 !important;
+        color: #312e81 !important;
+        box-shadow: inset 0 -2px 0 0 #6366f1 !important;
+    }
+    .rp-matrix tbody td.rp-highlight-col {
+        background-color: rgba(99, 102, 241, 0.06) !important;
+    }
+    .rp-matrix tbody tr:hover td.rp-highlight-col {
+        background-color: rgba(99, 102, 241, 0.12) !important;
+    }
     .rp-toolbar {
         display: flex;
         flex-wrap: wrap;
@@ -49,7 +62,7 @@
     .rp-card-main {
         border: none;
         border-radius: 0.85rem;
-        overflow: hidden;
+        overflow: visible;
         box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 10px 24px -12px rgba(102, 126, 234, 0.2);
     }
     .rp-card-main .card-header {
@@ -77,7 +90,7 @@
         border: 1px solid #e2e8f0;
         border-radius: var(--rp-acc-radius) !important;
         margin-bottom: 0.65rem;
-        overflow: hidden;
+        overflow: visible;
         background: #fff;
         box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
     }
@@ -98,12 +111,35 @@
         border-color: rgba(102, 126, 234, 0.35);
     }
     .rp-accordion .accordion-button::after {
-        filter: opacity(0.55);
+        flex-shrink: 0;
+        width: 1.1rem;
+        height: 1.1rem;
+        margin-left: auto;
+        background-size: 1.1rem;
+        filter: none;
+        opacity: 0.65;
     }
     .rp-accordion .accordion-body {
         padding: 1rem 1.1rem 1.15rem;
         background: #f8fafc;
         border-top: 1px solid #eef2f7;
+        overflow: visible;
+    }
+    /* Tailwind CDN juga mendefinisikan .collapse { visibility: collapse } — timpa agar accordion BS5 jalan */
+    .rp-accordion .accordion-collapse {
+        visibility: visible !important;
+    }
+    .rp-accordion .accordion-collapse:not(.show) {
+        display: none !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+    .rp-accordion .accordion-collapse.show,
+    .rp-accordion .accordion-collapse.collapsing {
+        display: block !important;
+        visibility: visible !important;
+        height: auto !important;
+        overflow: visible !important;
     }
     .rp-mod-icon {
         width: 2rem;
@@ -119,7 +155,7 @@
     .rp-page-card {
         border: 1px solid #e2e8f0;
         border-radius: 0.65rem;
-        overflow: hidden;
+        overflow: visible;
         background: #fff;
         transition: box-shadow 0.15s ease;
     }
@@ -140,8 +176,51 @@
     }
     .rp-matrix-wrap {
         overflow-x: auto;
+        overflow-y: visible;
         -webkit-overflow-scrolling: touch;
         border-radius: 0 0 0.5rem 0.5rem;
+    }
+    .rp-role-filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 0.75rem;
+        padding: 0.55rem 0.75rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+    .rp-role-filter-bar label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #475569;
+        margin: 0;
+        white-space: nowrap;
+    }
+    .rp-role-filter-bar .form-select,
+    #rpRoleFilterGlobal {
+        min-width: 10rem;
+        max-width: 16rem;
+        font-size: 0.78rem;
+        padding: 0.3rem 1.75rem 0.3rem 0.55rem;
+        border-radius: 0.45rem;
+        border-color: #cbd5e1;
+        background-color: #fff;
+        color: #0f172a;
+        position: relative;
+        z-index: 5;
+        appearance: auto !important;
+        -webkit-appearance: menulist !important;
+        background-image: none !important;
+    }
+    .rp-matrix .rp-role-col-hidden {
+        display: none !important;
+    }
+    .rp-matrix .rp-role-col.rp-role-col-visible {
+        display: table-cell !important;
+    }
+    .rp-matrix thead .rp-role-col.rp-role-col-visible {
+        display: table-cell !important;
     }
     .rp-matrix {
         position: relative;
@@ -165,13 +244,29 @@
         vertical-align: middle;
         white-space: nowrap;
     }
+    .rp-matrix thead tr.rp-role-filter-row th {
+        position: static;
+        z-index: 1;
+        background: #f8fafc !important;
+        box-shadow: none !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+    .rp-matrix thead tr.rp-role-filter-row th:first-child {
+        position: static;
+        left: auto;
+        min-width: 0;
+        max-width: none;
+        border-right: 0;
+    }
     .rp-matrix thead th:first-child {
         position: sticky;
         left: 0;
-        z-index: 3;
+        top: 0;
+        z-index: 4;
         min-width: 108px;
         max-width: 140px;
         background: #eef2ff !important;
+        box-shadow: none !important;
         border-right: 2px solid #e2e8f0;
         text-align: left;
         padding-left: 0.75rem;
@@ -179,8 +274,9 @@
     .rp-matrix tbody td:first-child {
         position: sticky;
         left: 0;
-        z-index: 1;
-        background: #fafbff;
+        z-index: 3;
+        background: #fafbff !important;
+        box-shadow: none !important;
         border-right: 2px solid #e2e8f0;
         padding-left: 0.75rem;
     }
@@ -215,15 +311,27 @@
         color: #94a3b8;
     }
     .rp-matrix .form-check-input {
-        width: 2.1rem;
-        height: 1.1rem;
+        width: 2.1rem !important;
+        height: 1.1rem !important;
+        min-width: 2.1rem;
+        min-height: 1.1rem;
         margin: 0;
         cursor: pointer;
         border-color: #cbd5e1;
+        flex-shrink: 0;
+        opacity: 1 !important;
+        appearance: none;
+        -webkit-appearance: none;
+        background-color: #e2e8f0;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+        background-position: left center;
+        background-repeat: no-repeat;
+        background-size: contain;
     }
     .rp-matrix .form-check-input:checked {
         background-color: #667eea;
         border-color: #667eea;
+        background-position: right center;
     }
     .rp-matrix .form-check-input:focus {
         box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
@@ -254,31 +362,66 @@
 @endpush
 
 @section('content')
-<div class="row rp-shell">
-    <div class="col-12">
-        <div class="card rp-card-main shadow-sm">
-            <div class="card-header bg-primary text-white d-flex flex-wrap justify-content-between align-items-start gap-3">
-                <div>
-                    <h5 class="mb-1 fw-semibold"><i class="fa fa-shield-halved me-2 opacity-90"></i>Hak akses per modul</h5>
-                    <p class="mb-0 small opacity-90">Matriks <strong>aksi × role</strong> — aktifkan izin per sel (superadmin).</p>
-                </div>
-                <div class="d-flex flex-wrap gap-2 align-items-center">
-                    <span class="rp-stat text-white">
-                        <i class="fa fa-database opacity-75"></i> {{ $totalPermissions }} izin
-                    </span>
-                    @if($canEdit)
-                        <span class="badge bg-success rounded-pill px-3 py-2">Mode edit aktif</span>
-                    @else
-                        <span class="badge bg-light text-dark rounded-pill px-3 py-2">Hanya baca</span>
-                    @endif
-                </div>
+<div class="rp-shell">
+    <div class="card rp-card-main shadow-sm">
+        <div class="card-header bg-primary text-white d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div>
+                <h5 class="mb-1 fw-semibold"><i class="fa fa-shield-halved me-2 opacity-90"></i>Hak akses per modul</h5>
+                <p class="mb-0 small opacity-90">Matriks <strong>aksi × role</strong> — aktifkan izin per sel (superadmin).</p>
             </div>
-            <div class="card-body">
-                <div class="rp-toolbar">
-                    <p class="rp-legend mb-0">
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                <span class="rp-stat text-white">
+                    <i class="fa fa-database opacity-75"></i> {{ $totalPermissions }} izin
+                </span>
+                @if($canEdit)
+                    <span class="badge bg-success rounded-pill px-3 py-2">Mode edit aktif</span>
+                @else
+                    <span class="badge bg-light text-dark rounded-pill px-3 py-2">Hanya baca</span>
+                @endif
+            </div>
+        </div>
+        <div class="card-body">
+            @php
+                $selectedRoleId = request()->query('role_id');
+                $selectedRole = $roles->firstWhere('role_id', $selectedRoleId);
+            @endphp
+            @if($selectedRole)
+                <div class="alert alert-info py-2 px-3 mb-3 d-flex flex-wrap align-items-center justify-content-between rounded-3 border-0 shadow-sm" style="background: rgba(99, 102, 241, 0.08); border-left: 4px solid #6366f1 !important; color: #312e81;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-info-circle" style="color: #6366f1; font-size: 16px;"></i>
+                        <span>Fokus pada role: <strong>{{ $selectedRole->role_name }} (ID #{{ $selectedRole->role_id }})</strong>. Kolom role ini telah di-highlight untuk memudahkan konfigurasi.</span>
+                    </div>
+                    <div class="d-flex gap-2 my-1">
+                        <a href="{{ route('admin.role_permissions.index') }}" class="btn btn-sm btn-outline-secondary py-1 px-2 text-decoration-none" style="font-size: 10px; border-radius: 0.375rem;">
+                            <i class="fa fa-times me-1"></i> Bersihkan fokus
+                        </a>
+                        <a href="{{ route('admin.roles.index') }}" class="btn btn-sm btn-outline-primary py-1 px-2 text-decoration-none" style="font-size: 10px; border-radius: 0.375rem;">
+                            <i class="fa fa-arrow-left me-1"></i> Kembali ke Roles
+                        </a>
+                    </div>
+                </div>
+            @else
+                <div class="mb-3 d-flex justify-content-end">
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-sm btn-outline-secondary text-decoration-none" style="border-radius: 0.375rem;">
+                        <i class="fa fa-arrow-left me-1"></i> Kembali ke Roles
+                    </a>
+                </div>
+            @endif
+
+            <div class="rp-toolbar">
+                <p class="rp-legend mb-0">
                         Grup modul dari <code>page_name</code>. Middleware memakai <code>page_name/action_name</code> (mis. <code>usm/list</code>).
                     </p>
                     <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <label for="rpRoleFilterGlobal" class="form-label mb-0 small text-muted text-nowrap">Fokus role:</label>
+                            <select id="rpRoleFilterGlobal" class="form-select form-select-sm" style="min-width: 11rem; max-width: 16rem;" aria-label="Filter kolom role">
+                                <option value="">Semua role</option>
+                                @foreach($roles as $r)
+                                    <option value="{{ $r->role_id }}" @selected((string) $selectedRoleId === (string) $r->role_id)>{{ $r->role_name }} (#{{ $r->role_id }})</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text"><i class="fa fa-search"></i></span>
                             <input type="search" class="form-control" id="rpFilterModul" placeholder="Cari modul atau halaman…" autocomplete="off" aria-label="Filter">
@@ -318,7 +461,7 @@
                                     </button>
                                 </h2>
                                 <div id="c-{{ $accId }}" class="accordion-collapse collapse"
-                                     aria-labelledby="h-{{ $accId }}">
+                                     aria-labelledby="h-{{ $accId }}" data-bs-parent="#accordionModul">
                                     <div class="accordion-body">
                                         @foreach($bucket['pages'] as $page)
                                             <div class="card rp-page-card mb-3 rp-page-block"
@@ -343,10 +486,26 @@
                                                             <div class="rp-matrix">
                                                                 <table class="table mb-0">
                                                                     <thead>
+                                                                        <tr class="rp-role-filter-row">
+                                                                            <th colspan="{{ 1 + count($roles) }}" class="p-0 border-0">
+                                                                                <div class="rp-role-filter-bar">
+                                                                                    <label for="rpRoleFilter-{{ md5($page) }}">Tampilkan role:</label>
+                                                                                    <select id="rpRoleFilter-{{ md5($page) }}" class="form-select form-select-sm rp-role-filter" aria-label="Filter role untuk {{ $page }}">
+                                                                                        <option value="">Semua role</option>
+                                                                                        @foreach($roles as $r)
+                                                                                            <option value="{{ $r->role_id }}" @selected((string) $selectedRoleId === (string) $r->role_id)>{{ $r->role_name }} (#{{ $r->role_id }})</option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
+                                                                            </th>
+                                                                        </tr>
                                                                         <tr>
                                                                             <th scope="col">Aksi</th>
                                                                             @foreach($roles as $r)
-                                                                                <th class="text-center role-col" scope="col" title="{{ $r->role_name }} (ID {{ $r->role_id }})">
+                                                                                @php
+                                                                                    $isHighlighted = isset($selectedRoleId) && (string) $selectedRoleId === (string) $r->role_id;
+                                                                                @endphp
+                                                                                <th class="text-center role-col rp-role-col {{ $isHighlighted ? 'rp-highlight-col' : '' }}" scope="col" data-role-id="{{ $r->role_id }}" title="{{ $r->role_name }} (ID {{ $r->role_id }})">
                                                                                     <span class="rp-rn">{{ $r->role_name }}</span>
                                                                                     <span class="rp-rid d-block">#{{ $r->role_id }}</span>
                                                                                 </th>
@@ -372,8 +531,9 @@
                                                                                 @foreach($roles as $r)
                                                                                     @php
                                                                                         $on = isset($matrix[$page][$action][$r->role_id]);
+                                                                                        $isHighlighted = isset($selectedRoleId) && (string) $selectedRoleId === (string) $r->role_id;
                                                                                     @endphp
-                                                                                    <td class="text-center">
+                                                                                    <td class="text-center rp-role-col {{ $isHighlighted ? 'rp-highlight-col' : '' }}" data-role-id="{{ $r->role_id }}">
                                                                                         @if($canEdit)
                                                                                             <div class="form-check form-switch d-flex justify-content-center my-1">
                                                                                                 <input
@@ -415,10 +575,142 @@
             </div>
         </div>
     </div>
-</div>
 @push('scripts')
 <script>
 (function () {
+    function normalizeRoleId(value) {
+        return value === null || value === undefined ? '' : String(value).trim();
+    }
+
+    function applyRoleFilter(roleId) {
+        roleId = normalizeRoleId(roleId);
+        var showAll = roleId === '';
+        document.querySelectorAll('.rp-role-col').forEach(function (cell) {
+            var cellRoleId = normalizeRoleId(cell.getAttribute('data-role-id'));
+            var visible = showAll || cellRoleId === roleId;
+            cell.classList.toggle('rp-role-col-hidden', !visible);
+            cell.classList.toggle('rp-role-col-visible', visible);
+            cell.classList.remove('rp-highlight-col');
+        });
+        var highlightId = roleId || normalizeRoleId(initialRoleId);
+        if (highlightId !== '') {
+            document.querySelectorAll('.rp-role-col').forEach(function (cell) {
+                if (normalizeRoleId(cell.getAttribute('data-role-id')) === highlightId
+                    && !cell.classList.contains('rp-role-col-hidden')) {
+                    cell.classList.add('rp-highlight-col');
+                }
+            });
+        }
+    }
+
+    function applyRoleHighlightOnly(highlightId) {
+        highlightId = normalizeRoleId(highlightId);
+        document.querySelectorAll('.rp-role-col').forEach(function (cell) {
+            cell.classList.remove('rp-role-col-hidden', 'rp-highlight-col');
+            cell.classList.add('rp-role-col-visible');
+        });
+        if (highlightId !== '') {
+            document.querySelectorAll('.rp-role-col').forEach(function (cell) {
+                if (normalizeRoleId(cell.getAttribute('data-role-id')) === highlightId) {
+                    cell.classList.add('rp-highlight-col');
+                }
+            });
+        }
+    }
+
+    function syncRoleFilters(roleId, hideColumns) {
+        roleId = normalizeRoleId(roleId);
+        document.querySelectorAll('.rp-role-filter, #rpRoleFilterGlobal').forEach(function (sel) {
+            if (normalizeRoleId(sel.value) !== roleId) {
+                sel.value = roleId;
+            }
+        });
+        if (hideColumns) {
+            applyRoleFilter(roleId);
+        } else {
+            applyRoleHighlightOnly(roleId);
+        }
+    }
+
+    function updateRoleQuery(roleId) {
+        var url = new URL(window.location.href);
+        if (roleId) {
+            url.searchParams.set('role_id', roleId);
+        } else {
+            url.searchParams.delete('role_id');
+        }
+        window.history.replaceState({}, '', url.toString());
+    }
+
+    var initialRoleId = @json($selectedRoleId ? (string) $selectedRoleId : '');
+    syncRoleFilters(initialRoleId, false);
+
+    document.querySelectorAll('.rp-role-filter, #rpRoleFilterGlobal').forEach(function (sel) {
+        sel.addEventListener('change', function () {
+            var roleId = normalizeRoleId(sel.value);
+            syncRoleFilters(roleId, true);
+            updateRoleQuery(roleId);
+        });
+    });
+})();
+
+(function () {
+    var acc = document.getElementById('accordionModul');
+
+    function showCollapse(el) {
+        if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
+            try {
+                var instance = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
+                instance.show();
+                return;
+            } catch (e) {}
+        }
+        if (window.jQuery && typeof jQuery.fn.collapse === 'function') {
+            try {
+                jQuery(el).collapse('show');
+                return;
+            } catch (e) {}
+        }
+        // Pure JS fallback — paksa tampil agar isi accordion terlihat
+        el.classList.add('show');
+        el.style.display = 'block';
+        el.style.visibility = 'visible';
+        el.style.height = 'auto';
+        el.style.overflow = 'visible';
+        var btn = document.querySelector('[data-bs-target="#' + el.id + '"], [data-target="#' + el.id + '"]');
+        if (btn) {
+            btn.classList.remove('collapsed');
+            btn.setAttribute('aria-expanded', 'true');
+        }
+    }
+
+    function hideCollapse(el) {
+        if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
+            try {
+                var instance = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
+                instance.hide();
+                return;
+            } catch (e) {}
+        }
+        if (window.jQuery && typeof jQuery.fn.collapse === 'function') {
+            try {
+                jQuery(el).collapse('hide');
+                return;
+            } catch (e) {}
+        }
+        // Pure JS fallback
+        el.classList.remove('show');
+        el.style.display = '';
+        el.style.visibility = '';
+        el.style.height = '';
+        el.style.overflow = '';
+        var btn = document.querySelector('[data-bs-target="#' + el.id + '"], [data-target="#' + el.id + '"]');
+        if (btn) {
+            btn.classList.add('collapsed');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    }
+
     var inp = document.getElementById('rpFilterModul');
     if (inp) {
         inp.addEventListener('input', function () {
@@ -433,26 +725,47 @@
                     if (hit) showMod = true;
                 });
                 mod.style.display = showMod ? '' : 'none';
+
+                var collapseEl = mod.querySelector('.accordion-collapse');
+                if (collapseEl) {
+                    if (q && showMod) {
+                        if (!collapseEl.classList.contains('show')) {
+                            showCollapse(collapseEl);
+                        }
+                    } else if (!q) {
+                        if (collapseEl.classList.contains('show')) {
+                            hideCollapse(collapseEl);
+                        }
+                    }
+                }
             });
         });
     }
-    var acc = document.getElementById('accordionModul');
+
     document.getElementById('rpExpandAll')?.addEventListener('click', function () {
-        if (!acc || typeof bootstrap === 'undefined') return;
+        if (!acc) return;
         acc.querySelectorAll('.accordion-collapse').forEach(function (el) {
-            try {
-                bootstrap.Collapse.getOrCreateInstance(el, { toggle: false }).show();
-            } catch (e) {}
+            showCollapse(el);
         });
     });
+
     document.getElementById('rpCollapseAll')?.addEventListener('click', function () {
-        if (!acc || typeof bootstrap === 'undefined') return;
+        if (!acc) return;
         acc.querySelectorAll('.accordion-collapse.show').forEach(function (el) {
-            try {
-                bootstrap.Collapse.getOrCreateInstance(el).hide();
-            } catch (e) {}
+            hideCollapse(el);
         });
     });
+
+    if (acc) {
+        acc.querySelectorAll('.accordion-collapse').forEach(function (el) {
+            el.addEventListener('shown.bs.collapse', function () {
+                el.style.visibility = 'visible';
+                el.style.display = 'block';
+                el.style.height = 'auto';
+                el.style.overflow = 'visible';
+            });
+        });
+    }
 })();
 
 @if($canEdit)

@@ -32,38 +32,59 @@
     </div>
 @endif
 
+@if(($tab ?? '') !== 'dacol_objek_vital')
 <form action="{{ route('objekwisata.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
+    @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
     <div class="pmf-row">
-        @include('_partials.compact_filters.search', ['placeholder' => 'Cari nama, kategori, lokasi, CP...'])
+        @include('_partials.compact_filters.territory')
+        @include('_partials.compact_filters.select', ['name' => 'kategori', 'placeholder' => 'Kategori', 'options' => $kategori ?? []])
+        @include('_partials.compact_filters.search', ['placeholder' => 'Cari nama tempat, lokasi...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('objekwisata.index'),
-            'active' => $hasFilters,
+            'active' => request()->hasAny(['search', 'kategori']),
         ])
     </div>
 </form>
+@endif
 
 <section class="bg-white rounded-xl border border-slate-200/60 overflow-hidden shadow-sm">
-    <div class="px-4 py-3 border-b border-slate-100 flex items-center gap-1.5">
-        <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">landscape</span>
-        <h3 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 m-0">Daftar Objek Wisata
-            @if(($data->total() ?? 0) > 0)<span class="text-[10px] font-semibold text-slate-400 normal-case ml-1">{{ number_format($data->total(), 0, ',', '.') }} record</span>@endif
-        </h3>
+    <div class="px-4 py-3 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">landscape</span>
+            <h3 class="text-[11px] font-bold uppercase tracking-wider text-slate-700 m-0">Daftar Objek Wisata
+                @if(($tab ?? 'rinci') === 'rinci' && ($data->total() ?? 0) > 0)<span class="text-[10px] font-semibold text-slate-400 normal-case ml-1">{{ number_format($data->total(), 0, ',', '.') }} record</span>@endif
+            </h3>
+        </div>
+        <div class="flex gap-4 border-l border-slate-200 pl-4">
+            <a href="{{ route('objekwisata.index', array_merge(request()->except('tab','page'), ['tab' => 'dacol_objek_vital'])) }}"
+               class="text-[11px] font-bold uppercase tracking-wider text-decoration-none {{ ($tab ?? '') === 'dacol_objek_vital' ? 'text-primary' : 'text-slate-400 hover:text-slate-600' }}">Objek Wisata & Vital (Dacol)</a>
+        </div>
     </div>
-    @if($data->count() > 0)
+    @if(($tab ?? '') === 'dacol_objek_vital')
+        @include('sm.dacol._table')
+    @elseif($data->count() > 0)
         <div class="overflow-x-auto custom-scrollbar">
             <table class="w-full text-left min-w-[1020px]">
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
-@endif
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama Tempat</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Kap. Pengunjung</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Kap. Parkir</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">CP</th>
+                    @if($isOp)
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Kategori</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama tempat</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Kap pengunjung</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Kap Parkir</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Contact</th>
+                    @else
+                        @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+                        @endif
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Kategori</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama Object</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Kapasitas</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Kap parkir</th>
+                    @endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                 </tr></thead>
                 <tbody class="divide-y divide-slate-100">
@@ -74,27 +95,40 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                            <td class="px-3 py-2.5">
-                                <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($r->petugas_daerah ?? '—') }}</span>
-                            </td>
-                            <td class="px-3 py-2.5">
-                                <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $r->petugas_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $r->petugas_wilayah))) : '—' }}</span>
-                            </td>
-                            <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $r->tanggal ? \Carbon\Carbon::parse($r->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
-                            <td class="px-3 py-2.5">
-                                <a href="{{ route('objekwisata.show', $rowId) }}"
-                                   class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ \Str::limit($r->nametempat ?: 'Detail', 28) }}</a>
-                                @if($r->kattempatwisata)
-                                    <span class="inline-flex items-center mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $r->kattempatwisata }}</span>
+                            @if($isOp)
+                                <td class="px-3 py-2.5">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $r->kattempatwisata ?: '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('objekwisata.show', $rowId) }}"
+                                       class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ \Str::limit($r->nametempat ?: 'Detail', 28) }}</a>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($r->lokasi ?: '—', 26) }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600 text-right">{{ number_format($r->kappengunjung ?? 0, 0, ',', '.') }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600 text-right">{{ number_format($r->kapparkir ?? 0, 0, ',', '.') }}</td>
+                                <td class="px-3 py-2.5">
+                                    <div class="text-[11px] font-medium text-slate-700">{{ $r->namecp ?: '—' }}</div>
+                                    @if($r->cp ?? null)<div class="text-[10px] text-slate-400">{{ $r->cp }}</div>@endif
+                                </td>
+                            @else
+                                @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($r->petugas_daerah ?? '—') }}</span>
+                                    </td>
                                 @endif
-                            </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ \Str::limit($r->lokasi ?: '—', 26) }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600 text-right">{{ number_format($r->kappengunjung ?? 0, 0, ',', '.') }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600 text-right">{{ number_format($r->kapparkir ?? 0, 0, ',', '.') }}</td>
-                            <td class="px-3 py-2.5">
-                                <div class="text-[11px] font-medium text-slate-700">{{ $r->namecp ?: '—' }}</div>
-                                @if($r->cp ?? null)<div class="text-[10px] text-slate-400">{{ $r->cp }}</div>@endif
-                            </td>
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $r->petugas_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $r->petugas_wilayah))) : '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    @if($r->kattempatwisata)<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $r->kattempatwisata }}</span>@else <span class="text-slate-400">—</span>@endif
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('objekwisata.show', $rowId) }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ \Str::limit($r->nametempat ?: 'Detail', 28) }}</a>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ \Str::limit($r->lokasi ?: '-', 26) }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600 text-right">{{ number_format($r->kappengunjung ?: 0, 0, ',', '.') }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600 text-right">{{ number_format($r->kapparkir ?: 0, 0, ',', '.') }}</td>
+                            @endif
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('objekwisata.show', $rowId) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail">

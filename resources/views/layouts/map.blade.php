@@ -57,7 +57,7 @@
             flex-direction: column;
             align-items: center;
             width: max-content;
-            max-width: 220px;
+            max-width: 150px;
             pointer-events: none;
         }
         .map-pin-root .map-pin-circle {
@@ -65,20 +65,29 @@
             flex-shrink: 0;
         }
         .map-label {
-            margin-top: 7px;
-            padding: 1px 6px 0;
+            margin-top: 5px;
+            padding: 3px 8px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
             color: #fff;
-            font-weight: 800;
-            font-size: 11px;
+            font-weight: 600;
+            font-size: 10px;
             line-height: 1.35;
-            text-shadow: 0 0 4px #000, 0 1px 2px rgba(0,0,0,0.9);
             text-align: center;
             white-space: normal;
             word-break: break-word;
-            max-width: 220px;
+            max-width: 140px;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.15s ease-in-out;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+            /* Truncate to max 2 lines */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .leaflet-marker-icon:hover .map-label {
             opacity: 1;

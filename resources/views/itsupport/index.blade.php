@@ -30,12 +30,15 @@
 @endif
 
 <form action="{{ route('itsupport.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
+    @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
     <div class="pmf-row">
+        @include('_partials.compact_filters.territory')
+        @include('_partials.compact_filters.date_range', ['prefix' => 'itsupport'])
+        @include('_partials.compact_filters.select', ['name' => 'status', 'placeholder' => '— Semua Status —', 'options' => $statuses])
         @include('_partials.compact_filters.search', ['placeholder' => 'Cari device, owner, kategori...'])
-        @include('_partials.compact_filters.select', ['name' => 'status', 'placeholder' => '— Semua —', 'options' => $statuses])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route('itsupport.index'),
-            'active' => request()->hasAny(['search','status']),
+            'active' => request()->hasAny(['search','status','tanggal_dari','tanggal_sampai']),
         ])
     </div>
 </form>
@@ -52,18 +55,27 @@
         <div class="overflow-x-auto custom-scrollbar">
             <table class="w-full text-left min-w-[900px]">
                 <thead><tr class="bg-slate-50/50">
+                    @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
+                    @if($isOp)
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Name Device</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Owner</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tingkat Trouble</th>
+                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Statusticket</th>
+                    @else
 @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
 @endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Device</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Kategori</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Owner</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tingkat</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Status</th>
+                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Nama Device</th>
+                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Gangguan</th>
+                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Status Ticket</th>
+                    @endif
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                 </tr></thead>
                 <tbody class="divide-y divide-slate-100">
@@ -82,25 +94,43 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
+                            @if($isOp)
+                                <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $r->tanggal ? \Carbon\Carbon::parse($r->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $r->petugas_nama ?? '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <a href="{{ route('itsupport.show', $r->id_itsupport) }}" class="text-[12px] font-bold text-primary hover:underline text-decoration-none">{{ $r->namedevice ?: 'Detail' }}</a>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ \Str::limit($r->lokasidevice ?: '-', 22) }}</td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $r->owner ?: '-' }}</td>
+                                <td class="px-3 py-2.5">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $tgColor }}">{{ $r->tingkatgangguan ?: '-' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $stColor }}">{{ $r->statusticket ?: '-' }}</span>
+                                </td>
+                            @else
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-bold" style="color:#D8A808;">{{ $r->petugas_daerah ? strtoupper($r->petugas_daerah) : '—' }}</span>
                             </td>
+@endif
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $r->petugas_wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $r->petugas_wilayah))) : '—' }}</span>
                             </td>
                             <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $r->tanggal ? \Carbon\Carbon::parse($r->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $r->katdevice ?: '-' }}</td>
                             <td class="px-3 py-2.5">
                                 <a href="{{ route('itsupport.show', $r->id_itsupport) }}" class="text-[12px] font-bold text-primary hover:underline text-decoration-none">{{ $r->namedevice ?: 'Detail' }}</a>
                             </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $r->katdevice ?: '-' }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $r->owner ?: '-' }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ \Str::limit($r->lokasidevice ?: '-', 22) }}</td>
                             <td class="px-3 py-2.5">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $tgColor }}">{{ $r->tingkatgangguan ?: '-' }}</span>
                             </td>
                             <td class="px-3 py-2.5">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold {{ $stColor }}">{{ $r->statusticket ?: '-' }}</span>
                             </td>
+                            @endif
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('itsupport.show', $r->id_itsupport) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail"><span class="material-symbols-outlined text-[18px]">visibility</span></a>

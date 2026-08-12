@@ -21,7 +21,7 @@ class MediaAnalyticController extends LegacySboOperasionalController
 
     protected $viewFolder = 'media.analytic';
 
-    protected $fillable = ['tanggal', 'issue_topic', 'vol_percakapan', 'sentimen', 'potensi'];
+    protected $fillable = ['piket', 'tanggal', 'issue_topic', 'vol_percakapan', 'sentimen', 'potensi'];
 
     protected $searchFields = ['issue_topic', 'sentimen', 'potensi'];
 
@@ -42,22 +42,32 @@ class MediaAnalyticController extends LegacySboOperasionalController
 
     protected function ensureTableExists(): void
     {
-        if (Schema::hasTable($this->tableName)) {
-            return;
+        if (!Schema::hasTable($this->tableName)) {
+            Schema::create($this->tableName, function (Blueprint $table) {
+                $table->increments('id_mediaanalytic');
+                $table->unsignedInteger('piket')->nullable();
+                $table->date('tanggal');
+                $table->string('issue_topic', 255)->nullable();
+                $table->unsignedInteger('vol_percakapan')->default(0);
+                $table->string('sentimen', 50)->nullable();
+                $table->string('potensi', 150)->nullable();
+            });
+        } else {
+            if (!Schema::hasColumn($this->tableName, 'piket')) {
+                Schema::table($this->tableName, function (Blueprint $table) {
+                    $table->unsignedInteger('piket')->nullable()->after('id_mediaanalytic');
+                });
+            }
         }
-
-        Schema::create($this->tableName, function (Blueprint $table) {
-            $table->increments('id_mediaanalytic');
-            $table->date('tanggal');
-            $table->string('issue_topic', 255)->nullable();
-            $table->unsignedInteger('vol_percakapan')->default(0);
-            $table->string('sentimen', 50)->nullable();
-            $table->string('potensi', 150)->nullable();
-        });
     }
 
     protected function applyFilters($query, Request $request)
     {
+        $query->leftJoin('usm', $this->tableName.'.piket', '=', 'usm.id_usm')
+            ->select($this->tableName.'.*', 'usm.nama as usm_nama', 'usm.daerah', 'usm.wilayah');
+
+        \App\Support\TerritoryIndexFilters::applyUsmFilters($query, $request);
+
         if ($request->filled('tanggal_dari')) {
             $query->where($this->tableName.'.tanggal', '>=', $request->tanggal_dari);
         }
@@ -78,7 +88,6 @@ class MediaAnalyticController extends LegacySboOperasionalController
     {
         $query = DB::table($this->tableName);
         $query = $this->applyFilters($query, $request);
-        // mediaanalytic tidak punya kolom daerah/wilayah/piket — data tampil untuk semua role yang punya akses menu.
 
         if ($request->filled('search')) {
             $s = $request->search;
@@ -86,6 +95,7 @@ class MediaAnalyticController extends LegacySboOperasionalController
                 foreach ($this->searchFields as $field) {
                     $q->orWhere($this->tableName.'.'.$field, 'like', "%{$s}%");
                 }
+                $q->orWhere('usm.nama', 'like', "%{$s}%");
             });
         }
 
@@ -95,7 +105,7 @@ class MediaAnalyticController extends LegacySboOperasionalController
         );
 
         $data = $query->paginate($request->get('per_page', $this->perPage))
-            ->appends($request->only(['search', 'tanggal_dari', 'tanggal_sampai', 'sentimen', 'potensi']));
+            ->appends($request->only(['search', 'tanggal_dari', 'tanggal_sampai', 'daerah', 'wilayah', 'sentimen', 'potensi']));
 
         $potensiOptions = DB::table($this->tableName)
             ->whereNotNull('potensi')
@@ -104,7 +114,7 @@ class MediaAnalyticController extends LegacySboOperasionalController
             ->orderBy('potensi')
             ->pluck('potensi');
 
-        return view($this->viewFolder.'.index', [
+        return view($this->viewFolder.'.index', array_merge([
             'pageTitle' => 'List Media Analytic',
             'data' => $data,
             'tableName' => $this->tableName,
@@ -113,7 +123,7 @@ class MediaAnalyticController extends LegacySboOperasionalController
             'potensiOptions' => $potensiOptions,
             'sboViewOnly' => RoleMutationPolicy::deniesAllMutations(Auth::user()),
             'sboOperatorOwnership' => RoleMutationPolicy::mutationMode(Auth::user()) === RoleMutationPolicy::MODE_OWN,
-        ]);
+        ], \App\Support\TerritoryIndexFilters::viewBundle($request)));
     }
 
     /**
@@ -152,7 +162,15 @@ class MediaAnalyticController extends LegacySboOperasionalController
 
     public function show($id)
     {
-        $data = $this->findOperationalRowOrFail($id);
+        $data = DB::table($this->tableName)
+            ->leftJoin('usm', $this->tableName.'.piket', '=', 'usm.id_usm')
+            ->select($this->tableName.'.*', 'usm.nama as usm_nama', 'usm.daerah', 'usm.wilayah')
+            ->where($this->tableName.'.'.$this->primaryKey, $id)
+            ->first();
+
+        if (! $data) {
+            abort(404, 'Data tidak ditemukan');
+        }
 
         return view($this->viewFolder.'.show', array_merge(
             $this->formViewData('Detail Media Analytic', $data),
@@ -164,9 +182,40 @@ class MediaAnalyticController extends LegacySboOperasionalController
     public function edit($id)
     {
         $data = $this->findOperationalRowOrFail($id);
-        RoleMutationPolicy::assertCanEditOrDelete(Auth::user(), $data, $this->tableName);
+        if (!RoleMutationPolicy::isOperatorRole(Auth::user())) {
+            RoleMutationPolicy::assertCanEditOrDelete(Auth::user(), $data, $this->tableName);
+        }
 
         return view($this->viewFolder.'.edit', $this->formViewData('Edit Media Analytic', $data));
+    }
+
+    public function update(Request $request, string|int $id)
+    {
+        $row = $this->findOperationalRowOrFail($id);
+        if (!RoleMutationPolicy::isOperatorRole(Auth::user())) {
+            RoleMutationPolicy::assertCanEditOrDelete(Auth::user(), $row, $this->tableName);
+        }
+
+        $validated = $request->validate($this->getValidationRules('update'));
+        $data = $this->prepareDataForUpdate($validated, $request);
+
+        $this->stampOperatorEdit($data);
+
+        DB::table($this->tableName)->where($this->primaryKey, $id)->update($data);
+
+        return redirect()->route($this->getRoutePrefix().'.index')->with('success', 'Data berhasil diupdate.');
+    }
+
+    public function destroy(string|int $id)
+    {
+        $row = $this->findOperationalRowOrFail($id);
+        if (!RoleMutationPolicy::isOperatorRole(Auth::user())) {
+            RoleMutationPolicy::assertCanEditOrDelete(Auth::user(), $row, $this->tableName);
+        }
+
+        DB::table($this->tableName)->where($this->primaryKey, $id)->delete();
+
+        return redirect()->route($this->getRoutePrefix().'.index')->with('success', 'Data berhasil dihapus.');
     }
 
     /**
@@ -194,12 +243,7 @@ class MediaAnalyticController extends LegacySboOperasionalController
 
     protected function prepareDataForStore(array $validated, Request $request)
     {
-        $data = [];
-        foreach ($this->fillable as $field) {
-            if (array_key_exists($field, $validated)) {
-                $data[$field] = $validated[$field];
-            }
-        }
+        $data = parent::prepareDataForStore($validated, $request);
         $data['vol_percakapan'] = (int) ($data['vol_percakapan'] ?? 0);
 
         return $data;

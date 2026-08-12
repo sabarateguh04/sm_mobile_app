@@ -54,6 +54,12 @@ class KunjunganWisataController extends BaseController
 
         }
 
+        if ($request->filled('namawisata')) {
+
+            $query->where('k.namawisata', $request->namawisata);
+
+        }
+
 
 
         TerritoryIndexFilters::applyUsmFilters($query, $request);
@@ -112,6 +118,10 @@ class KunjunganWisataController extends BaseController
 
 
 
+        $namaWisataList = DB::table('kunjunganwisata')->whereNotNull('namawisata')->where('namawisata', '!=', '')->distinct()->orderBy('namawisata')->pluck('namawisata');
+
+
+
         return view('kunjunganwisata.index', array_merge([
 
             'pageTitle' => 'Kunjungan Wisata Harian',
@@ -119,6 +129,8 @@ class KunjunganWisataController extends BaseController
             'data' => $data,
 
             'kategori' => $kategori,
+
+            'namaWisataList' => $namaWisataList,
 
         ], TerritoryIndexFilters::viewBundle($request)));
 

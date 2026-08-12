@@ -5,6 +5,7 @@
 @section('content')
 @php
     $hasFilters = request()->hasAny(['search','tanggal_dari','tanggal_sampai','peristiwa','daerah','wilayah']);
+    $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user());
 @endphp
 <div class="max-w-[1400px] mx-auto w-full space-y-4">
 
@@ -93,22 +94,30 @@
                 <thead>
                     <tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Capture</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
-                        @if($patrolCols['situasilalin'] ?? null)
-                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Situasi Lalin</th>
-                        @endif
-                        @if($patrolCols['situasicuaca'] ?? null)
-                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Situasi Cuaca</th>
-                        @endif
-                        @if($patrolCols['peristiwa'] ?? null)
+                        @if($isOp)
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                            @if($patrolCols['situasilalin'] ?? null)
+                                <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Sitlalin</th>
+                            @endif
+                            @if($patrolCols['situasicuaca'] ?? null)
+                                <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Sitcuaca</th>
+                            @endif
+                            @if($patrolCols['peristiwa'] ?? null)
+                                <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Peristiwa</th>
+                            @endif
+                        @else
+                            @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+                            @endif
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Sit Lalin</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Sit cuaca</th>
                             <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Peristiwa</th>
                         @endif
-                        @if($patrolCols['ketcb'] ?? null)
-                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">CB / Ket CB</th>
-                        @endif
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Petugas</th>
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -126,26 +135,50 @@
                         @endphp
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                            <td class="px-3 py-2.5">
-                                @if($thumb)
-                                    <a href="{{ route('patrolicctv.show', $item->{$primaryKey}) }}" class="block shrink-0">
-                                        <img src="{{ $thumb }}" alt="" class="w-11 h-11 rounded-lg object-cover border border-slate-200 group-hover:scale-105 transition-transform" referrerpolicy="no-referrer">
-                                    </a>
-                                @else
-                                    <div class="w-11 h-11 rounded-lg bg-slate-100 flex items-center justify-center text-slate-300">
-                                        <span class="material-symbols-outlined text-[20px]">image_not_supported</span>
-                                    </div>
+                            @if($isOp)
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-bold text-slate-800">
+                                        {{ $tanggal ? \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}
+                                    </span>
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-medium text-slate-700">{{ $item->petugas_nama ?? '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-700 max-w-[200px]">
+                                    <span class="line-clamp-2">{{ $lokasi ?: '—' }}</span>
+                                </td>
+                                @if($patrolCols['situasilalin'] ?? null)
+                                    <td class="px-3 py-2.5">
+                                        @if($lalin)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $lalin }}</span>
+                                        @else
+                                            <span class="text-slate-400">—</span>
+                                        @endif
+                                    </td>
                                 @endif
-                            </td>
-                            <td class="px-3 py-2.5">
-                                <span class="text-[11px] font-bold text-slate-800">
-                                    {{ $tanggal ? \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}
-                                </span>
-                            </td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-700 max-w-[200px]">
-                                <span class="line-clamp-2">{{ $lokasi ?: '—' }}</span>
-                            </td>
-                            @if($patrolCols['situasilalin'] ?? null)
+                                @if($patrolCols['situasicuaca'] ?? null)
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $cuaca ?: '—' }}</td>
+                                @endif
+                                @if($patrolCols['peristiwa'] ?? null)
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $peristiwa ?: '—' }}</td>
+                                @endif
+                            @else
+                                @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah ?? '—') }}</span>
+                                    </td>
+                                @endif
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah))) : '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-bold text-slate-800">
+                                        {{ $tanggal ? \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}
+                                    </span>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-700 max-w-[200px]">
+                                    <span class="line-clamp-2">{{ $lokasi ?: '—' }}</span>
+                                </td>
                                 <td class="px-3 py-2.5">
                                     @if($lalin)
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/8 text-primary border border-primary/15">{{ $lalin }}</span>
@@ -153,21 +186,9 @@
                                         <span class="text-slate-400">—</span>
                                     @endif
                                 </td>
-                            @endif
-                            @if($patrolCols['situasicuaca'] ?? null)
                                 <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $cuaca ?: '—' }}</td>
-                            @endif
-                            @if($patrolCols['peristiwa'] ?? null)
                                 <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $peristiwa ?: '—' }}</td>
                             @endif
-                            @if($patrolCols['ketcb'] ?? null)
-                                <td class="px-3 py-2.5 text-[11px] text-slate-600 max-w-[160px]">
-                                    <span class="line-clamp-2">{{ $ketcb ? \Str::limit($ketcb, 35) : '—' }}</span>
-                                </td>
-                            @endif
-                            <td class="px-3 py-2.5">
-                                <span class="text-[11px] font-medium text-slate-700">{{ $item->petugas_nama ?? '—' }}</span>
-                            </td>
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('patrolicctv.show', $item->{$primaryKey}) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail">

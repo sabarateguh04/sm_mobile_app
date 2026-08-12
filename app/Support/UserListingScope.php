@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Schema;
 final class UserListingScope
 {
     /** @var list<int> Role legacy DB sebelum migrasi 7 tier → diperlakukan sebagai admin. */
-    private const LEGACY_ADMIN_USER_ROLE_IDS = [5, 8, 9, 16];
+    private const LEGACY_ADMIN_USER_ROLE_IDS = [8, 9, 16];
 
     public static function actorIsAdminTier(?Usm $actor): bool
     {
@@ -24,8 +24,21 @@ final class UserListingScope
             return false;
         }
 
+        if (MenuHelper::isExecutiveForLayout($actor) || MenuHelper::isExecutiveKabKotaUser($actor) || MenuHelper::isExecutiveProvinsiUser($actor) || MenuHelper::isExecutiveNationalUser($actor)) {
+            return false;
+        }
+
+        $roleLabel = strtolower($actor->role_label ?? '');
+        if (str_contains($roleLabel, 'executive') || str_contains($roleLabel, 'eksekutif')) {
+            return false;
+        }
+
         $matrixId = MenuHelper::matrixRoleIdForUser($actor);
-        if ($matrixId === 2 || $matrixId === 3) {
+        if (in_array($matrixId, [5, 6, 7], true)) {
+            return false;
+        }
+
+        if ($matrixId === 2 || $matrixId === 3 || $matrixId === 8) {
             return true;
         }
 
@@ -165,7 +178,9 @@ final class UserListingScope
             return;
         }
 
-        if ($wilayah !== '') {
+        $level = \App\Support\TerritoryLevelForUsm::resolve($actor);
+
+        if ($wilayah !== '' && $level === \App\Support\TerritoryLevelForUsm::KAB_KOTA) {
             self::applyColumnEqualsNormalized($query, $table.'.daerah', $daerah);
             self::applyColumnEqualsNormalized($query, $table.'.wilayah', $wilayah);
             if ($ctx !== null) {
@@ -212,7 +227,9 @@ final class UserListingScope
         $wilayah = trim((string) ($actor->wilayah ?? ''));
         $daerah = trim((string) ($actor->daerah ?? ''));
 
-        if ($wilayah !== '') {
+        $level = \App\Support\TerritoryLevelForUsm::resolve($actor);
+
+        if ($wilayah !== '' && $level === \App\Support\TerritoryLevelForUsm::KAB_KOTA) {
             return strcasecmp(trim((string) ($target->daerah ?? '')), $daerah) === 0
                 && strcasecmp(trim((string) ($target->wilayah ?? '')), $wilayah) === 0;
         }

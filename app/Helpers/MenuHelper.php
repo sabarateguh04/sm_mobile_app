@@ -59,6 +59,7 @@ class MenuHelper
             'pnpangkutan' => 'pnpangkutan.index',
             'contigency' => 'contigency.index',
             'trafficstuck' => 'trafficstuck.index',
+            'opsdal/cad' => 'opsdal.cad.index',
             'report/traffic-analytic' => 'report.traffic-analytic.index',
             'traffics' => 'traffics.index',
             'trafficdalkot' => 'report.traffic-analytic.index',
@@ -87,6 +88,9 @@ class MenuHelper
             'master/kl-resort' => 'master.kl-resort.index',
             'master/referensi' => 'master.referensi.index',
             'master/unit-kerja' => 'master.unit-kerja.index',
+            'sm/master'         => 'sm.master.index',
+            'sm/transaksi'      => 'sm.transaksi.index',
+            'sm/dacol'          => 'sm.dacol.index',
         ];
     }
 
@@ -440,15 +444,15 @@ class MenuHelper
         }
 
         if (Schema::hasColumn('roles', 'role_id')) {
+            if (DB::table('roles')->where('role_id', $raw)->exists()) {
+                return $raw;
+            }
+
             if (Schema::hasColumn('roles', 'id')) {
                 $matrixFromPk = DB::table('roles')->where('id', $raw)->value('role_id');
                 if ($matrixFromPk !== null) {
                     return (int) $matrixFromPk;
                 }
-            }
-
-            if (DB::table('roles')->where('role_id', $raw)->exists()) {
-                return $raw;
             }
 
             $matrixId = DB::table('roles')->where('id', $raw)->value('role_id');
@@ -510,6 +514,10 @@ class MenuHelper
         if (self::isSuperAdminForLayout($user)) {
             return false;
         }
+        
+        if (self::isExecutiveForLayout($user)) {
+            return false;
+        }
 
         $operatorId = (int) config('role_menu_matrix.operator_matrix_role_id', 4);
 
@@ -551,21 +559,24 @@ class MenuHelper
             return self::getSuperadminSidebarItems();
         }
 
-        if (self::isOperatorForLayout($user)) {
-            return self::getOperatorSidebarItems();
+        if (self::isOperatorForLayout($user) || self::matrixRoleIdForUser($user) === 3 || self::isExecutiveKabKotaUser($user)) {
+            $menu = self::getOperatorSidebarItems();
+        } elseif (self::isExecutiveForLayout($user) || self::matrixRoleIdForUser($user) === 2 || self::matrixRoleIdForUser($user) === 8) {
+            $menu = self::getExecutiveSidebarItems();
+        } else {
+            $menu = self::getAdminSidebarItems();
         }
 
         if (self::isExecutiveForLayout($user)) {
-            if (self::isExecutiveKabKotaUser($user)) {
-                // Executive 3 (matrix 5): sidebar & topbar sama operator, hanya lihat.
-                return self::getOperatorSidebarItems();
+            foreach ($menu as &$item) {
+                if (($item['path'] ?? '') === 'admin/users') {
+                    $item['label'] = 'Personil BackOffice';
+                }
             }
-
-            // Executive 2/1: sidebar sama AdminPolda/pusat (config/menu.php), hanya lihat.
-            return self::getAdminSidebarItems();
+            unset($item);
         }
 
-        return self::getAdminSidebarItems();
+        return $menu;
     }
 
     /**
@@ -672,7 +683,7 @@ class MenuHelper
             return false;
         }
 
-        return in_array(self::matrixRoleIdForUser($user), [2, 3], true);
+        return in_array(self::matrixRoleIdForUser($user), [2, 3, 8], true);
     }
 
     /** @deprecated Gunakan {@see isOperatorForLayout} */
@@ -705,6 +716,7 @@ class MenuHelper
         $menu = self::filterMenuByRoleMatrix($menu);
         $menu = self::filterMenuByTerritory($menu);
         $menu = self::filterMenuByPermission($menu);
+        $menu = self::filterSidebarItemsHiddenWhenShownInNavbar($menu);
 
         return self::pruneEmptySubmenuGroups(self::excludeSidebarOnlyGroups($menu));
     }

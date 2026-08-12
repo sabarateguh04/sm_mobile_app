@@ -64,6 +64,9 @@
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</dd>
                         
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Petugas</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->nama_petugas ?? $data->piket ?? '—' }}</dd>
+                        
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Pemohon</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0">
                             {{ $data->pemohon ?: '—' }}

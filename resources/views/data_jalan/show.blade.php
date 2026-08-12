@@ -33,8 +33,17 @@
             <div class="flex flex-col gap-6">
                 <div>
                     <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                        <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ $data->daerah_nama ? strtoupper($data->daerah_nama) : '—' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah_nama ? strtoupper($data->wilayah_nama) : '—' }}</dd>
+                        
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</dd>
+                        
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
                         
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Jenis Jalan</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jenisjalan ?? '-' }}</dd>
@@ -51,9 +60,9 @@
                         @if(!empty($prasjalChips))
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Prasarana Jalan</dt>
                         <dd class="m-0 flex flex-wrap gap-1.5 mt-1">
-                            @foreach($prasjalChips as $chip)
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[11px] font-bold">{{ $chip }}</span>
-                            @endforeach
+                             @foreach($prasjalChips as $chip)
+                                 <span class="inline-flex items-center px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[11px] font-bold">{{ $chip }}</span>
+                             @endforeach
                         </dd>
                         @elseif(!empty($data->prasjal))
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Prasarana Jalan</dt>
@@ -63,18 +72,12 @@
                         @if(!empty($data->koordinat))
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-1">Koordinat GPS</dt>
                         <dd class="m-0 flex items-center gap-2 flex-wrap">
-                            <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
-                            <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
-                                <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
-                            </a>
+                             <code class="bg-slate-100 px-2 py-0.5 rounded text-[12px]">{{ $data->koordinat }}</code>
+                             <a href="https://www.google.com/maps/search/?api=1&query={{ $data->koordinat }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 text-primary hover:underline text-decoration-none text-[12px]">
+                                 <span class="material-symbols-outlined text-[14px]">map</span>Google Maps
+                             </a>
                         </dd>
                         @endif
-                        
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
-                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
-                        
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Wilayah / Daerah</dt>
-                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->wilayah_nama ?? '-' }} / {{ $data->daerah_nama ?? '-' }}</dd>
                     </dl>
                 </div>
                 @if($fotoUrls)

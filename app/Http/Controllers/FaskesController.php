@@ -22,6 +22,30 @@ class FaskesController extends BaseController
 
     public function index(Request $request)
     {
+        $tab = $request->get('tab', 'dacol_fasilitas_umum');
+
+        if ($tab === 'dacol_fasilitas_umum') {
+            $table = 'sm_dacol_fasilitas_umum';
+            $dacolRows = \App\Support\SmDacolData::paginated($table, $request, 20);
+            return view('faskes.index', array_merge([
+                'pageTitle' => 'Data Faskes',
+                'tab' => $tab,
+                'data' => collect(), // dummy
+                'kategori' => [],
+                'namaFaskesList' => [],
+                'sboViewOnly' => true,
+                
+                'active' => $table,
+                'meta' => config("smd_tables.dacol.{$table}", []),
+                'rows' => $dacolRows,
+                'displayColumns' => \App\Support\SmDacolData::displayColumns($table),
+                'availableSources' => \App\Support\SmDacolData::availableSources($table),
+                'filterUrl' => route('faskes.index'),
+                'filterHiddenInputs' => '<input type="hidden" name="tab" value="'.$tab.'">',
+                'filterResetUrl' => route('faskes.index', ['tab' => $tab]),
+            ], \App\Support\TerritoryIndexFilters::viewBundle($request)));
+        }
+
         $query = DB::table('data_faskes as t')
             ->leftJoin('usm', 'usm.id_usm', '=', 't.piket')
             ->select('t.*', 'usm.nama as petugas_nama', 'usm.wilayah as petugas_wilayah', 'usm.daerah as petugas_daerah');
@@ -40,11 +64,22 @@ class FaskesController extends BaseController
             });
         }
 
+        if ($request->filled('katfaskes')) {
+            $query->where('t.katfaskes', $request->katfaskes);
+        }
+
+        if ($request->filled('nama_faskes')) {
+            $query->where('t.namafaskes', $request->nama_faskes);
+        }
+
         $data = $query->orderByDesc('t.tanggal')->paginate($request->get('per_page', 20))->withQueryString();
 
         return view('faskes.index', array_merge([
             'pageTitle' => 'Data Faskes',
+            'tab' => $tab,
             'data' => $data,
+            'kategori' => array_combine($this->kategoriOptions(), $this->kategoriOptions()),
+            'namaFaskesList' => DB::table('data_faskes')->select('namafaskes')->whereNotNull('namafaskes')->where('namafaskes', '!=', '')->distinct()->orderBy('namafaskes')->pluck('namafaskes', 'namafaskes'),
             'sboViewOnly' => \App\Support\RoleMutationPolicy::deniesAllMutations(Auth::user()),
         ], \App\Support\TerritoryIndexFilters::viewBundle($request)));
     }
@@ -79,6 +114,14 @@ class FaskesController extends BaseController
                     ->orWhere('t.lokasi', 'like', "%{$s}%")
                     ->orWhere('t.namecp', 'like', "%{$s}%");
             });
+        }
+
+        if ($request->filled('katfaskes')) {
+            $query->where('t.katfaskes', $request->katfaskes);
+        }
+
+        if ($request->filled('nama_faskes')) {
+            $query->where('t.namafaskes', $request->nama_faskes);
         }
 
         return $query->orderByDesc('t.tanggal');

@@ -26,11 +26,11 @@
     $valUnit = old('unit_kerja', $row->unit_kerja ?? $defaultUnitKerja ?? '');
 
     if ($kepegawaianKlEmpatTingkat ?? false) {
-        $kepegawaianSubtitleHtml = 'Alur hierarki 4 tingkat: <strong>Induk organisasi</strong> → <strong>Organisasi pusat</strong> → <strong>Organisasi daerah</strong> → <strong>Unit kerja</strong>';
+        $kepegawaianSubtitleHtml = 'Alur hierarki 4 tingkat: <strong>Instansi</strong> → <strong>Organisasi</strong> → <strong>Sub organisasi</strong> → <strong>Unit kerja</strong>';
     } elseif ($kepegawaianKlTigaTingkat ?? false) {
-        $kepegawaianSubtitleHtml = 'Alur hierarki 3 tingkat: <strong>Induk organisasi</strong> → <strong>Organisasi pusat</strong> → <strong>Unit kerja</strong>';
+        $kepegawaianSubtitleHtml = 'Alur hierarki 3 tingkat: <strong>Instansi</strong> → <strong>Organisasi</strong> → <strong>Unit kerja</strong>';
     } else {
-        $kepegawaianSubtitleHtml = 'Induk organisasi, organisasi pusat, organisasi daerah, dan unit kerja pegawai';
+        $kepegawaianSubtitleHtml = 'Instansi, organisasi, sub organisasi, dan unit kerja pegawai';
     }
 @endphp
 
@@ -45,14 +45,14 @@
     <div class="col-6 col-lg-3">
         <label class="form-label" for="pm_induk_pemerintahan">
             @if(($kepegawaianKlTigaTingkat ?? false) || ($kepegawaianKlEmpatTingkat ?? false))<span class="pm-step-badge pm-step-badge--1">1</span>@endif
-            Induk organisasi
+            Instansi
         </label>
         @if($locks['induk_pemerintahan'] ?? false)
             <input type="text" class="form-control bg-light" value="{{ $valInduk }}" readonly>
             <input type="hidden" name="induk_pemerintahan" id="pm_induk_pemerintahan" value="{{ $valInduk }}">
         @elseif($indukPemerintahanUseSelect)
             <select name="induk_pemerintahan" id="pm_induk_pemerintahan" class="form-select @error('induk_pemerintahan') is-invalid @enderror">
-                <option value="">— Pilih induk organisasi —</option>
+                <option value="">— Pilih instansi —</option>
                 @foreach($orgsIndukForKepegawaian as $o)
                     <option value="{{ $o->nameorg }}" @selected($valInduk === $o->nameorg)>{{ $o->nameorg }}</option>
                 @endforeach
@@ -65,14 +65,14 @@
     <div class="col-6 col-lg-3">
         <label class="form-label" for="pm_pemerintahan_daerah">
             @if(($kepegawaianKlTigaTingkat ?? false) || ($kepegawaianKlEmpatTingkat ?? false))<span class="pm-step-badge pm-step-badge--2">2</span>@endif
-            Organisasi pusat
+            Organisasi
         </label>
         @if($locks['pemerintahan_daerah'] ?? false)
             <input type="text" class="form-control bg-light" value="{{ $valPemda }}" readonly>
             <input type="hidden" name="pemerintahan_daerah" id="pm_pemerintahan_daerah" value="{{ $valPemda }}">
         @elseif($pemerintahanDaerahUseSelect)
             <select name="pemerintahan_daerah" id="pm_pemerintahan_daerah" class="form-select @error('pemerintahan_daerah') is-invalid @enderror">
-                <option value="">— Pilih organisasi pusat —</option>
+                <option value="">— Pilih organisasi —</option>
                 @foreach($pemerintahanDaerahResorts as $pr)
                     <option value="{{ $pr->nama }}" data-induk-org="{{ $pr->nameorg }}" @selected($valPemda === $pr->nama)>{{ $pr->nama }}</option>
                 @endforeach
@@ -86,14 +86,14 @@
         <div class="col-6 col-lg-3">
             <label class="form-label" for="pm_organisasi_daerah">
                 <span class="pm-step-badge pm-step-badge--3">3</span>
-                Organisasi daerah
+                Sub organisasi
             </label>
             @if($locks['organisasi_daerah'] ?? false)
                 <input type="text" class="form-control bg-light" value="{{ $valOrgDaerah }}" readonly>
                 <input type="hidden" name="organisasi_daerah" id="pm_organisasi_daerah" value="{{ $valOrgDaerah }}">
             @elseif($organisasiDaerahUseSelect)
                 <select name="organisasi_daerah" id="pm_organisasi_daerah" class="form-select @error('organisasi_daerah') is-invalid @enderror">
-                    <option value="">— Pilih organisasi daerah —</option>
+                    <option value="">— Pilih sub organisasi —</option>
                     @foreach($organisasiDaerahListCol as $od)
                         <option value="{{ $od->nama }}"
                             data-induk-org="{{ $od->induk_pusat ?? '' }}"
@@ -152,18 +152,18 @@
     @endif
 @else
     <div class="col-6 col-lg-3">
-        <label class="form-label">Induk organisasi</label>
+        <label class="form-label">Instansi</label>
         <input type="text" class="form-control bg-light" value="{{ $valInduk }}" readonly>
         <input type="hidden" name="induk_pemerintahan" value="{{ $valInduk }}">
     </div>
     <div class="col-6 col-lg-3">
-        <label class="form-label">Organisasi pusat</label>
+        <label class="form-label">Organisasi</label>
         <input type="text" class="form-control bg-light" value="{{ $valPemda }}" readonly>
         <input type="hidden" name="pemerintahan_daerah" value="{{ $valPemda }}">
     </div>
     @if($kepegawaianKlEmpatTingkat ?? false)
         <div class="col-6 col-lg-3">
-            <label class="form-label">Organisasi daerah</label>
+            <label class="form-label">Sub organisasi</label>
             <input type="text" class="form-control bg-light" value="{{ $valOrgDaerah }}" readonly>
             <input type="hidden" name="organisasi_daerah" value="{{ $valOrgDaerah }}">
         </div>

@@ -1,0 +1,9 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s8"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <rect x="26" y="32" width="48" height="44" rx="4" fill="#10B981" stroke="#059669" stroke-width="2" filter="url(#s8)"/>
+            <rect x="44" y="42" width="3" height="18" fill="#FFF" opacity="0.95"/>
+            <rect x="36" y="50" width="18" height="3" fill="#FFF" opacity="0.95"/>
+            <circle cx="50" cy="28" r="5" fill="#059669" stroke="#FFF" stroke-width="1.5" opacity="0.9"/>
+          </svg>

@@ -109,17 +109,18 @@
 
         // Lonceng hanya dirender di menu Opsdal (.opsdal-bell-container); menu lain tanpa lonceng.
         const bellContainers = document.querySelectorAll('.opsdal-bell-container');
-        const OPSDAL_ALERT_SOURCES = ['patrolicctv', 'layanan_masyarakat', 'contigency', 'trafficstuck', 'turjagwali'];
+        const OPSDAL_ALERT_SOURCES = ['patrolicctv', 'layanan_masyarakat', 'contigency', 'trafficstuck', 'turjagwali', 'cad_log'];
 
         if (bellContainers.length > 0) {
-            let lastLayananId = localStorage.getItem('sbo_opsdal_notif_layanan') || 0;
-            let lastCctvId = localStorage.getItem('sbo_opsdal_notif_cctv') || 0;
-            let lastTurjagwaliId = localStorage.getItem('sbo_opsdal_notif_turjagwali') || 0;
-            let lastContigencyId = localStorage.getItem('sbo_opsdal_notif_contigency') || 0;
-            let lastTrafficstuckId = localStorage.getItem('sbo_opsdal_notif_trafficstuck') || 0;
+            let lastLayananId = localStorage.getItem('sbo_opsdal_notif_layanan_v2') || 0;
+            let lastCctvId = localStorage.getItem('sbo_opsdal_notif_cctv_v2') || 0;
+            let lastTurjagwaliId = localStorage.getItem('sbo_opsdal_notif_turjagwali_v2') || 0;
+            let lastContigencyId = localStorage.getItem('sbo_opsdal_notif_contigency_v2') || 0;
+            let lastTrafficstuckId = localStorage.getItem('sbo_opsdal_notif_trafficstuck_v2') || 0;
+            let lastCadLogId = localStorage.getItem('sbo_opsdal_notif_cad_log_v2') || 0;
             let notifItems = [];
             try {
-                notifItems = JSON.parse(localStorage.getItem('sbo_opsdal_notif_items') || '[]')
+                notifItems = JSON.parse(localStorage.getItem('sbo_opsdal_notif_items_v2') || '[]')
                     .filter(item => OPSDAL_ALERT_SOURCES.includes(item.source));
             } catch(e) {
                 notifItems = [];
@@ -224,7 +225,7 @@
                             e.preventDefault();
                             e.stopPropagation();
                             notifItems = notifItems.filter(item => !OPSDAL_ALERT_SOURCES.includes(item.source));
-                            localStorage.setItem('sbo_opsdal_notif_items', JSON.stringify(notifItems));
+                            localStorage.setItem('sbo_opsdal_notif_items_v2', JSON.stringify(notifItems));
                             renderNotifs();
                         });
                     }
@@ -234,7 +235,7 @@
                             const idx = parseInt(this.getAttribute('data-idx'));
                             if (!isNaN(idx)) {
                                 notifItems.splice(idx, 1);
-                                localStorage.setItem('sbo_opsdal_notif_items', JSON.stringify(notifItems));
+                                localStorage.setItem('sbo_opsdal_notif_items_v2', JSON.stringify(notifItems));
                                 renderNotifs();
                             }
                         });
@@ -243,9 +244,9 @@
             }
 
             function fetchNotifs() {
-                const wasInitialized = (lastLayananId > 0 || lastCctvId > 0 || lastTurjagwaliId > 0 || lastContigencyId > 0 || lastTrafficstuckId > 0);
+                const wasInitialized = (lastLayananId > 0 || lastCctvId > 0 || lastTurjagwaliId > 0 || lastContigencyId > 0 || lastTrafficstuckId > 0 || lastCadLogId > 0);
 
-                fetch(`/api/opsdal-notifications?last_layanan_id=${lastLayananId}&last_cctv_id=${lastCctvId}&last_turjagwali_id=${lastTurjagwaliId}&last_contigency_id=${lastContigencyId}&last_trafficstuck_id=${lastTrafficstuckId}`, {
+                fetch(`/api/opsdal-notifications?last_layanan_id=${lastLayananId}&last_cctv_id=${lastCctvId}&last_turjagwali_id=${lastTurjagwaliId}&last_contigency_id=${lastContigencyId}&last_trafficstuck_id=${lastTrafficstuckId}&last_cad_log_id=${lastCadLogId}`, {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 })
                 .then(r => r.json())
@@ -267,19 +268,21 @@
                             return OPSDAL_ALERT_SOURCES.includes(item.source);
                         }).slice(0, 20);
 
-                        localStorage.setItem('sbo_opsdal_notif_items', JSON.stringify(notifItems));
+                        localStorage.setItem('sbo_opsdal_notif_items_v2', JSON.stringify(notifItems));
 
                         lastLayananId = Math.max(lastLayananId, data.max_layanan_id || 0);
                         lastCctvId = Math.max(lastCctvId, data.max_cctv_id || 0);
                         lastTurjagwaliId = Math.max(lastTurjagwaliId, data.max_turjagwali_id || 0);
                         lastContigencyId = Math.max(lastContigencyId, data.max_contigency_id || 0);
                         lastTrafficstuckId = Math.max(lastTrafficstuckId, data.max_trafficstuck_id || 0);
+                        lastCadLogId = Math.max(lastCadLogId, data.max_cad_log_id || 0);
 
-                        localStorage.setItem('sbo_opsdal_notif_layanan', lastLayananId);
-                        localStorage.setItem('sbo_opsdal_notif_cctv', lastCctvId);
-                        localStorage.setItem('sbo_opsdal_notif_turjagwali', lastTurjagwaliId);
-                        localStorage.setItem('sbo_opsdal_notif_contigency', lastContigencyId);
-                        localStorage.setItem('sbo_opsdal_notif_trafficstuck', lastTrafficstuckId);
+                        localStorage.setItem('sbo_opsdal_notif_layanan_v2', lastLayananId);
+                        localStorage.setItem('sbo_opsdal_notif_cctv_v2', lastCctvId);
+                        localStorage.setItem('sbo_opsdal_notif_turjagwali_v2', lastTurjagwaliId);
+                        localStorage.setItem('sbo_opsdal_notif_contigency_v2', lastContigencyId);
+                        localStorage.setItem('sbo_opsdal_notif_trafficstuck_v2', lastTrafficstuckId);
+                        localStorage.setItem('sbo_opsdal_notif_cad_log_v2', lastCadLogId);
                     }
 
                     renderNotifs();
@@ -295,7 +298,7 @@
             setInterval(function() {
                 let currentItems = [];
                 try {
-                    currentItems = JSON.parse(localStorage.getItem('sbo_opsdal_notif_items') || '[]')
+                    currentItems = JSON.parse(localStorage.getItem('sbo_opsdal_notif_items_v2') || '[]')
                         .filter(item => OPSDAL_ALERT_SOURCES.includes(item.source));
                 } catch(e) {}
                 if (localStorage.getItem('sbo_opsdal_notif_opened') === 'false' && currentItems.length > 0) {

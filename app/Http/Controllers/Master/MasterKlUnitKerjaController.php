@@ -20,23 +20,25 @@ class MasterKlUnitKerjaController extends Controller
             abort(404);
         }
 
+        $instansis = DB::table('master_pemerintahan_instansi')->orderBy('nama_unit')->pluck('nama_unit', 'id');
+        $orgs = DB::table('org')->orderBy('nameorg')->pluck('nameorg', 'id_org');
+
         $resorts = DB::table('master_kl_resort as r')
-            ->join('master_kl_daerah as d', 'd.id', '=', 'r.parent_id')
-            ->orderBy('d.nama')
             ->orderBy('r.nama')
-            ->get(['r.id', 'r.nama as resort_nama', 'd.nama as daerah_nama']);
+            ->get(['r.id', 'r.nama as resort_nama', 'r.instansi_id', 'r.org_id']);
 
         $q = DB::table('master_kl_unit_kerja as u')
             ->join('master_kl_resort as r', 'r.id', '=', 'u.parent_id')
-            ->join('master_kl_daerah as d', 'd.id', '=', 'r.parent_id')
+            ->leftJoin('master_pemerintahan_instansi as i', 'i.id', '=', 'r.instansi_id')
+            ->leftJoin('org as o', 'o.id_org', '=', 'r.org_id')
             ->select(
                 'u.id',
                 'u.nama',
                 'u.parent_id',
                 'r.nama as resort_nama',
-                'd.nama as daerah_nama'
+                'i.nama_unit as instansi_nama',
+                'o.nameorg as org_nama'
             )
-            ->orderBy('d.nama')
             ->orderBy('r.nama')
             ->orderBy('u.nama');
 
@@ -45,7 +47,8 @@ class MasterKlUnitKerjaController extends Controller
             $q->where(function ($qq) use ($s): void {
                 $qq->where('u.nama', 'like', "%{$s}%")
                     ->orWhere('r.nama', 'like', "%{$s}%")
-                    ->orWhere('d.nama', 'like', "%{$s}%");
+                    ->orWhere('i.nama_unit', 'like', "%{$s}%")
+                    ->orWhere('o.nameorg', 'like', "%{$s}%");
             });
         }
 
@@ -56,7 +59,7 @@ class MasterKlUnitKerjaController extends Controller
         $perPage = max(1, (int) $request->get('per_page', 10));
         $rows = $q->paginate($perPage)->withQueryString();
 
-        return view('master.kl_unit_kerja.index', compact('rows', 'resorts'));
+        return view('master.kl_unit_kerja.index', compact('rows', 'resorts', 'instansis', 'orgs'));
     }
 
     public function create(Request $request)
@@ -65,14 +68,15 @@ class MasterKlUnitKerjaController extends Controller
             abort(404);
         }
 
+        $instansis = DB::table('master_pemerintahan_instansi')->orderBy('nama_unit')->get();
+        $orgs = DB::table('org')->orderBy('nameorg')->get();
+
         $resorts = DB::table('master_kl_resort as r')
-            ->join('master_kl_daerah as d', 'd.id', '=', 'r.parent_id')
-            ->orderBy('d.nama')
             ->orderBy('r.nama')
-            ->get(['r.id', 'r.nama as resort_nama', 'd.nama as daerah_nama']);
+            ->get(['r.id', 'r.nama as resort_nama', 'r.instansi_id', 'r.org_id']);
         $preselectedParent = $request->query('parent_id');
 
-        return view('master.kl_unit_kerja.create', compact('resorts', 'preselectedParent'));
+        return view('master.kl_unit_kerja.create', compact('instansis', 'orgs', 'resorts', 'preselectedParent'));
     }
 
     public function store(Request $request)
@@ -109,13 +113,14 @@ class MasterKlUnitKerjaController extends Controller
             abort(404);
         }
 
-        $resorts = DB::table('master_kl_resort as r')
-            ->join('master_kl_daerah as d', 'd.id', '=', 'r.parent_id')
-            ->orderBy('d.nama')
-            ->orderBy('r.nama')
-            ->get(['r.id', 'r.nama as resort_nama', 'd.nama as daerah_nama']);
+        $instansis = DB::table('master_pemerintahan_instansi')->orderBy('nama_unit')->get();
+        $orgs = DB::table('org')->orderBy('nameorg')->get();
 
-        return view('master.kl_unit_kerja.edit', compact('row', 'resorts'));
+        $resorts = DB::table('master_kl_resort as r')
+            ->orderBy('r.nama')
+            ->get(['r.id', 'r.nama as resort_nama', 'r.instansi_id', 'r.org_id']);
+
+        return view('master.kl_unit_kerja.edit', compact('row', 'instansis', 'orgs', 'resorts'));
     }
 
     public function update(Request $request, string $id)

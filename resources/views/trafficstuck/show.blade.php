@@ -37,11 +37,20 @@
         </div>
         <div class="p-5">
             <dl class="grid grid-cols-[140px_1fr] md:grid-cols-[160px_1fr] gap-x-4 gap-y-3 mb-0 items-center">
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
+                <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ strtoupper($data->daerah_nama ?? '-') }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ !empty($data->wilayah_nama) ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah_nama))) : '-' }}</dd>
+                
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</dd>
                 
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Jam Peristiwa</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->jamperistiwa ? \Carbon\Carbon::parse($data->jamperistiwa)->format('H:i') . ' WIB' : '-' }}</dd>
+                
+                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
+                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
                 
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Lokasi</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->lokasi ?? '-' }}</dd>
@@ -79,14 +88,6 @@
                 <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide self-start mt-0.5">Keterangan CB</dt>
                 <dd class="text-[13px] text-slate-800 font-medium m-0 whitespace-pre-wrap">{!! nl2br(e($data->ketcb ?? '-')) !!}</dd>
                 
-                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Piket</dt>
-                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? '-' }}</dd>
-                
-                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polda</dt>
-                <dd class="text-[13px] font-bold m-0" style="color:#D8A808;">{{ strtoupper($data->daerah_nama ?? '-') }}</dd>
-                
-                <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Polres</dt>
-                <dd class="text-[13px] text-slate-800 font-medium m-0">{{ !empty($data->wilayah_nama) ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $data->wilayah_nama))) : '-' }}</dd>
             </dl>
             @if(!empty($data->fotosituasi))
                 <div class="mt-4 pt-4 border-t border-slate-100">

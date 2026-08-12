@@ -19,7 +19,6 @@
         <div class="p-5">
             <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 mb-0">
                 <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Tanggal</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ isset($data->tanggal) ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '-' }}</dd></div>
-                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Profile Posko</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->id_profileposko ?? '-' }}</dd></div>
                 <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Polda</dt>
                     <dd class="m-0">@if(!empty($data->daerah))<span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-amber-100 text-amber-700 text-[11px] font-bold">{{ $data->daerah }}</span>@else<span class="text-slate-400 text-[13px]">-</span>@endif</dd>
                 </div>
@@ -27,6 +26,7 @@
                     <dd class="m-0">@if(!empty($data->wilayah))<span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-bold">{{ $data->wilayah }}</span>@else<span class="text-slate-400 text-[13px]">-</span>@endif</dd>
                 </div>
                 <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Piket</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->usm_nama ?? $data->piket ?? '-' }}</dd></div>
+                <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Profile Posko</dt><dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->id_profileposko ?? '-' }}</dd></div>
                 <div><dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Status Arus</dt>
                     <dd class="m-0">@if(!empty($data->statarus))<span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-100 text-blue-700 text-[11px] font-bold">{{ $data->statarus }}</span>@else<span class="text-slate-400 text-[13px]">-</span>@endif</dd>
                 </div>

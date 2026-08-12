@@ -34,6 +34,25 @@
     var hintPilihInduk = @json($hintPilihIndukWilayah);
     var hintPilihAnak = @json($hintPilihAnakWilayah);
 
+    function clearError(el) {
+        if (!el) return;
+        var container = el.closest('.min-w-0') || el.parentNode;
+        if (container) {
+            var errorEls = container.querySelectorAll('.invalid-feedback, .text-red-600');
+            errorEls.forEach(function (errorEl) {
+                errorEl.style.display = 'none';
+            });
+        }
+        el.classList.remove('border-red-300', 'bg-red-50', 'is-invalid');
+        if (window.jQuery) {
+            $(el).removeClass('border-red-300 bg-red-50 is-invalid');
+            if ($(el).hasClass('select2-hidden-accessible')) {
+                var select2Selection = $(el).next('.select2-container').find('.select2-selection');
+                select2Selection.removeClass('is-invalid border-red-300 bg-red-50');
+            }
+        }
+    }
+
     function refillWilayah(resetSelection) {
         var d = daerahEl.value;
         wilayahEl.innerHTML = '';
@@ -84,14 +103,73 @@
         $(daerahEl).on('change', function () {
             selectedWilayah = '';
             refillWilayah(true);
+            clearError(daerahEl);
+            clearError(wilayahEl);
+        });
+        $(wilayahEl).on('change', function () {
+            clearError(wilayahEl);
         });
     } else {
         daerahEl.addEventListener('change', function () {
             selectedWilayah = '';
             refillWilayah(true);
+            clearError(daerahEl);
+            clearError(wilayahEl);
+        });
+        wilayahEl.addEventListener('change', function () {
+            clearError(wilayahEl);
         });
     }
     refillWilayah(false);
+})();
+(function () {
+    var roleEl = document.querySelector('select[name="user_role_id"]');
+    var wilayahEl = document.getElementById('userWilayah');
+    if (!roleEl || !wilayahEl) return;
+
+    function handleRoleChange() {
+        var isExec2 = roleEl.value === '6';
+        if (isExec2) {
+            wilayahEl.value = '';
+            wilayahEl.disabled = true;
+            if (window.jQuery) {
+                $(wilayahEl).prop('disabled', true);
+                if ($(wilayahEl).hasClass('select2-hidden-accessible')) {
+                    $(wilayahEl).trigger('change.select2');
+                }
+            }
+        } else {
+            wilayahEl.disabled = false;
+            if (window.jQuery) {
+                $(wilayahEl).prop('disabled', false);
+                if ($(wilayahEl).hasClass('select2-hidden-accessible')) {
+                    $(wilayahEl).trigger('change.select2');
+                }
+            }
+        }
+    }
+
+    roleEl.addEventListener('change', handleRoleChange);
+    // Run on init
+    handleRoleChange();
+
+    // Also watch for when daerah changes: if role is Executive 2, make sure wilayah remains cleared/disabled
+    var daerahEl = document.getElementById('userDaerah');
+    if (daerahEl) {
+        var handler = function () {
+            if (roleEl.value === '6') {
+                wilayahEl.value = '';
+                wilayahEl.disabled = true;
+                if (window.jQuery && $(wilayahEl).hasClass('select2-hidden-accessible')) {
+                    $(wilayahEl).prop('disabled', true).trigger('change.select2');
+                }
+            }
+        };
+        daerahEl.addEventListener('change', handler);
+        if (window.jQuery) {
+            $(daerahEl).on('change', handler);
+        }
+    }
 })();
 </script>
 @php

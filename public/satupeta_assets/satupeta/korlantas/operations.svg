@@ -1,0 +1,11 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="s13"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+            </defs>
+            <circle cx="50" cy="50" r="16" fill="none" stroke="#7C3AED" stroke-width="2.5" filter="url(#s13)"/>
+            <circle cx="50" cy="50" r="10" fill="none" stroke="#7C3AED" stroke-width="1.5" opacity="0.7"/>
+            <circle cx="50" cy="32" r="3" fill="#7C3AED"/>
+            <circle cx="68" cy="50" r="3" fill="#7C3AED"/>
+            <circle cx="50" cy="68" r="3" fill="#7C3AED"/>
+            <circle cx="32" cy="50" r="3" fill="#7C3AED"/>
+          </svg>

@@ -12,14 +12,30 @@
 
 {{-- ══ MAP SEBARAN (EMBED) ══ --}}
 <div>
-    <div class="flex items-center gap-1.5 mb-2">
-        <div class="w-6 h-6 rounded-md bg-indigo-100 flex items-center justify-center">
-            <span class="material-symbols-outlined text-indigo-500 text-[14px]" style="font-variation-settings:'FILL' 1;">map</span>
+    <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-1.5">
+            <div class="w-6 h-6 rounded-md bg-indigo-100 flex items-center justify-center">
+                <span class="material-symbols-outlined text-indigo-500 text-[14px]" style="font-variation-settings:'FILL' 1;">map</span>
+            </div>
+            <h6 class="m-0 font-bold text-[12px] text-slate-700">Peta Opsdal</h6>
+            @if(request()->query('debug') == '1')
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200 animate-pulse">
+                    <span class="w-1.5 h-1.5 mr-1 rounded-full bg-rose-500"></span> Debug Mode
+                </span>
+            @endif
         </div>
-        <h6 class="m-0 font-bold text-[12px] text-slate-700">Peta Opsdal</h6>
+        @if(request()->query('debug') == '1')
+            <a href="{{ route('map.debug') }}" target="_blank" class="text-[10px] font-bold text-rose-600 hover:text-rose-800 transition-colors flex items-center gap-1 text-decoration-none">
+                <span class="material-symbols-outlined text-[12px]">bug_report</span> View Raw Diagnostics
+            </a>
+        @endif
     </div>
-    <div class="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden relative" style="height: 450px; z-index: 10;">
-        <iframe src="{{ route('map.index') }}?embed=1" width="100%" height="100%" style="border:none;" title="Map Operasional"></iframe>
+    @php
+        $mapQuery = request()->only(['daerah', 'wilayah', 'debug']);
+        $mapQuery['embed'] = 1;
+    @endphp
+    <div class="bg-white border border-slate-200/60 shadow-sm overflow-hidden relative mx-auto" style="height: 450px; border-radius: 40px; z-index: 10;">
+        <iframe src="{{ route('map.index', $mapQuery) }}" width="100%" height="100%" style="border:none;" title="Map Operasional"></iframe>
     </div>
 </div>
 

@@ -54,7 +54,9 @@ class OrganisasiController extends Controller
         $org = $orgQ->paginate($perPage)->withQueryString();
         $suborgCounts = OrgMaster::suborgCountsForOrgRows($org->items());
 
-        return view('master.organisasi.index', compact('org', 'suborgCounts'));
+        $instansiMap = DB::table('master_pemerintahan_instansi')->pluck('nama_unit', 'id');
+
+        return view('master.organisasi.index', compact('org', 'suborgCounts', 'instansiMap'));
     }
 
     public function suborganisasi(Request $request, $id)
@@ -103,7 +105,9 @@ class OrganisasiController extends Controller
             abort(404);
         }
 
-        return view('master.organisasi.create');
+        $instansiList = DB::table('master_pemerintahan_instansi')->orderBy('nama_unit')->get();
+
+        return view('master.organisasi.create', compact('instansiList'));
     }
 
     public function store(Request $request)
@@ -112,7 +116,7 @@ class OrganisasiController extends Controller
             abort(404);
         }
 
-        $rules = ['nameorg' => ['required', 'string', 'max:255']];
+        $rules = ['nameorg' => ['required', 'string', 'max:255'], 'instansi_id' => ['required', 'integer']];
         if (Schema::hasColumn('org', 'singkatan')) {
             $rules['singkatan'] = ['nullable', 'string', 'max:64'];
         }
@@ -121,6 +125,7 @@ class OrganisasiController extends Controller
         $insert = [
             'id_org' => TerritoryMaster::nextTableId('org', 'id_org'),
             'nameorg' => $this->normalizeOrgName($validated['nameorg']),
+            'instansi_id' => $validated['instansi_id'],
         ];
         if (Schema::hasColumn('org', 'singkatan') && ! empty($validated['singkatan'] ?? '')) {
             $insert['singkatan'] = mb_strtoupper(trim((string) $validated['singkatan']), 'UTF-8');
@@ -138,7 +143,9 @@ class OrganisasiController extends Controller
             abort(404);
         }
 
-        return view('master.organisasi.edit', compact('row'));
+        $instansiList = DB::table('master_pemerintahan_instansi')->orderBy('nama_unit')->get();
+
+        return view('master.organisasi.edit', compact('row', 'instansiList'));
     }
 
     public function update(Request $request, $id)
@@ -147,13 +154,16 @@ class OrganisasiController extends Controller
             abort(404);
         }
 
-        $rules = ['nameorg' => ['required', 'string', 'max:255']];
+        $rules = ['nameorg' => ['required', 'string', 'max:255'], 'instansi_id' => ['required', 'integer']];
         if (Schema::hasColumn('org', 'singkatan')) {
             $rules['singkatan'] = ['nullable', 'string', 'max:64'];
         }
         $validated = $request->validate($rules);
 
-        $update = ['nameorg' => $this->normalizeOrgName($validated['nameorg'])];
+        $update = [
+            'nameorg' => $this->normalizeOrgName($validated['nameorg']),
+            'instansi_id' => $validated['instansi_id'],
+        ];
         if (Schema::hasColumn('org', 'singkatan')) {
             $update['singkatan'] = ! empty($validated['singkatan'] ?? '')
                 ? mb_strtoupper(trim((string) $validated['singkatan']), 'UTF-8')

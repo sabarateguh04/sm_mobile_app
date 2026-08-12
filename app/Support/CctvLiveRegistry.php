@@ -141,6 +141,103 @@ final class CctvLiveRegistry
         return $row;
     }
 
+    private static function getPoldaIdByName(string $name): ?string
+    {
+        $cleaned = mb_strtolower((string) preg_replace('/^(polda|provinsi|prov\.?)\s+/iu', '', $name));
+        $cleaned = trim($cleaned);
+        if ($cleaned === '') return null;
+
+        // Hardcoded map for the main known Poldas in CCTV database
+        $map = [
+            'jawa tengah' => '14',
+            'jateng' => '14',
+            'jawa barat' => '15',
+            'jabar' => '15',
+            'bali' => '17',
+        ];
+        if (isset($map[$cleaned])) {
+            return $map[$cleaned];
+        }
+
+        // Try legacy table first
+        if (Schema::hasTable('daerah')) {
+            $row = DB::table('daerah')->where('namadaerah', 'LIKE', '%' . $cleaned . '%')->first();
+            if ($row) return (string) ($row->id_daerah ?? $row->id ?? '');
+        }
+
+        // Try master table
+        if (Schema::hasTable('master_provinsi')) {
+            $row = DB::table('master_provinsi')->where('nama', 'LIKE', '%' . $cleaned . '%')->first();
+            if ($row) return (string) ($row->id ?? '');
+        }
+
+        // Dynamic lookup from table
+        try {
+            $table = self::tableName();
+            $conn = 'satupeta';
+            if (Schema::connection($conn)->hasTable($table)) {
+                $row = DB::connection($conn)->table($table)
+                    ->where('nama_cctv', 'LIKE', '%' . $cleaned . '%')
+                    ->first();
+                if ($row && !empty($row->polda_id)) {
+                    return (string) $row->polda_id;
+                }
+            }
+        } catch (\Throwable $e) {}
+
+        return null;
+    }
+
+    private static function getPolresIdByName(string $name): ?string
+    {
+        $cleaned = mb_strtolower((string) preg_replace('/^(polrestabes metro|polresta metro|polres metro|polres\/metro|polrestabes|polresta|polres|kabupaten|kab\.|kota administrasi|kota adm\.|kota)\s+/iu', '', $name));
+        $cleaned = trim($cleaned);
+        if ($cleaned === '') return null;
+
+        // Hardcoded map for the main known Polreses in CCTV database
+        $map = [
+            'surakarta' => '191',
+            'solo' => '191',
+            'denpasar' => '271',
+            'badung' => '265',
+        ];
+        if (isset($map[$cleaned])) {
+            return $map[$cleaned];
+        }
+
+        // Try legacy table first
+        if (Schema::hasTable('wilayah')) {
+            $row = DB::table('wilayah')->where('namawilayah', 'LIKE', '%' . $cleaned . '%')->first();
+            if ($row) return (string) ($row->id_wilayah ?? $row->id ?? '');
+        }
+
+        // Try master table
+        if (Schema::hasTable('master_kabupaten_kota')) {
+            $row = DB::table('master_kabupaten_kota')->where('nama', 'LIKE', '%' . $cleaned . '%')->first();
+            if ($row) return (string) ($row->id ?? '');
+        }
+
+        // Dynamic lookup from table
+        try {
+            $table = self::tableName();
+            $conn = 'satupeta';
+            if (Schema::connection($conn)->hasTable($table)) {
+                $row = DB::connection($conn)->table($table)
+                    ->where(function($q) use ($cleaned) {
+                        $q->where('nama_cctv', 'LIKE', '%' . $cleaned . '%')
+                          ->orWhere('kota', 'LIKE', '%' . $cleaned . '%')
+                          ->orWhere('kecamatan', 'LIKE', '%' . $cleaned . '%');
+                    })
+                    ->first();
+                if ($row && !empty($row->polres_id)) {
+                    return (string) $row->polres_id;
+                }
+            }
+        } catch (\Throwable $e) {}
+
+        return null;
+    }
+
     private static function applyTerritoryScope($query): void
     {
         if (HierarchicalHelper::viewerBypassesTerritoryScope()) {
@@ -150,40 +247,70 @@ final class CctvLiveRegistry
         $user = Auth::user();
         if (! $user) {
             $query->whereRaw('1 = 0');
-
             return;
         }
 
         $table = self::tableName();
         $schema = Schema::connection('satupeta');
-        $poldaId = trim((string) config('satupeta.polda_id', ''));
 
-        if ($poldaId !== '') {
+        // Dynamic Scoping based on logged in user's daerah and wilayah
+        $userDaerah = trim((string) ($user->daerah ?? ''));
+        $userWilayah = trim((string) ($user->wilayah ?? ''));
+
+        if ($userDaerah !== '') {
+            $poldaId = self::getPoldaIdByName($userDaerah);
+            if ($poldaId !== null && $poldaId !== '') {
+                if ($table === 'smpc_tbl_data_cctv' && $schema->hasColumn($table, 'polda_id')) {
+                    $query->where('polda_id', $poldaId);
+                } elseif ($schema->hasColumn($table, 'da_id')) {
+                    $query->where('da_id', $poldaId);
+                }
+            } else {
+                // Name-based fallback if ID not found
+                $cleanDaerah = mb_strtolower((string) preg_replace('/^(polda|provinsi|prov\.?)\s+/iu', '', $userDaerah));
+                $likeDaerah = '%'.$cleanDaerah.'%';
+                $query->where(function ($w) use ($likeDaerah, $table) {
+                    $w->whereRaw('LOWER(nama_cctv) LIKE ?', [$likeDaerah]);
+                    if ($table !== 'smpc_tbl_data_cctv') {
+                        $w->orWhereRaw('LOWER(channel_name) LIKE ?', [$likeDaerah]);
+                    }
+                });
+            }
+
+            if ($userWilayah !== '') {
+                $polresId = self::getPolresIdByName($userWilayah);
+                if ($polresId !== null && $polresId !== '') {
+                    if ($table === 'smpc_tbl_data_cctv' && $schema->hasColumn($table, 'polres_id')) {
+                        $query->where('polres_id', $polresId);
+                    }
+                } else {
+                    // Name-based fallback for Polres (using kecamatan or kota or nama_cctv)
+                    $cleanWilayah = mb_strtolower((string) preg_replace('/^(polrestabes metro|polresta metro|polres metro|polres\/metro|polrestabes|polresta|polres|kabupaten|kab\.|kota administrasi|kota adm\.|kota)\s+/iu', '', $userWilayah));
+                    $likeWilayah = '%'.$cleanWilayah.'%';
+                    $query->where(function ($w) use ($likeWilayah, $table, $schema) {
+                        $w->whereRaw('LOWER(nama_cctv) LIKE ?', [$likeWilayah]);
+                        if ($table === 'smpc_tbl_data_cctv') {
+                            if ($schema->hasColumn($table, 'kota')) {
+                                $w->orWhereRaw('LOWER(kota) LIKE ?', [$likeWilayah]);
+                            }
+                            if ($schema->hasColumn($table, 'kecamatan')) {
+                                $w->orWhereRaw('LOWER(kecamatan) LIKE ?', [$likeWilayah]);
+                            }
+                        }
+                    });
+                }
+            }
+            return;
+        }
+
+        // Default global config fallback if user has no daerah
+        $configPoldaId = trim((string) config('satupeta.polda_id', ''));
+        if ($configPoldaId !== '') {
             if ($table === 'smpc_tbl_data_cctv' && $schema->hasColumn($table, 'polda_id')) {
-                $query->where('polda_id', $poldaId);
-                return;
+                $query->where('polda_id', $configPoldaId);
             } elseif ($schema->hasColumn($table, 'da_id')) {
-                $query->where('da_id', $poldaId);
-                return;
+                $query->where('da_id', $configPoldaId);
             }
         }
-
-        $daerah = trim((string) ($user->daerah ?? ''));
-        if ($daerah === '') {
-            return;
-        }
-
-        $clean = mb_strtolower((string) preg_replace('/^(polda|provinsi|prov\.?)\s+/iu', '', $daerah));
-        if ($clean === '') {
-            return;
-        }
-
-        $like = '%'.$clean.'%';
-        $query->where(function ($w) use ($like, $table) {
-            $w->whereRaw('LOWER(nama_cctv) LIKE ?', [$like]);
-            if ($table !== 'smpc_tbl_data_cctv') {
-                $w->orWhereRaw('LOWER(channel_name) LIKE ?', [$like]);
-            }
-        });
     }
 }

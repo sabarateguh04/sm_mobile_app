@@ -19,6 +19,10 @@
                                 <td>{{ $data->id_da_arusmudik ?? $data->id ?? '-' }}</td>
                             </tr>
                             <tr>
+
+                                <th>Tanggal</th>
+                                <td>{{ isset($data->tanggal) ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '-' }}</td>
+                            </tr>
 @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
                                 <th>Polda</th>
 @endif
@@ -28,10 +32,10 @@
                                 <th>Polres</th>
                                 <td><span class="badge bg-secondary">{{ $data->wilayah ?? '-' }}</span></td>
                             </tr>
-                            <tr>
-                                <th>Tanggal</th>
-                                <td>{{ isset($data->tanggal) ? \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y') : '-' }}</td>
-                            </tr>
+
+
+
+
                             <tr>
                                 <th>Status Arus</th>
                                 <td>

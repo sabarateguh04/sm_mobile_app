@@ -64,6 +64,63 @@ return [
         'smd_mstr_teguran' => ['label' => 'Teguran', 'column' => 'teguran'],
     ],
 
+    'dacol' => [
+        'sm_dacol_black_trouble_spot' => [
+            'label'       => 'Black & Trouble Spot',
+            'pk'          => 'id',
+            'date_column' => 'created_at',
+            'search'      => ['namalokasi', 'polda', 'polres', 'bs_ts', 'status'],
+        ],
+        'sm_dacol_fasilitas_umum' => [
+            'label'       => 'Fasilitas Umum',
+            'pk'          => 'id',
+            'date_column' => 'created_at',
+            'search'      => ['nama', 'polda', 'polres', 'fasilitas', 'kategori_fasilitas'],
+        ],
+        'sm_dacol_integrasi_data' => [
+            'label'       => 'Integrasi Data',
+            'pk'          => 'id',
+            'date_column' => 'tanggal',
+            'search'      => ['jenis_data', 'polda', 'polres', 'kategori', 'sub_kategori'],
+        ],
+        'sm_dacol_objek_vital' => [
+            'label'       => 'Objek Vital',
+            'pk'          => 'id',
+            'date_column' => 'created_at',
+            'search'      => ['nama', 'polda', 'polres', 'jenis_objek_vital', 'status'],
+        ],
+        'sm_dacol_penduduk' => [
+            'label'       => 'Data Penduduk',
+            'pk'          => 'id',
+            'date_column' => 'created_at',
+            'search'      => ['polda', 'polres', 'tahun'],
+        ],
+        'sm_dacol_pengemudi' => [
+            'label'       => 'Data Pengemudi',
+            'pk'          => 'id',
+            'date_column' => 'created_at',
+            'search'      => ['nama', 'nik', 'polda', 'polres', 'jenis_pengemudi'],
+        ],
+        'sm_dacol_prasjal' => [
+            'label'       => 'Prasarana Jalan',
+            'pk'          => 'id',
+            'date_column' => 'created_at',
+            'search'      => ['nama', 'polda', 'polres', 'prasjal', 'status'],
+        ],
+        'sm_dacol_rengiat' => [
+            'label'       => 'Rencana Kegiatan',
+            'pk'          => 'id',
+            'date_column' => 'tanggal',
+            'search'      => ['polda', 'polres', 'jenis_kegiatan', 'kategori'],
+        ],
+        'sm_dacol_wilayah_rawan' => [
+            'label'       => 'Wilayah Rawan',
+            'pk'          => 'id',
+            'date_column' => 'created_at',
+            'search'      => ['namalokasi', 'polda', 'polres', 'kerawanan', 'status'],
+        ],
+    ],
+
     'transaksi' => [
         'smd_tbl_data_irsms' => [
             'label' => 'Data IRSMS (Laka Lantas)',

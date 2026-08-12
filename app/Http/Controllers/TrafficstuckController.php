@@ -704,87 +704,127 @@ class TrafficstuckController extends OperasionalController
         session(['trafficstuck_sb_grp' => 'patrol_online']);
         $sbGrp = ['sb_grp' => 'patrol_online'];
 
-        $query = DB::table('trafficdalkot')
-            ->leftJoin('usm', 'trafficdalkot.piket', '=', 'usm.id_usm')
-            ->select(
-                'trafficdalkot.*',
-                'usm.nama as usm_nama',
-                DB::raw('usm.daerah as daerah_nama'),
-                DB::raw('usm.wilayah as wilayah_nama')
-            );
+        $connection = 'satupeta';
+        $tableName = 'smd_tbl_data_traffic_counting';
 
-        HierarchicalHelper::applyTerritoryScopeForTable($query, 'trafficdalkot');
+        $query = DB::connection($connection)->table($tableName);
+        $query->selectRaw("
+            pk_ids as id_trafficdalkot,
+            pk_ids as id,
+            polda as daerah_nama,
+            polres as wilayah_nama,
+            tanggal,
+            jam as waktu,
+            category as gerbangkota,
+            status_cctv as araharus,
+            keterangan as jenisjalan,
+            nama_cctv as namajalan,
+            CAST(motor AS UNSIGNED) as r2,
+            CAST(minibus AS UNSIGNED) as r4,
+            (CAST(bus AS UNSIGNED) + CAST(truck AS UNSIGNED)) as r6,
+            CAST(total AS UNSIGNED) as jumlah,
+            source_server as usm_nama,
+            NULL as fotosit,
+            NULL as polda,
+            NULL as polres,
+            NULL as piket,
+            NULL as daerah,
+            NULL as wilayah,
+            NULL as usm_daerah,
+            NULL as usm_wilayah,
+            NULL as id_usm,
+            NULL as id_interaksi
+        ");
 
         if ($request->filled('tanggal_dari')) {
-            $query->where('trafficdalkot.tanggal', '>=', $request->tanggal_dari);
+            $query->where($tableName.'.tanggal', '>=', $request->tanggal_dari);
         }
         if ($request->filled('tanggal_sampai')) {
-            $query->where('trafficdalkot.tanggal', '<=', $request->tanggal_sampai);
+            $query->where($tableName.'.tanggal', '<=', $request->tanggal_sampai);
         }
         if ($request->filled('jenisjalan')) {
-            $query->where('trafficdalkot.jenisjalan', $request->jenisjalan);
+            $query->where($tableName.'.keterangan', $request->jenisjalan);
         }
         if ($request->filled('gerbangkota')) {
-            $query->where('trafficdalkot.gerbangkota', $request->gerbangkota);
+            $query->where($tableName.'.category', $request->gerbangkota);
         }
         if ($request->filled('araharus')) {
-            $query->where('trafficdalkot.araharus', $request->araharus);
+            $query->where($tableName.'.status_cctv', $request->araharus);
         }
 
-        TerritoryIndexFilters::applyUsmFilters($query, $request);
+        // Apply territory filter based on user access
+        $user = Auth::user();
+        if ($user && !\App\Helpers\HierarchicalHelper::viewerBypassesTerritoryScope()) {
+            if (!empty($user->daerah)) {
+                // Remove prefixes like POLDA or PROVINSI to make search more robust
+                $cleanDaerah = trim(preg_replace('/^(polda|provinsi|prov\.?)\s+/iu', '', $user->daerah));
+                if ($cleanDaerah !== '') {
+                    $query->where($tableName.'.polda', 'LIKE', "%{$cleanDaerah}%");
+                }
+            }
+            if (!empty($user->wilayah)) {
+                $cleanWilayah = trim(preg_replace('/^(polresta|polrestabes|polres|polsek|kabupaten|kota|kab\.?)\s+/iu', '', $user->wilayah));
+                if ($cleanWilayah !== '') {
+                    $query->where($tableName.'.polres', 'LIKE', "%{$cleanWilayah}%");
+                }
+            }
+        }
+
+        // Apply explicit dropdown filters from request
+        if ($request->filled('daerah')) {
+            $cleanReqDaerah = trim(preg_replace('/^(polda|provinsi|prov\.?)\s+/iu', '', $request->daerah));
+            if ($cleanReqDaerah !== '') {
+                $query->where($tableName.'.polda', 'LIKE', "%{$cleanReqDaerah}%");
+            }
+        }
+        if ($request->filled('wilayah')) {
+            $cleanReqWilayah = trim(preg_replace('/^(polresta|polrestabes|polres|polsek|kabupaten|kota|kab\.?)\s+/iu', '', $request->wilayah));
+            if ($cleanReqWilayah !== '') {
+                $query->where($tableName.'.polres', 'LIKE', "%{$cleanReqWilayah}%");
+            }
+        }
 
         if ($request->filled('search')) {
             $s = $request->search;
-            $searchFields = ['gerbangkota', 'araharus', 'jenisjalan', 'namajalan', 'ketcb'];
-            $query->where(function ($q) use ($s, $searchFields) {
+            $searchFields = ['nama_cctv', 'keterangan', 'category', 'status_cctv', 'polda', 'polres']; 
+            $query->where(function ($q) use ($s, $searchFields, $tableName) {
                 foreach ($searchFields as $field) {
-                    $q->orWhere('trafficdalkot.'.$field, 'like', "%{$s}%");
+                    $q->orWhere($tableName.'.'.$field, 'like', "%{$s}%");
                 }
-                $q->orWhere('usm.nama', 'like', "%{$s}%");
             });
         }
 
         $query->orderBy(
-            'trafficdalkot.'.$request->get('orderby', 'tanggal'),
+            $tableName.'.'.$request->get('orderby', 'tanggal'),
             $request->get('ordertype', 'desc')
         );
 
         $data = $query->paginate($request->get('per_page', $this->perPage))->withQueryString();
 
-        $jenisJalanList = collect();
-        if (Schema::hasTable('t_jenisjalan')) {
-            $jenisJalanList = DB::table('t_jenisjalan')->orderBy('namajenis')->pluck('namajenis');
-        } else {
-            $jenisJalanList = DB::table('trafficdalkot')->whereNotNull('jenisjalan')->where('jenisjalan', '!=', '')
-                ->distinct()->orderBy('jenisjalan')->pluck('jenisjalan');
+        if (request()->has('debug_cctv')) {
+            dd([
+                'first_item' => $data->first(),
+                'keys' => $data->first() ? array_keys((array)$data->first()) : [],
+                'all_mapped' => true
+            ]);
         }
 
-        $gerbangKotaList = \App\Support\ReferensiOptions::list(
-            'gerbangkota',
-            ['UTARA', 'SELATAN', 'TIMUR', 'BARAT'],
-            'trafficdalkot',
-            'gerbangkota'
-        );
-
-        $arahArusList = \App\Support\ReferensiOptions::list(
-            'araharus',
-            ['Masuk', 'Keluar'],
-            'trafficdalkot',
-            'araharus'
-        );
-
+        $jenisJalanList = DB::connection($connection)->table($tableName)->whereNotNull('keterangan')->where('keterangan', '!=', '')->distinct()->orderBy('keterangan')->pluck('keterangan');
+        $gerbangKotaList = DB::connection($connection)->table($tableName)->whereNotNull('category')->where('category', '!=', '')->distinct()->orderBy('category')->pluck('category');
+        $arahArusList = DB::connection($connection)->table($tableName)->whereNotNull('status_cctv')->where('status_cctv', '!=', '')->distinct()->orderBy('status_cctv')->pluck('status_cctv');
+        
         return view($this->viewFolder.'.index', array_merge([
             'pageTitle' => 'Report Traffic Analytic',
             'data' => $data,
             'tabulasi' => collect(),
             'tab' => 'rinci',
-            'listSource' => 'trafficdalkot',
+            'listSource' => $tableName,
             'indexRouteName' => $indexRouteName,
             'jenisJalanList' => $jenisJalanList,
             'gerbangKotaList' => $gerbangKotaList,
             'arahArusList' => $arahArusList,
             'sbGrp' => $sbGrp,
-            'tableName' => 'trafficdalkot',
+            'tableName' => $tableName,
             'primaryKey' => 'id_trafficdalkot',
             'sboViewOnly' => RoleMutationPolicy::deniesAllMutations(Auth::user()),
         ], TerritoryIndexFilters::viewBundle($request)));
@@ -973,5 +1013,95 @@ class TrafficstuckController extends OperasionalController
     protected function getRoutePrefix()
     {
         return 'trafficstuck';
+    }
+
+    public function fetchAnalyticData(Request $request)
+    {
+        $tanggal = $request->get('tanggal');
+        $waktu = $request->get('waktu');
+        $gerbangkota = $request->get('gerbangkota');
+
+        if (!$tanggal || !$waktu) {
+            return response()->json(['found' => false, 'message' => 'Tanggal dan waktu wajib diisi']);
+        }
+
+        // Parse date from d/m/y to Y-m-d
+        if (str_contains($tanggal, '/')) {
+            try {
+                $parts = explode('/', $tanggal);
+                if (count($parts) === 3) {
+                    $y = strlen($parts[2]) === 2 ? '20' . $parts[2] : $parts[2];
+                    $tanggal = $y . '-' . $parts[1] . '-' . $parts[0];
+                }
+            } catch (\Exception $e) {
+                // ignore
+            }
+        }
+
+        $query = DB::connection('satupeta')->table('smd_tbl_data_traffic_counting');
+        $query->where('tanggal', $tanggal);
+        
+        // Ambil hanya 2 digit jam (contoh: 17 dari 17:38)
+        $jamAwal = substr($waktu, 0, 2);
+        $query->where('jam', 'like', $jamAwal . ':%');
+
+        $user = Auth::user();
+        $cleanDaerah = null;
+        $cleanWilayah = null;
+        if ($user && !\App\Helpers\HierarchicalHelper::viewerBypassesTerritoryScope()) {
+            if (!empty($user->daerah)) {
+                $cleanDaerah = trim(preg_replace('/^(polda|provinsi|prov\.?)\s+/iu', '', $user->daerah));
+                if ($cleanDaerah !== '') {
+                    $query->where('polda', 'LIKE', "%{$cleanDaerah}%");
+                }
+            }
+            if (!empty($user->wilayah)) {
+                $cleanWilayah = trim(preg_replace('/^(polresta|polrestabes|polres|polsek|kabupaten|kota|kab\.?)\s+/iu', '', $user->wilayah));
+                if ($cleanWilayah !== '') {
+                    $query->where('polres', 'LIKE', "%{$cleanWilayah}%");
+                }
+            }
+        }
+
+        $debugInfo = [
+            'input_tanggal' => $tanggal,
+            'input_waktu' => $waktu,
+            'input_gerbangkota' => $gerbangkota,
+            'user_daerah_asli' => $user->daerah ?? null,
+            'user_wilayah_asli' => $user->wilayah ?? null,
+            'user_daerah_clean' => $cleanDaerah,
+            'user_wilayah_clean' => $cleanWilayah,
+            'sql' => $query->toSql(),
+            'bindings' => $query->getBindings(),
+        ];
+
+        $data = $query->get();
+
+        if ($data->count() > 0) {
+            $items = $data->map(function($row) {
+                return [
+                    'tanggal' => $row->tanggal,
+                    'jam' => $row->jam,
+                    'polda' => $row->polda,
+                    'polres' => $row->polres,
+                    'category' => $row->category,
+                    'status_cctv' => $row->status_cctv,
+                    'keterangan' => $row->keterangan,
+                    'nama_cctv' => $row->nama_cctv,
+                    'motor' => (int) $row->motor,
+                    'minibus' => (int) $row->minibus,
+                    'bus_truck' => (int) $row->bus + (int) $row->truck,
+                    'total' => (int) $row->total,
+                ];
+            });
+
+            return response()->json([
+                'found' => true,
+                'items' => $items,
+                'debug' => $debugInfo
+            ]);
+        }
+
+        return response()->json(['found' => false, 'message' => 'Data tidak ditemukan untuk tanggal dan waktu tersebut.', 'debug' => $debugInfo]);
     }
 }

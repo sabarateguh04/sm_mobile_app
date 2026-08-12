@@ -24,9 +24,17 @@
          role="menu"
          data-mega-panel>
         @foreach($group['items'] as $item)
+            @php
+                $level = $item['level'] ?? 0;
+                $paddingLeft = $level > 0 ? (12 + ($level * 16)) . 'px' : '12px';
+            @endphp
             <a role="menuitem"
-               class="block mx-1.5 px-3 py-2 rounded-lg text-[11px] font-semibold text-decoration-none transition-colors {{ !empty($item['active']) ? 'bg-primary/10 text-primary font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-primary' }}"
+               class="block mx-1.5 py-2 pr-3 rounded-lg text-[11px] font-semibold text-decoration-none transition-colors {{ !empty($item['active']) ? 'bg-primary/10 text-primary font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-primary' }}"
+               style="padding-left: {{ $paddingLeft }}"
                href="{{ $item['url'] }}">
+               @if($level > 0)
+                   <span class="text-slate-300 font-normal mr-1">↳</span>
+               @endif
                 {{ $item['label'] }}
             </a>
         @endforeach

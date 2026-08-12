@@ -10,9 +10,12 @@
     $previewWrapId = $isCreate ? 'itsupport_foto_preview_wrap_create' : 'itsupport_foto_preview_wrap_edit';
     $existingFotoUrl = null;
     if (!$isCreate && !empty($data->fotokondisi ?? '')) {
-        $existingFotoUrl = preg_match('#^https?://#i', $data->fotokondisi)
-            ? $data->fotokondisi
-            : \Illuminate\Support\Facades\Storage::disk('public')->url($data->fotokondisi);
+        if (preg_match('#^https?://#i', $data->fotokondisi)) {
+            $existingFotoUrl = $data->fotokondisi;
+        } else {
+            $path = ltrim($data->fotokondisi, '/');
+            $existingFotoUrl = str_starts_with($path, 'storage/') ? asset($path) : asset('storage/' . $path);
+        }
     }
 @endphp
 

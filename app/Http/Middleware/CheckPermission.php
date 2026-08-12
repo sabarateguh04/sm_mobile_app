@@ -26,12 +26,13 @@ class CheckPermission
         'terminal' => 'data_terminal',
         'datajalan' => 't_datajalan',
         'jalangangguan' => 'data_gangguan',
+        'role' => 'roles',
         'rolepermission' => 'role_permissions',
         'cctv' => 'patrolicctv',
         'traffics' => 'trafficdalkot',
         'posyanpublic' => 'posyan',
         'interaksilayanan' => 'interaksi',
-        'layanandata' => 'layanan_data',
+        'opsdalcad' => 'opsdal/cad',
     ];
 
     /**
@@ -158,13 +159,6 @@ class CheckPermission
         $allowedUserMgmt = is_array($menuAccess['admin/users'] ?? null) ? $menuAccess['admin/users'] : [];
 
         if (in_array($matrixId, $allowedUserMgmt, true)) {
-            return true;
-        }
-
-        if (
-            MenuHelper::isExecutiveNationalUser($user)
-            && in_array($actionPart, ['list', 'view'], true)
-        ) {
             return true;
         }
 

@@ -42,6 +42,7 @@ return [
                 ['path' => 'turjagwali', 'query' => ['sm_lv' => 'opsdal'], 'label' => 'Kodal Turjagwali', 'icon' => 'fas fa-map-marker-alt', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
                 ['path' => 'contigency', 'query' => ['sb_grp' => 'opsdal'], 'label' => 'Kodal Contigency', 'icon' => 'fas fa-ambulance', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
                 ['path' => 'trafficstuck', 'query' => ['sb_grp' => 'opsdal'], 'label' => 'Kodal Perlambatan', 'icon' => 'fas fa-gauge', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
+                ['path' => 'opsdal/cad', 'index_route' => 'opsdal.cad.index', 'label' => 'Report CAD Dispatch', 'icon' => 'fas fa-headset', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
             ],
         ],
         [
@@ -59,7 +60,7 @@ return [
             'icon' => 'fas fa-hands-helping',
             'submenu' => [
                 ['path' => 'layanan/masyarakat', 'label' => 'Layanan Masy', 'icon' => 'fas fa-people-carry', 'territories' => ['kab_kota']],
-                ['path' => 'layanan/masyarakat', 'query' => ['sb_grp' => 'public_service'], 'label' => 'Report Layanan Masy', 'icon' => 'fas fa-chart-bar', 'territories' => ['nasional', 'provinsi']],
+                ['path' => 'layanan/masyarakat', 'query' => ['sb_grp' => 'public_service'], 'label' => 'Report Layanan Masyarakat', 'icon' => 'fas fa-chart-bar', 'territories' => ['nasional', 'provinsi']],
             ],
         ],
         [
@@ -84,6 +85,16 @@ return [
                 ['path' => 'jalan_gangguan', 'label' => 'Data Gangguan', 'icon' => 'fas fa-exclamation-triangle', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
                 ['path' => 'pnpangkutan', 'label' => 'Pnp Angkutan', 'icon' => 'fas fa-train', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
                 ['path' => 'kunjunganwisata', 'label' => 'Pengunjung Wisata', 'icon' => 'fas fa-users', 'territories' => ['nasional', 'provinsi', 'kab_kota']],
+            ],
+        ],
+        [
+            'path'    => 'group_data_sm',
+            'label'   => 'Data SM',
+            'icon'    => 'fas fa-layer-group',
+            'submenu' => [
+                ['path' => 'sm/master',    'index_route' => 'sm.master.index',    'label' => 'Master Referensi', 'icon' => 'fas fa-book',          'territories' => ['nasional', 'provinsi', 'kab_kota']],
+                ['path' => 'sm/transaksi', 'index_route' => 'sm.transaksi.index', 'label' => 'Data Operasional', 'icon' => 'fas fa-table',         'territories' => ['nasional', 'provinsi', 'kab_kota']],
+                ['path' => 'sm/dacol',     'index_route' => 'sm.dacol.index',     'label' => 'Data Koleksi',    'icon' => 'fas fa-database',      'territories' => ['nasional', 'provinsi', 'kab_kota']],
             ],
         ],
 

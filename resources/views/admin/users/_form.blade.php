@@ -39,6 +39,7 @@
     $ufKepegCol = $myProfileMode ? 'col-12 col-sm-6 col-md-3' : 'col-md-6 col-xl-3';
     $ufEmptyDaerah = $ufRegisterMobileRow ? '— Pilih —' : '— Tidak dipilih —';
     $ufEmptyWilayah = $ufRegisterMobileRow ? '— Pilih —' : '— Pilih Polda dulu —';
+    $isExecutive3 = $myProfileMode && \App\Helpers\MenuHelper::isExecutiveKabKotaUser($user);
 @endphp
 
 <x-admin.user-form-section icon="fa-map-marker-alt" title="Provinsi dan Kabupaten/Kota" variant="info">
@@ -46,14 +47,14 @@
     <div class="{{ $ufPairCol }} min-w-0">
         <label class="{{ $ufLabelClass }}" for="userDaerah">Provinsi/Polda</label>
         @if($ufCompactMode)
-            <x-sbo-compact-select name="daerah" id="userDaerah" :invalid="$errors->has('daerah')" :compact="$ufRegisterMobileRow" data-placeholder="{{ $ufEmptyDaerah }}">
+            <x-sbo-compact-select name="daerah" id="userDaerah" :invalid="$errors->has('daerah')" :compact="$ufRegisterMobileRow" data-placeholder="{{ $ufEmptyDaerah }}" :disabled="$isExecutive3 ? 'disabled' : null">
                 <option value="">{{ $ufEmptyDaerah }}</option>
                 @foreach($daerahList as $d)
                     <option value="{{ $d->namadaerah }}" {{ old('daerah', optional($user)->daerah ?? '') === $d->namadaerah ? 'selected' : '' }}>{{ strtoupper($d->namadaerah) }}</option>
                 @endforeach
             </x-sbo-compact-select>
         @else
-            <select name="daerah" id="userDaerah" class="form-select select2 @error('daerah') is-invalid @enderror" data-placeholder="— Tidak dipilih —">
+            <select name="daerah" id="userDaerah" class="form-select select2 @error('daerah') is-invalid @enderror" data-placeholder="— Tidak dipilih —" {{ $isExecutive3 ? 'disabled' : '' }}>
                 <option value="">— Tidak dipilih —</option>
                 @foreach($daerahList as $d)
                     <option value="{{ $d->namadaerah }}" {{ old('daerah', optional($user)->daerah ?? '') === $d->namadaerah ? 'selected' : '' }}>{{ strtoupper($d->namadaerah) }}</option>
@@ -70,17 +71,21 @@
             @endunless
         </label>
         @if($ufCompactMode)
-            <x-sbo-compact-select name="wilayah" id="userWilayah" :invalid="$errors->has('wilayah')" :compact="$ufRegisterMobileRow" data-placeholder="{{ $ufEmptyWilayah }}">
+            <x-sbo-compact-select name="wilayah" id="userWilayah" :invalid="$errors->has('wilayah')" :compact="$ufRegisterMobileRow" data-placeholder="{{ $ufEmptyWilayah }}" :disabled="$isExecutive3 ? 'disabled' : null">
                 <option value="">{{ $ufEmptyWilayah }}</option>
             </x-sbo-compact-select>
         @else
-            <select name="wilayah" id="userWilayah" class="form-select select2 @error('wilayah') is-invalid @enderror" data-placeholder="— Pilih Provinsi/Polda dulu —">
+            <select name="wilayah" id="userWilayah" class="form-select select2 @error('wilayah') is-invalid @enderror" data-placeholder="— Pilih Provinsi/Polda dulu —" {{ $isExecutive3 ? 'disabled' : '' }}>
                 <option value="">— Pilih Provinsi/Polda dulu —</option>
             </select>
         @endif
         @error('wilayah')<div class="{{ $ufErrClass }}">{{ $message }}</div>@enderror
     </div>
 </div>
+@if($isExecutive3)
+    <input type="hidden" name="daerah" value="{{ old('daerah', optional($user)->daerah ?? '') }}">
+    <input type="hidden" name="wilayah" value="{{ old('wilayah', optional($user)->wilayah ?? '') }}">
+@endif
 </x-admin.user-form-section>
 
 <x-admin.user-form-section icon="fa-user" title="Identitas" variant="primary">
@@ -238,7 +243,7 @@
 <x-admin.user-form-section icon="fa-landmark" title="{{ $myProfileMode ? 'Kepegawaian' : 'Kepegawaian dan organisasi' }}" variant="success">
 <div class="row g-1">
     <div class="{{ $ufKepegCol }}">
-        <label class="{{ $ufLabelClass }}" for="user_induk_pemerintahan">Induk organisasi</label>
+        <label class="{{ $ufLabelClass }}" for="user_induk_pemerintahan">Instansi</label>
         @if($indukPemerintahanUseSelect)
             @if($myProfileMode)
                 <x-sbo-compact-select name="induk_pemerintahan" id="user_induk_pemerintahan" :invalid="$errors->has('induk_pemerintahan')">
@@ -249,19 +254,19 @@
                 </x-sbo-compact-select>
             @else
                 <select name="induk_pemerintahan" id="user_induk_pemerintahan" class="form-select @error('induk_pemerintahan') is-invalid @enderror">
-                    <option value="">— Pilih induk organisasi —</option>
+                    <option value="">— Pilih instansi —</option>
                     @foreach($orgsIndukForKepegawaian as $o)
                         <option value="{{ $o->nameorg }}" @selected(old('induk_pemerintahan', optional($user)->induk_pemerintahan ?? '') === $o->nameorg)>{{ $o->nameorg }}</option>
                     @endforeach
                 </select>
             @endif
         @else
-            <input type="text" name="induk_pemerintahan" id="user_induk_pemerintahan" class="{{ $myProfileMode ? $ufInputClass : 'form-control' }} @error('induk_pemerintahan') is-invalid @enderror" value="{{ old('induk_pemerintahan', optional($user)->induk_pemerintahan ?? '') }}" maxlength="255" placeholder="Contoh: Kementerian / instansi induk">
+            <input type="text" name="induk_pemerintahan" id="user_induk_pemerintahan" class="{{ $myProfileMode ? $ufInputClass : 'form-control' }} @error('induk_pemerintahan') is-invalid @enderror" value="{{ old('induk_pemerintahan', optional($user)->induk_pemerintahan ?? '') }}" maxlength="255" placeholder="Contoh: Kementerian / instansi">
         @endif
         @error('induk_pemerintahan')<div class="{{ $ufErrClass }}">{{ $message }}</div>@enderror
     </div>
     <div class="{{ $ufKepegCol }}">
-        <label class="{{ $ufLabelClass }}" for="user_pemerintahan_daerah">Organisasi pusat</label>
+        <label class="{{ $ufLabelClass }}" for="user_pemerintahan_daerah">Organisasi</label>
         @if($pemerintahanDaerahUseSelect)
             @if($myProfileMode)
                 <x-sbo-compact-select name="pemerintahan_daerah" id="user_pemerintahan_daerah" :invalid="$errors->has('pemerintahan_daerah')">
@@ -272,7 +277,7 @@
                 </x-sbo-compact-select>
             @else
                 <select name="pemerintahan_daerah" id="user_pemerintahan_daerah" class="form-select @error('pemerintahan_daerah') is-invalid @enderror">
-                    <option value="">— Pilih organisasi pusat —</option>
+                    <option value="">— Pilih organisasi —</option>
                     @foreach($pemerintahanDaerahResorts as $pr)
                         <option value="{{ $pr->nama }}" data-induk-org="{{ $pr->nameorg }}" @selected(old('pemerintahan_daerah', optional($user)->pemerintahan_daerah ?? '') === $pr->nama)>{{ $pr->nama }}</option>
                     @endforeach
@@ -285,7 +290,7 @@
     </div>
     @if($kepegawaianKlEmpatTingkat ?? false)
         <div class="{{ $ufKepegCol }}">
-            <label class="{{ $ufLabelClass }}" for="user_organisasi_daerah">Organisasi daerah</label>
+            <label class="{{ $ufLabelClass }}" for="user_organisasi_daerah">Sub organisasi</label>
             @if($organisasiDaerahUseSelect)
                 @if($myProfileMode)
                     <x-sbo-compact-select name="organisasi_daerah" id="user_organisasi_daerah" :invalid="$errors->has('organisasi_daerah')">
@@ -299,7 +304,7 @@
                     </x-sbo-compact-select>
                 @else
                     <select name="organisasi_daerah" id="user_organisasi_daerah" class="form-select @error('organisasi_daerah') is-invalid @enderror">
-                        <option value="">— Pilih organisasi daerah —</option>
+                        <option value="">— Pilih sub organisasi —</option>
                         @foreach($organisasiDaerahListCol as $od)
                             <option value="{{ $od->nama }}"
                                 data-induk-org="{{ $od->induk_pusat ?? '' }}"

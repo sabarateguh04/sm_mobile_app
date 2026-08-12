@@ -60,15 +60,15 @@
                 <thead><tr class="bg-slate-50/50">
                     <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket</th>
+                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Gerbang</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Waktu</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Gerbang / Arah</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jenis / Nama Jalan</th>
+                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Arah Arus</th>
+                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jenis jalan</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R2</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R4</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R6</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R6+</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Total</th>
-                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket</th>
+                    <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Jumlah</th>
                     <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Aksi</th>
                 </tr></thead>
                 <tbody class="divide-y divide-slate-100">
@@ -76,21 +76,20 @@
                         <tr class="hover:bg-slate-50 group">
                             <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
                             <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $item->waktu ? substr((string)$item->waktu, 0, 5) : '-' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->usm_nama ?? '-' }}</td>
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] font-semibold text-slate-800 block">{{ $item->gerbangkota ?? '-' }}</span>
-                                <span class="text-[10px] text-slate-400">{{ $item->araharus ?? '' }}</span>
                             </td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $item->waktu ? substr((string)$item->waktu, 0, 5) : '-' }}</td>
+                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->araharus ?? '-' }}</td>
                             <td class="px-3 py-2.5">
                                 <span class="text-[11px] text-slate-700 block">{{ $item->jenisjalan ?? '-' }}</span>
                                 <span class="text-[10px] text-slate-400">{{ $item->namajalan ?? '' }}</span>
                             </td>
                             <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r2 ?? 0 }}</td>
                             <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r4 ?? 0 }}</td>
-                            <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r6 ?? 0 }}</td>
-                            <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r6_plus ?? 0 }}</td>
+                            <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r6_plus ?? $item->r6 ?? 0 }}</td>
                             <td class="px-3 py-2.5 text-center text-[12px] font-bold text-slate-800">{{ $item->jumlah ?? (($item->r2??0)+($item->r4??0)+($item->r6??0)+($item->r6_plus??0)) }}</td>
-                            <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->usm_nama ?? '-' }}</td>
                             <td class="px-3 py-2.5 text-right">
                                 <div class="flex items-center justify-end gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('traffics.show', $item->id_trafficdalkot) }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none"><span class="material-symbols-outlined text-[18px]">visibility</span></a>

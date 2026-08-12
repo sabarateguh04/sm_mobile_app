@@ -34,9 +34,10 @@ return [
             'items' => [
                 ['label' => 'Polda', 'route' => 'master.daerah.index'],
                 ['label' => 'Polres / Polrestabes', 'route' => 'master.resort.index', 'matrix_path' => 'master/resort'],
-                ['label' => 'Organisasi', 'route' => 'master.pusat.index'],
-                ['label' => 'Sub Org', 'route' => 'master.kl-resort.index'],
-                ['label' => 'Unit Kerja', 'route' => 'master.unit-kerja.index'],
+                ['label' => 'Instansi', 'route' => 'master.pemerintahan-instansi.index'],
+                ['label' => 'Organisasi', 'route' => 'master.pusat.index', 'level' => 1],
+                ['label' => 'Sub Org', 'route' => 'master.kl-resort.index', 'level' => 2],
+                ['label' => 'Unit Kerja', 'route' => 'master.unit-kerja.index', 'level' => 3],
             ],
         ],
         [

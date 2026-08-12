@@ -95,9 +95,12 @@
                 $fotoUrl = null;
                 if (!empty($data->fotoperangkat)) {
                     $first = trim(explode(',', (string) $data->fotoperangkat)[0]);
-                    $fotoUrl = preg_match('#^https?://#i', $first)
-                        ? $first
-                        : (str_starts_with($first, '/storage/') ? $first : \Illuminate\Support\Facades\Storage::disk('public')->url($first));
+                    if (preg_match('#^https?://#i', $first)) {
+                        $fotoUrl = $first;
+                    } else {
+                        $cleaned = ltrim($first, '/');
+                        $fotoUrl = str_starts_with($cleaned, 'storage/') ? asset($cleaned) : asset('storage/' . $cleaned);
+                    }
                 }
             @endphp
             @if($fotoUrl)

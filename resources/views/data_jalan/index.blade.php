@@ -30,6 +30,7 @@
     </div>
 @endif
 
+@if($tab !== 'dacol_prasjal')
 <form action="{{ route('t_datajalan.index') }}" method="GET" class="sbo-compact-filters bg-white rounded-lg p-2 border border-slate-200/60 shadow-sm relative z-10">
     <input type="hidden" name="tab" value="{{ $tab }}">
     <div class="pmf-row">
@@ -43,6 +44,7 @@
         ])
     </div>
 </form>
+@endif
 
 <section class="bg-white rounded-xl border border-slate-200/60 overflow-hidden shadow-sm">
     <div class="px-4 py-3 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -79,7 +81,9 @@
         @endif
     </div>
 
-    @if($tab === 'tabulasi')
+    @if($tab === 'dacol_prasjal')
+        @include('sm.dacol._table')
+    @elseif($tab === 'tabulasi')
         @if(($tabulasi ?? collect())->count() > 0)
             <div class="overflow-x-auto custom-scrollbar">
                 <table class="w-full text-left min-w-[700px]">

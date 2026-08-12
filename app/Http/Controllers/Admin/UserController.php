@@ -205,6 +205,18 @@ class UserController extends Controller
 
         $nextDaerah = trim((string) ($daerah ?? ''));
         $nextWilayah = trim((string) ($wilayah ?? ''));
+
+        // Jika target diset sebagai Eksekutif 2 (Polda), polres (wilayah) dibiarkan kosong/dibersihkan
+        $isExec2 = (int) request()->input('user_role_id', $target->user_role_id) === 6;
+        if ($isExec2) {
+            if (strcasecmp($targetDaerah, $nextDaerah) !== 0) {
+                throw ValidationException::withMessages([
+                    'daerah' => ['Wilayah kerja user mengikuti wilayah awal saat pendaftaran dan tidak dapat diubah.'],
+                ]);
+            }
+            return;
+        }
+
         if (strcasecmp($targetDaerah, $nextDaerah) !== 0 || strcasecmp($targetWilayah, $nextWilayah) !== 0) {
             throw ValidationException::withMessages([
                 'daerah' => ['Wilayah kerja user mengikuti wilayah awal saat pendaftaran dan tidak dapat diubah.'],
@@ -480,6 +492,7 @@ class UserController extends Controller
         $rows = $query->with('role')->get()->map(function ($user) {
             return [
                 'id_usm' => $user->id_usm,
+                'fotoprof' => $user->fotoprof,
                 'nama' => $user->nama,
                 'username' => $user->username,
                 'email' => $user->email,
@@ -661,6 +674,10 @@ class UserController extends Controller
             $request->merge(['daerah' => '', 'wilayah' => '']);
         }
 
+        if ((int) $request->input('user_role_id') === 6) {
+            $request->merge(['wilayah' => '']);
+        }
+
         $validated = $request->validate(array_merge(
             $this->daerahWilayahValidationRules(),
             $klForm ? UsmMasterReferensi::registrationKepegawaianValidationRules() : $this->kepegawaianValidationRules(),
@@ -701,6 +718,10 @@ class UserController extends Controller
             $validated['wilayah'] ?? null,
             false
         );
+
+        if ((int) ($validated['user_role_id'] ?? 0) === 6) {
+            $validated['wilayah'] = '';
+        }
 
         // Handle file upload
         if ($request->hasFile('fotoprof')) {
@@ -797,6 +818,10 @@ class UserController extends Controller
             $request->merge(['daerah' => '', 'wilayah' => '']);
         }
 
+        if ((int) $request->input('user_role_id') === 6) {
+            $request->merge(['wilayah' => '']);
+        }
+
         $validated = $request->validate(array_merge(
             $this->daerahWilayahValidationRules(),
             $klForm ? UsmMasterReferensi::registrationKepegawaianValidationRules() : $this->kepegawaianValidationRules(),
@@ -839,6 +864,10 @@ class UserController extends Controller
             $validated['password'] = Hash::make($validated['password']);
         } else {
             unset($validated['password']);
+        }
+
+        if ((int) ($validated['user_role_id'] ?? $user->user_role_id) === 6) {
+            $validated['wilayah'] = '';
         }
 
         $validated = $this->normalizeLegacyUsmOptionalStrings($validated);
@@ -1023,6 +1052,19 @@ class UserController extends Controller
             $rid = ($value === null || $value === '') ? null : (int) $value;
             try {
                 $this->assertActorMayAssignMatrixRole($actor, $rid);
+
+                // Jika diubah ke Eksekutif 2 (Polda), pastikan Polres (wilayah) dikosongkan/tidak ikut
+                if ($rid === 6) {
+                    $user->update(['user_role_id' => 6, 'wilayah' => '']);
+                    if ($request->wantsJson() || $request->ajax()) {
+                        return response()->json([
+                            'num_rows' => 1,
+                            'rec_id' => $id,
+                        ]);
+                    }
+                    return redirect()->back()->with('success', 'Data berhasil diperbarui.');
+                }
+
                 UsmMasterReferensi::assertTerritorialStaffRoleHasWilayahKerja(
                     $rid,
                     $user->daerah,

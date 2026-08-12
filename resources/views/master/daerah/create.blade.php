@@ -30,21 +30,32 @@
                     <p class="text-[10px] text-slate-400 mt-1 mb-0">Disimpan huruf KAPITAL.</p>
                     @error('nama') <p class="text-[11px] text-error mt-1 mb-0">{{ $message }}</p> @enderror
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-2 items-end">
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Latitude</label>
-                        <input type="text" name="lat"
+                        <label for="daerah_lat" class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Latitude</label>
+                        <input type="text" name="lat" id="daerah_lat"
                                class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-primary focus:bg-white focus:ring-0 outline-none text-[13px] @error('lat') border-error @enderror"
                                value="{{ old('lat') }}" maxlength="50" autocomplete="off" placeholder="Misal: -6.200000">
-                        @error('lat') <p class="text-[11px] text-error mt-1 mb-0">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Longitude</label>
-                        <input type="text" name="lng"
+                        <label for="daerah_lng" class="block text-[11px] font-bold text-slate-600 uppercase tracking-wide mb-1.5">Longitude</label>
+                        <input type="text" name="lng" id="daerah_lng"
                                class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:border-primary focus:bg-white focus:ring-0 outline-none text-[13px] @error('lng') border-error @enderror"
                                value="{{ old('lng') }}" maxlength="50" autocomplete="off" placeholder="Misal: 106.816666">
-                        @error('lng') <p class="text-[11px] text-error mt-1 mb-0">{{ $message }}</p> @enderror
                     </div>
+                    <div>
+                        <button type="button" id="btn_gps_daerah_form"
+                            class="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold rounded-xl text-[12px] transition-all border-solid whitespace-nowrap"
+                            data-sbo-gps-lat="daerah_lat"
+                            data-sbo-gps-lng="daerah_lng"
+                            data-sbo-gps-status="gps_status_daerah_form">
+                            <span class="material-symbols-outlined text-[16px]">my_location</span>
+                            <span>GPS</span>
+                        </button>
+                    </div>
+                    <span class="sr-only" id="gps_status_daerah_form"></span>
+                    @error('lat') <p class="text-[11px] text-error mt-1 mb-0 sm:col-span-2">{{ $message }}</p> @enderror
+                    @error('lng') <p class="text-[11px] text-error mt-1 mb-0 sm:col-span-2">{{ $message }}</p> @enderror
                 </div>
                 <div class="flex justify-between gap-2 pt-2">
                     <a href="{{ route('master.daerah.index') }}" class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 text-[12px] font-bold hover:bg-slate-50 text-decoration-none">Batal</a>

@@ -69,7 +69,8 @@
                         @endif
 
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Tanggal</dt>
-                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $tanggal ? \Carbon\Carbon::parse($tanggal)->format('d/m/Y') : '—' }}</dd>
+                        <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $tanggal ? \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</dd>
+
 
                         <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Petugas</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $data->petugas_nama ?? '—' }}</dd>

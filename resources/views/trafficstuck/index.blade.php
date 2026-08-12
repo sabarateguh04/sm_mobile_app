@@ -48,6 +48,7 @@
     @if($indexRouteName !== 'report.traffic-analytic.index')
         @foreach($sbGrp as $k => $v)<input type="hidden" name="{{ $k }}" value="{{ $v }}">@endforeach
     @endif
+    @php $isOp = \App\Helpers\MenuHelper::isOperatorForLayout(auth()->user()); @endphp
     <div class="pmf-row">
         @include('_partials.compact_filters.territory')
         @include('_partials.compact_filters.date_range', ['prefix' => 'trafficstuck'])
@@ -59,7 +60,7 @@
             @include('_partials.compact_filters.select', ['name' => 'lokasi', 'placeholder' => 'Lokasi', 'options' => $lokasiList ?? [], 'autoSubmit' => false])
             @include('_partials.compact_filters.select', ['name' => 'faktor', 'placeholder' => 'Faktor', 'options' => $faktorList ?? [], 'autoSubmit' => false])
         @endif
-        @include('_partials.compact_filters.search', ['placeholder' => $isDalkotList ? 'Cari gerbang, arah, jalan...' : 'Cari lokasi, faktor...'])
+        @include('_partials.compact_filters.search', ['placeholder' => 'Pencarian...'])
         @include('_partials.compact_filters.actions', [
             'resetUrl' => route($indexRouteName, $indexRouteName === 'report.traffic-analytic.index' ? [] : $sbGrp),
             'active' => $hasFilters,
@@ -93,68 +94,95 @@
                 <table class="w-full text-left min-w-[1180px]">
                     <thead><tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-14">Foto</th>
-@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
-                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
-@endif
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Waktu</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Gerbang / Arah</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jenis / Nama Jalan</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R2</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R4</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R6</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Total</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Piket</th>
+                        @if($isOp)
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Gerbang</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Waktu</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Arah Arus</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jenis jalan</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R2</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R4</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R6+</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Jumlah</th>
+                        @else
+                            @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+                            @endif
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Gateway</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Arah Arus</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jalan</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R2</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R4</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">R6+</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Jumlah</th>
+                        @endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Aksi</th>
                     </tr></thead>
                     <tbody class="divide-y divide-slate-100">
                         @foreach($data as $item)
-                            @php
-                                $canMutate = !($sboViewOnly ?? false) && \App\Support\RoleMutationPolicy::canMutateOperationalRow(auth()->user(), $item, 'trafficdalkot');
-                                $rowId = $item->id_trafficdalkot;
-                                $showUrl = route('traffics.show', $rowId);
-                                $editUrl = route('traffics.edit', $rowId);
-                                $destroyUrl = route('traffics.destroy', $rowId);
-                                $fotoThumb = \App\Http\Controllers\TrafficsController::fotoPublicUrl($item->fotosit ?? null);
-                                $totalVol = $item->jumlah ?? (($item->r2 ?? 0) + ($item->r4 ?? 0) + ($item->r6 ?? 0));
-                            @endphp
+                                @php
+                                    $canMutate = !($sboViewOnly ?? false) && \App\Support\RoleMutationPolicy::canMutateOperationalRow(auth()->user(), $item, 'trafficdalkot');
+                                    $rowId = $item->id_trafficdalkot ?? null;
+                                    $isSatupeta = ($listSource ?? '') === 'smd_tbl_data_traffic_counting';
+                                    $qs = $isSatupeta ? '?source=satupeta' : '';
+                                    $showUrl = $rowId ? route('traffics.show', $rowId) . $qs : '#';
+                                    $editUrl = $rowId ? route('traffics.edit', $rowId) . $qs : '#';
+                                    $destroyUrl = $rowId ? route('traffics.destroy', $rowId) . $qs : '#';
+                                    $fotoThumb = \App\Http\Controllers\TrafficsController::fotoPublicUrl($item->fotosit ?? null);
+                                    $totalVol = $item->jumlah ?? (($item->r2 ?? 0) + ($item->r4 ?? 0) + ($item->r6 ?? 0));
+                                @endphp
                             <tr class="hover:bg-slate-50 group">
                                 <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                                <td class="px-3 py-2.5">
-                                    @if($fotoThumb)
-                                        <a href="{{ $showUrl }}" class="block shrink-0" title="Lihat foto situasi">
-                                            <img src="{{ $fotoThumb }}" alt="Foto situasi" class="w-11 h-11 rounded-lg object-cover border border-slate-200 group-hover:scale-105 transition-transform" referrerpolicy="no-referrer">
-                                        </a>
-                                    @else
-                                        <div class="w-11 h-11 rounded-lg bg-slate-100 flex items-center justify-center text-slate-300" title="Tanpa foto">
-                                            <span class="material-symbols-outlined text-[20px]">image_not_supported</span>
-                                        </div>
-                                    @endif
-                                </td>
+                                @if($isOp)
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ ($item->tanggal ?? null) ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                    <td class="px-3 py-2.5">
+                                        <a href="{{ $showUrl }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ $item->gerbangkota ?? '—' }}</a>
+                                    </td>
+   
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ ($item->waktu ?? null) ? substr((string) $item->waktu, 0, 5) : '—' }}</td>
+                                     <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->araharus ?? '—' }}</td>
+                                    <td class="px-3 py-2.5">
+                                        <span class="text-[11px] text-slate-700 block">{{ $item->jenisjalan ?? '—' }}</span>
+                                        <span class="text-[10px] text-slate-400">{{ $item->namajalan ?? '' }}</span>
+                                    </td>
+                                    <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r2 ?? 0 }}</td>
+                                    <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r4 ?? 0 }}</td>
+                                    <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r6_plus ?? $item->r6 ?? 0 }}</td>
+                                    <td class="px-3 py-2.5 text-center text-[12px] font-bold text-slate-800">{{ $item->jumlah ?? (($item->r2 ?? 0) + ($item->r4 ?? 0) + ($item->r6 ?? 0) + ($item->r6_plus ?? 0)) }}</td>
+                                @else
+                                
 @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
-                                    <td class="px-3 py-2.5"><span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span></td>
-@endif
-                                <td class="px-3 py-2.5"><span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span></td>
-                                <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
-                                <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $item->waktu ? substr((string) $item->waktu, 0, 5) : '—' }}</td>
                                 <td class="px-3 py-2.5">
-                                    <a href="{{ $showUrl }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ $item->gerbangkota ?: '—' }}</a>
-                                    <span class="text-[10px] text-slate-400">{{ $item->araharus ?? '' }}</span>
+                                    <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
                                 </td>
+@endif
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span>
+                                </td>
+                                <td class="px-3 py-2.5 text-[11px] text-slate-700">{{ ($item->tanggal ?? null) ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
+                                 <td class="px-3 py-2.5">
+                                    <a href="{{ $showUrl }}" class="text-[11px] font-semibold text-primary hover:underline text-decoration-none block">{{ $item->gerbangkota ?? '—' }}</a>
+                                </td>
+                                
+                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->araharus ?? '—' }}</td>
                                 <td class="px-3 py-2.5">
                                     <span class="text-[11px] text-slate-700 block">{{ $item->jenisjalan ?? '—' }}</span>
                                     <span class="text-[10px] text-slate-400">{{ $item->namajalan ?? '' }}</span>
                                 </td>
                                 <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r2 ?? 0 }}</td>
                                 <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r4 ?? 0 }}</td>
-                                <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r6 ?? 0 }}</td>
-                                <td class="px-3 py-2.5 text-center text-[12px] font-bold text-slate-800">{{ $totalVol }}</td>
-                                <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->usm_nama ?? '—' }}</td>
+                                <td class="px-3 py-2.5 text-center text-[11px] text-slate-600">{{ $item->r6_plus ?? $item->r6 ?? 0 }}</td>
+                                <td class="px-3 py-2.5 text-center text-[12px] font-bold text-slate-800">{{ $item->jumlah ?? (($item->r2 ?? 0) + ($item->r4 ?? 0) + ($item->r6 ?? 0) + ($item->r6_plus ?? 0)) }}</td>
+                                
+                                @endif
                                 <td class="px-3 py-2.5 text-center">
                                     <div class="flex items-center justify-center gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <a href="{{ $showUrl }}" class="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/10 rounded-lg transition-colors text-decoration-none" title="Detail"><span class="material-symbols-outlined text-[18px]">visibility</span></a>
+                                        @if(!$sboViewOnly && ($isExternalData ?? false))
+                                            <a href="{{ route('traffics.create', ['source_id' => $rowId]) }}" class="w-8 h-8 flex items-center justify-center text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors text-decoration-none" title="Verifikasi ke Dalkot"><span class="material-symbols-outlined text-[18px]">post_add</span></a>
+                                        @endif
                                         @if($canMutate)
                                             <a href="{{ $editUrl }}" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors text-decoration-none" title="Edit"><span class="material-symbols-outlined text-[18px]">edit</span></a>
                                             <form action="{{ $destroyUrl }}" method="POST" class="inline m-0" onsubmit="return confirm('Yakin hapus data ini?')">
@@ -172,17 +200,24 @@
                 <table class="w-full text-left min-w-[1040px]">
                     <thead><tr class="bg-slate-50/50">
                         <th class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-10">#</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 w-14">Foto</th>
-@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
-                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
-@endif
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Status</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Faktor</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Penyebab</th>
-                        <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Durasi</th>
+                        @if($isOp)
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Jam Peristiwa</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Faktor</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Penyebab</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Durasi</th>
+                        @else
+                            @if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polda</th>
+                            @endif
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Polres</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Tanggal</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Lokasi</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Faktor</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Penyebab</th>
+                            <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">Durasi</th>
+                        @endif
                         <th class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Aksi</th>
                     </tr></thead>
                     <tbody class="divide-y divide-slate-100">
@@ -202,21 +237,22 @@
                             @endphp
                             <tr class="hover:bg-slate-50 group">
                                 <td class="px-4 py-2.5 text-label-sm text-slate-400">{{ $loop->iteration + ($data->currentPage() - 1) * $data->perPage() }}</td>
-                                <td class="px-3 py-2.5">
-                                    @if($fotoThumb)
-                                        <a href="{{ $showUrl }}" class="block shrink-0" title="Lihat foto situasi">
-                                            <img src="{{ $fotoThumb }}" alt="Foto situasi" class="w-11 h-11 rounded-lg object-cover border border-slate-200 group-hover:scale-105 transition-transform" referrerpolicy="no-referrer">
-                                        </a>
-                                    @else
-                                        <div class="w-11 h-11 rounded-lg bg-slate-100 flex items-center justify-center text-slate-300" title="Tanpa foto">
-                                            <span class="material-symbols-outlined text-[20px]">image_not_supported</span>
-                                        </div>
-                                    @endif
-                                </td>
-@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                @if($isOp)
+                                    <td class="px-3 py-2.5 text-[12px] font-semibold text-slate-700">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->locale('id')->translatedFormat('d F Y') : '—' }}</td>
                                     <td class="px-3 py-2.5">
-                                        <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
+                                        <a href="{{ $showUrl }}"
+                                           class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->lokasi ?: 'Detail', 28) }}</a>
                                     </td>
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-600">{{ $item->jamperistiwa ? substr((string)$item->jamperistiwa, 0, 5) : '—' }}</td>
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-600 max-w-[100px] truncate" title="{{ $item->faktor ?: '—' }}">{{ \Str::limit($item->faktor ?: '—', 16) }}</td>
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-600 max-w-[100px] truncate" title="{{ $item->penyebab ?: '—' }}">{{ \Str::limit($item->penyebab ?: '—', 16) }}</td>
+                                    <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $item->durasi ?: '—' }}</td>
+                                @else
+                                
+@if(\App\Support\TerritoryIndexFilters::canFilterByDaerah())
+                                <td class="px-3 py-2.5">
+                                    <span class="text-[11px] font-bold" style="color:#D8A808;">{{ strtoupper($item->daerah_nama ?? '—') }}</span>
+                                </td>
 @endif
                                 <td class="px-3 py-2.5">
                                     <span class="text-[11px] font-semibold text-slate-600 uppercase">{{ $item->wilayah_nama ? strtoupper(trim(str_ireplace(['KABUPATEN ', 'KOTA ', 'KAB. '], '', $item->wilayah_nama))) : '—' }}</span>
@@ -226,10 +262,12 @@
                                     <a href="{{ $showUrl }}"
                                        class="text-[11px] font-semibold text-primary hover:underline text-decoration-none">{{ \Str::limit($item->lokasi ?: 'Detail', 28) }}</a>
                                 </td>
-                                <td class="px-3 py-2.5">@include('trafficstuck._status_badges', ['item' => $item])</td>
+                                
                                 <td class="px-3 py-2.5 text-[11px] text-slate-600 max-w-[100px] truncate" title="{{ $item->faktor ?: '—' }}">{{ \Str::limit($item->faktor ?: '—', 16) }}</td>
                                 <td class="px-3 py-2.5 text-[11px] text-slate-600 max-w-[100px] truncate" title="{{ $item->penyebab ?: '—' }}">{{ \Str::limit($item->penyebab ?: '—', 16) }}</td>
                                 <td class="px-3 py-2.5 text-[11px] text-slate-500">{{ $item->durasi ?: '—' }}</td>
+                                
+                                @endif
                                 <td class="px-3 py-2.5 text-center">
                                     <div class="flex items-center justify-center gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <a href="{{ $showUrl }}"

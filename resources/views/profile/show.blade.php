@@ -102,18 +102,18 @@
             <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest m-0 mb-3">Organisasi</h3>
             <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mb-0">
                 <div>
-                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Induk Organisasi</dt>
+                    <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Instansi</dt>
                     <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $user->induk_pemerintahan ?: '—' }}</dd>
                 </div>
                 @if($klForm || !empty($user->pemerintahan_daerah))
                     <div>
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Organisasi Pusat</dt>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Organisasi</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $user->pemerintahan_daerah ?: '—' }}</dd>
                     </div>
                 @endif
                 @if(($kepegawaianKlEmpatTingkat ?? false) || !empty($user->organisasi_daerah))
                     <div>
-                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Organisasi Daerah</dt>
+                        <dt class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">Sub organisasi</dt>
                         <dd class="text-[13px] text-slate-800 font-medium m-0">{{ $user->organisasi_daerah ?: '—' }}</dd>
                     </div>
                 @endif

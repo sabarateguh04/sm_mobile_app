@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Support\SmTerritoryData;
 use App\Support\TerritoryLevelForUsm;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -70,16 +71,16 @@ class HierarchicalHelper
 
         switch ($level) {
             case TerritoryLevelForUsm::KAB_KOTA:
-                if (! empty($user->daerah) && ! empty($user->wilayah)) {
-                    $query->where('daerah', $user->daerah)->where('wilayah', $user->wilayah);
-                } elseif (! empty($user->wilayah)) {
-                    $query->where('wilayah', $user->wilayah);
+                if (! empty($user->wilayah)) {
+                    self::whereTerritoryColumnLike($query, 'wilayah', (string) $user->wilayah);
+                } elseif (! empty($user->daerah)) {
+                    self::whereTerritoryColumnLike($query, 'daerah', (string) $user->daerah);
                 }
                 break;
 
             case TerritoryLevelForUsm::PROVINSI:
                 if (! empty($user->daerah)) {
-                    $query->where('daerah', $user->daerah);
+                    self::whereTerritoryColumnLike($query, 'daerah', (string) $user->daerah);
                 }
                 break;
 
@@ -165,11 +166,12 @@ class HierarchicalHelper
 
         $level = self::getUserLevel();
 
-        if ($level === TerritoryLevelForUsm::KAB_KOTA && !empty($user->wilayah)) {
-            $query->where('usm.wilayah', $user->wilayah);
-        } elseif ($level === TerritoryLevelForUsm::PROVINSI && !empty($user->daerah)) {
-            $query->where('usm.daerah', $user->daerah);
+        if ($level === TerritoryLevelForUsm::KAB_KOTA && ! empty($user->wilayah)) {
+            self::whereTerritoryColumnLike($query, 'usm.wilayah', (string) $user->wilayah);
+        } elseif ($level === TerritoryLevelForUsm::PROVINSI && ! empty($user->daerah)) {
+            self::whereTerritoryColumnLike($query, 'usm.daerah', (string) $user->daerah);
         }
+
         return $query;
     }
 
@@ -193,7 +195,8 @@ class HierarchicalHelper
             return;
         }
 
-        if (! Schema::hasTable($table) && ! Schema::hasView($table)) {
+        $connName = $query->getConnection()->getName();
+        if (! Schema::connection($connName)->hasTable($table) && ! Schema::connection($connName)->hasView($table)) {
             return;
         }
 
@@ -201,14 +204,17 @@ class HierarchicalHelper
 
         $level = self::getUserLevel();
 
+        // Kab/kota (oprator, Polres, Executive3): filter utama by wilayah.
+        // Jangan wajibkan match daerah — nama Polda di profil vs data sering beda ejaan
+        // ("JAWA BARAT" vs "POLDA JABAR") sehingga marker modul kosong di peta.
         if ($level === TerritoryLevelForUsm::KAB_KOTA) {
-            if (! empty($user->daerah) && ! empty($user->wilayah)) {
-                self::applyDaerahDanWilayahTerritoryScope($query, $table, $user->daerah, $user->wilayah, $prefix);
-                return;
-            }
             if (! empty($user->wilayah)) {
                 self::applyWilayahTerritoryScope($query, $table, $user->wilayah, $prefix);
+
                 return;
+            }
+            if (! empty($user->daerah)) {
+                self::applyDaerahTerritoryScope($query, $table, $user->daerah, $prefix);
             }
         } elseif ($level === TerritoryLevelForUsm::PROVINSI) {
             if (! empty($user->daerah)) {
@@ -219,6 +225,7 @@ class HierarchicalHelper
 
     /**
      * Filter baris dengan pasangan provinsi + kab/kota (admin wilayah / satu satuan).
+     * Matching fleksibel (LIKE + nama dibersihkan) agar "POLRESTA BANDUNG" cocok dengan "KOTA BANDUNG".
      */
     private static function applyDaerahDanWilayahTerritoryScope(Builder $query, string $table, string $daerah, string $wilayah, string $prefix): void
     {
@@ -227,10 +234,11 @@ class HierarchicalHelper
 
             $connName = $q->getConnection()->getName();
             if (Schema::connection($connName)->hasColumn($table, 'daerah') && Schema::connection($connName)->hasColumn($table, 'wilayah')) {
-                $q->where($prefix.'.daerah', $daerah)->where($prefix.'.wilayah', $wilayah);
+                self::whereTerritoryColumnLike($q, $prefix.'.daerah', $daerah);
+                self::whereTerritoryColumnLike($q, $prefix.'.wilayah', $wilayah);
                 $any = true;
             } elseif (Schema::connection($connName)->hasColumn($table, 'wilayah')) {
-                $q->where($prefix.'.wilayah', $wilayah);
+                self::whereTerritoryColumnLike($q, $prefix.'.wilayah', $wilayah);
                 $any = true;
             }
 
@@ -239,9 +247,19 @@ class HierarchicalHelper
                 $q->{$method}(function ($sub) use ($table, $daerah, $wilayah, $prefix) {
                     $sub->select(DB::raw(1))
                         ->from('usm')
-                        ->whereColumn('usm.id_usm', $prefix.'.piket')
-                        ->where('usm.daerah', $daerah)
-                        ->where('usm.wilayah', $wilayah);
+                        ->whereColumn('usm.id_usm', $prefix.'.piket');
+                    self::whereTerritoryColumnLike($sub, 'usm.daerah', $daerah);
+                    self::whereTerritoryColumnLike($sub, 'usm.wilayah', $wilayah);
+                });
+                $any = true;
+            } elseif (Schema::connection($connName)->hasColumn($table, 'id_usm')) {
+                $method = $any ? 'orWhereExists' : 'whereExists';
+                $q->{$method}(function ($sub) use ($table, $daerah, $wilayah, $prefix) {
+                    $sub->select(DB::raw(1))
+                        ->from('usm')
+                        ->whereColumn('usm.id_usm', $prefix.'.id_usm');
+                    self::whereTerritoryColumnLike($sub, 'usm.daerah', $daerah);
+                    self::whereTerritoryColumnLike($sub, 'usm.wilayah', $wilayah);
                 });
                 $any = true;
             }
@@ -251,9 +269,9 @@ class HierarchicalHelper
                 $q->{$method}(function ($sub) use ($table, $daerah, $wilayah, $prefix) {
                     $sub->select(DB::raw(1))
                         ->from('profilposko')
-                        ->whereColumn('profilposko.id_profilposko', $prefix.'.id_profileposko')
-                        ->where('profilposko.daerah', $daerah)
-                        ->where('profilposko.wilayah', $wilayah);
+                        ->whereColumn('profilposko.id_profilposko', $prefix.'.id_profileposko');
+                    self::whereTerritoryColumnLike($sub, 'profilposko.daerah', $daerah);
+                    self::whereTerritoryColumnLike($sub, 'profilposko.wilayah', $wilayah);
                 });
                 $any = true;
             }
@@ -271,7 +289,7 @@ class HierarchicalHelper
 
             $connName = $q->getConnection()->getName();
             if (Schema::connection($connName)->hasColumn($table, 'wilayah')) {
-                $q->where($prefix.'.wilayah', $wilayah);
+                self::whereTerritoryColumnLike($q, $prefix.'.wilayah', $wilayah);
                 $any = true;
             }
 
@@ -280,8 +298,17 @@ class HierarchicalHelper
                 $q->{$method}(function ($sub) use ($table, $wilayah, $prefix) {
                     $sub->select(DB::raw(1))
                         ->from('usm')
-                        ->whereColumn('usm.id_usm', $prefix.'.piket')
-                        ->where('usm.wilayah', $wilayah);
+                        ->whereColumn('usm.id_usm', $prefix.'.piket');
+                    self::whereTerritoryColumnLike($sub, 'usm.wilayah', $wilayah);
+                });
+                $any = true;
+            } elseif (Schema::connection($connName)->hasColumn($table, 'id_usm')) {
+                $method = $any ? 'orWhereExists' : 'whereExists';
+                $q->{$method}(function ($sub) use ($table, $wilayah, $prefix) {
+                    $sub->select(DB::raw(1))
+                        ->from('usm')
+                        ->whereColumn('usm.id_usm', $prefix.'.id_usm');
+                    self::whereTerritoryColumnLike($sub, 'usm.wilayah', $wilayah);
                 });
                 $any = true;
             }
@@ -291,8 +318,8 @@ class HierarchicalHelper
                 $q->{$method}(function ($sub) use ($table, $wilayah, $prefix) {
                     $sub->select(DB::raw(1))
                         ->from('profilposko')
-                        ->whereColumn('profilposko.id_profilposko', $prefix.'.id_profileposko')
-                        ->where('profilposko.wilayah', $wilayah);
+                        ->whereColumn('profilposko.id_profilposko', $prefix.'.id_profileposko');
+                    self::whereTerritoryColumnLike($sub, 'profilposko.wilayah', $wilayah);
                 });
                 $any = true;
             }
@@ -310,7 +337,7 @@ class HierarchicalHelper
 
             $connName = $q->getConnection()->getName();
             if (Schema::connection($connName)->hasColumn($table, 'daerah')) {
-                $q->where($prefix.'.daerah', $daerah);
+                self::whereTerritoryColumnLike($q, $prefix.'.daerah', $daerah);
                 $any = true;
             }
 
@@ -319,8 +346,17 @@ class HierarchicalHelper
                 $q->{$method}(function ($sub) use ($table, $daerah, $prefix) {
                     $sub->select(DB::raw(1))
                         ->from('usm')
-                        ->whereColumn('usm.id_usm', $prefix.'.piket')
-                        ->where('usm.daerah', $daerah);
+                        ->whereColumn('usm.id_usm', $prefix.'.piket');
+                    self::whereTerritoryColumnLike($sub, 'usm.daerah', $daerah);
+                });
+                $any = true;
+            } elseif (Schema::connection($connName)->hasColumn($table, 'id_usm')) {
+                $method = $any ? 'orWhereExists' : 'whereExists';
+                $q->{$method}(function ($sub) use ($table, $daerah, $prefix) {
+                    $sub->select(DB::raw(1))
+                        ->from('usm')
+                        ->whereColumn('usm.id_usm', $prefix.'.id_usm');
+                    self::whereTerritoryColumnLike($sub, 'usm.daerah', $daerah);
                 });
                 $any = true;
             }
@@ -330,8 +366,8 @@ class HierarchicalHelper
                 $q->{$method}(function ($sub) use ($table, $daerah, $prefix) {
                     $sub->select(DB::raw(1))
                         ->from('profilposko')
-                        ->whereColumn('profilposko.id_profilposko', $prefix.'.id_profileposko')
-                        ->where('profilposko.daerah', $daerah);
+                        ->whereColumn('profilposko.id_profilposko', $prefix.'.id_profileposko');
+                    self::whereTerritoryColumnLike($sub, 'profilposko.daerah', $daerah);
                 });
                 $any = true;
             }
@@ -340,5 +376,28 @@ class HierarchicalHelper
                 $q->whereRaw('1 = 0');
             }
         });
+    }
+
+    /**
+     * Cocokkan kolom wilayah/daerah secara longgar (buang prefix POLRES/KOTA/dll + LIKE).
+     *
+     * @param  \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $query
+     */
+    private static function whereTerritoryColumnLike($query, string $column, string $value): void
+    {
+        $needle = self::territoryMatchNeedle($value);
+        if ($needle === '') {
+            return;
+        }
+
+        $query->whereRaw('LOWER('.$column.') LIKE ?', ['%'.$needle.'%']);
+    }
+
+    /**
+     * Normalisasi nama territory untuk pencocokan (selaras SmTerritoryData / TerritoryIndexFilters).
+     */
+    private static function territoryMatchNeedle(string $name): string
+    {
+        return SmTerritoryData::cleanTerritoryName($name);
     }
 }
