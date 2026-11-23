@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -88,7 +90,7 @@ class _LoginPageState extends State<LoginPage>
     try {
       final res = await ApiService.post(
         url: ApiConfig.login,
-        body: {'username': u, 'password': p},
+        body: {'username': u, 'password': p, 'client': 'petugas'},
       );
 
       final user = res['user'];
@@ -116,13 +118,26 @@ class _LoginPageState extends State<LoginPage>
         _fail(res['message'] ?? res['error'] ?? 'Username atau password salah');
       }
     } catch (e) {
-      _fail('Tidak bisa terhubung ke server. Periksa koneksi Anda.');
+      _fail(_loginError(e));
     }
     if (mounted) setState(() => _loading = false);
   }
 
   /// Tampilkan notif gagal login yang lebih "cool" (banner + kartu bergetar)
   /// dibanding SnackBar polos.
+  String _loginError(Object error) {
+    final raw = '$error';
+    final start = raw.indexOf('{');
+    if (start >= 0) {
+      try {
+        final body = jsonDecode(raw.substring(start));
+        if (body is Map && body['error'] != null) return '${body['error']}';
+      } catch (_) {}
+    }
+    if (raw.contains('POST Error')) return 'Username atau password salah';
+    return 'Tidak bisa terhubung ke server. Periksa koneksi Anda.';
+  }
+
   void _fail(String msg) {
     if (!mounted) return;
     AppToast.error(context, msg, title: 'Login Gagal');
@@ -234,7 +249,7 @@ class _LoginPageState extends State<LoginPage>
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Masukkan kredensial petugas Anda',
+                            'Akun Operator dari Personil Manager',
                             style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.45),
                               fontSize: 12,
@@ -248,7 +263,7 @@ class _LoginPageState extends State<LoginPage>
                             controller: _usernameCtrl,
                             label: 'Username',
                             icon: Icons.badge_rounded,
-                            hint: 'Masukkan username',
+                            hint: 'Username atau NRP',
                           ),
 
                           const SizedBox(height: 16),
