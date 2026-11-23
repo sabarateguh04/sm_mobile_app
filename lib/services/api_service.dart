@@ -3,9 +3,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../config/api_config.dart';
-import '../utils/datetime_helper.dart';
+import 'auth_service.dart';
 
 class ApiService {
+  static Future<Map<String, String>> _headers() async {
+    final token = await AuthService.getToken();
+    return {
+      "Content-Type": "application/json",
+      if (token != null && token.isNotEmpty) "Authorization": "Bearer $token",
+    };
+  }
+
   /// ==========================
   /// POST
   /// ==========================
@@ -15,7 +23,7 @@ class ApiService {
   }) async {
     final response = await http.post(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: await _headers(),
       body: jsonEncode(body),
     );
 
@@ -32,7 +40,7 @@ class ApiService {
   static Future<Map<String, dynamic>> get({required String url}) async {
     final response = await http.get(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: await _headers(),
     );
 
     if (response.statusCode == 200) {
@@ -51,7 +59,7 @@ class ApiService {
   }) async {
     final response = await http.put(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: await _headers(),
       body: jsonEncode(body),
     );
 
@@ -63,12 +71,35 @@ class ApiService {
   }
 
   /// ==========================
+  /// PATCH
+  /// ==========================
+  static Future<Map<String, dynamic>> patch({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
+    final response = await http.patch(
+      Uri.parse(url),
+      headers: await _headers(),
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      if (response.body.isEmpty) return {};
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map<String, dynamic>) return decoded;
+      return {};
+    }
+
+    throw Exception("PATCH Error (${response.statusCode}) : ${response.body}");
+  }
+
+  /// ==========================
   /// DELETE
   /// ==========================
   static Future<Map<String, dynamic>> delete({required String url}) async {
     final response = await http.delete(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: await _headers(),
     );
 
     if (response.statusCode == 200) {
@@ -87,16 +118,22 @@ class ApiService {
     required double lng,
     required String status,
   }) async {
-    final response = await http.post(
-      Uri.parse(ApiConfig.updateLocation),
-      headers: {"Content-Type": "application/json"},
+    final nama = await AuthService.getNama();
+    final nrp = await AuthService.getNrp();
+    final tugas = switch (status) {
+      'BERTUGAS' => 'Merespon Kejadian',
+      'OFFLINE' => 'Istirahat',
+      _ => 'Patroli Bergerak',
+    };
+    final response = await http.put(
+      Uri.parse(ApiConfig.tracking(userId)),
+      headers: await _headers(),
       body: jsonEncode({
-        "userId": userId,
+        "nama": nama,
+        "nrp": nrp,
         "lat": lat,
         "lng": lng,
-        "ctddate": DatetimeHelper.date,
-        "ctdtime": DatetimeHelper.time,
-        "status": status,
+        "status_tugas": tugas,
       }),
     );
 

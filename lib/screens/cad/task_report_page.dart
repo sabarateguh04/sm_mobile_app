@@ -39,6 +39,11 @@ class _TaskReportPageState extends State<TaskReportPage> {
   }
 
   /* ── Hitung durasi dari assigned → selesai ── */
+  String _photoUrl(String raw) {
+    if (raw.startsWith('http') || raw.startsWith('data:')) return raw;
+    return '${ApiConfig.baseUrl}$raw';
+  }
+
   String _calcDuration(List logs) {
     if (logs.isEmpty) return '-';
     try {
@@ -353,7 +358,7 @@ class _TaskReportPageState extends State<TaskReportPage> {
                     itemBuilder: (_, i) => ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        '${ApiConfig.baseUrl}${photos[i]}',
+                        _photoUrl('${photos[i]}'),
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stack) => Container(
                           color: Colors.grey[200],

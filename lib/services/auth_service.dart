@@ -8,12 +8,26 @@ class AuthService {
     required int userId,
     required String username,
     required String nama,
+    required String token,
+    String nrp = '',
   }) async {
     final pref = await SharedPreferences.getInstance();
 
     await pref.setInt("userId", userId);
     await pref.setString("username", username);
     await pref.setString("nama", nama);
+    await pref.setString("token", token);
+    await pref.setString("nrp", nrp);
+  }
+
+  static Future<String?> getToken() async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.getString("token");
+  }
+
+  static Future<String?> getNrp() async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.getString("nrp");
   }
 
   static Future<bool> isLogin() async {

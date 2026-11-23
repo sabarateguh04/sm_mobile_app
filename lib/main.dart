@@ -7,7 +7,11 @@ void main() async {
   // ← tambah async
   WidgetsFlutterBinding.ensureInitialized();
 
-  await FirebaseService.instance.init(); // ← TAMBAH
+  try {
+    await FirebaseService.instance.init();
+  } catch (e) {
+    debugPrint('Firebase dilewati: $e');
+  }
 
   runApp(const MobileSM());
 }

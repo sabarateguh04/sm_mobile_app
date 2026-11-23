@@ -4,7 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/foundation.dart';
 
 import '../config/api_config.dart';
-import '../config/firebase_options.dart'; // ← tambah
+import '../config/firebase_options.dart';
 import '../models/notif_item.dart';
 import 'api_service.dart';
 import 'auth_service.dart';
@@ -141,25 +141,22 @@ class FirebaseService {
 
   Future<void> registerToken({String role = 'petugas'}) async {
     try {
-      final token = await FirebaseMessaging.instance.getToken();
       final userId = await AuthService.getUserId();
-
-      if (token == null || userId == null) return;
-
-      await ApiService.post(
-        url: '${ApiConfig.baseUrl}/api/save-fcm-token',
-        body: {'userId': userId, 'fcmToken': token, 'role': role},
+      final nama = await AuthService.getNama();
+      final token = await FirebaseMessaging.instance.getToken();
+      if (userId == null || token == null || token.isEmpty) return;
+      await ApiService.put(
+        url: ApiConfig.tracking(userId),
+        body: {
+          'nama': nama ?? '',
+          'nrp': await AuthService.getNrp(),
+          'fcm_token': token,
+          'role': role,
+        },
       );
-      debugPrint('[FCM] Token registered: $token');
-
-      FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-        await ApiService.post(
-          url: '${ApiConfig.baseUrl}/api/save-fcm-token',
-          body: {'userId': userId, 'fcmToken': newToken, 'role': role},
-        );
-      });
+      debugPrint('[FCM] token tersimpan untuk user $userId');
     } catch (e) {
-      debugPrint('[FCM] registerToken error: $e');
+      debugPrint('[FCM] token belum tersimpan: $e');
     }
   }
 }

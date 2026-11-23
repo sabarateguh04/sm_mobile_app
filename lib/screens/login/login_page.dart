@@ -91,11 +91,17 @@ class _LoginPageState extends State<LoginPage>
         body: {'username': u, 'password': p},
       );
 
-      if (res['userId'] != null) {
+      final user = res['user'];
+      final token = res['token'];
+      if (user is Map && token is String && user['id_usm'] != null) {
         await AuthService.saveLogin(
-          userId: res['userId'],
-          username: res['username'],
-          nama: res['nama'],
+          userId: user['id_usm'] is int
+              ? user['id_usm'] as int
+              : int.parse('${user['id_usm']}'),
+          username: '${user['username'] ?? ''}',
+          nama: '${user['nama'] ?? ''}',
+          token: token,
+          nrp: '${user['nrp_nip_nik'] ?? ''}',
         );
 
         // Kirim FCM token device ini ke backend supaya bisa di-push
@@ -107,7 +113,7 @@ class _LoginPageState extends State<LoginPage>
           MaterialPageRoute(builder: (_) => const MainApp()),
         );
       } else {
-        _fail(res['message'] ?? 'Username atau password salah');
+        _fail(res['message'] ?? res['error'] ?? 'Username atau password salah');
       }
     } catch (e) {
       _fail('Tidak bisa terhubung ke server. Periksa koneksi Anda.');

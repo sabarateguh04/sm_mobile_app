@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../config/api_config.dart';
-import '../../services/api_service.dart';
 import '../../services/auth_service.dart';
+import '../../services/cad_service.dart';
+import '../../services/profile_service.dart';
 import '../login/login_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -35,15 +35,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _loadProfile() async {
     try {
-      final res = await ApiService.get(url: ApiConfig.profile(_userId!));
-      _profile = res;
+      _profile = await ProfileService.getProfile(_userId!);
     } catch (_) {}
   }
 
   Future<void> _loadStats() async {
     try {
-      final res = await ApiService.get(url: ApiConfig.cadStats(_userId!));
-      _stats = res;
+      _stats = await CadService.stats(_userId!);
     } catch (_) {}
   }
 

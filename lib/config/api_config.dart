@@ -1,21 +1,15 @@
+/// API produksi SM-lite. Semua panggilan aplikasi petugas mengarah ke situs ini.
 class ApiConfig {
   static const String baseUrl = 'https://sm.djalu.co.id';
 
-  /* ── Auth / GPS ── */
-  static String get login => '$baseUrl/api/login';
-  static String get updateLocation => '$baseUrl/api/update-location';
-  static String get updateProfile => '$baseUrl/api/update-profile';
-  static String profile(int userId) => '$baseUrl/api/profile?userId=$userId';
-
-  /* ── CAD ── */
-  static String get cadMyTask => '$baseUrl/api/cad/my-task';
-  static String get cadDetail => '$baseUrl/api/cad/task-detail';
-  static String get cadTerimaTask => '$baseUrl/api/cad/terima-task';
-  static String get cadMenuju => '$baseUrl/api/cad/menuju';
-  static String get cadTiba => '$baseUrl/api/cad/tiba';
-  static String get cadSelesai => '$baseUrl/api/cad/selesai';
-  static String get cadUploadPhoto => '$baseUrl/api/cad/upload-photo';
-
-  /* ── Statistik petugas ── */
-  static String cadStats(int userId) => '$baseUrl/api/cad/stats?userId=$userId';
+  static String get login => '$baseUrl/api/auth/login';
+  static String get me => '$baseUrl/api/auth/me';
+  static String tracking(int userId) => '$baseUrl/api/petugas-tracking/$userId';
+  static String get bootstrap => '$baseUrl/api/sync/bootstrap';
+  static String get tugas => '$baseUrl/api/mobile/tugas';
+  static String tugasItem(int id) => '$baseUrl/api/mobile/tugas/$id';
+  static String tugasStatus(int id) => '$baseUrl/api/mobile/tugas/$id/status';
+  static String tugasFoto(int id) => '$baseUrl/api/mobile/tugas/$id/foto';
+  static String laporan(String jenis, int id) => '$baseUrl/api/laporan/$jenis/$id';
+  static String patroli(int id) => '$baseUrl/api/patroli-cctv/$id';
 }
