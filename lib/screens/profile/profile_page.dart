@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
+import '../../services/location_service.dart';
 import '../../services/cad_service.dart';
 import '../../services/profile_service.dart';
 import '../login/login_page.dart';
@@ -68,6 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
     if (ok == true) {
+      await LocationService.instance.stop();
       await AuthService.logout();
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(

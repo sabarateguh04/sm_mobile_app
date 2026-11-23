@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../services/location_service.dart';
 import '../../services/notification_center.dart';
 import '../cad/cad_page.dart';
 import '../notifications/notification_page.dart';
@@ -97,6 +98,13 @@ class _MainAppState extends State<MainApp> {
       ),
     );
     NotificationCenter.instance.ensureLoaded();
+    LocationService.instance.start();
+  }
+
+  @override
+  void dispose() {
+    LocationService.instance.stop();
+    super.dispose();
   }
 
   @override
